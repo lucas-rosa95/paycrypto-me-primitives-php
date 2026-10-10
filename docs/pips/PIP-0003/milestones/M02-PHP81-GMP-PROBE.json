@@ -1,0 +1,265 @@
+{
+    "runtime": {
+        "php": "8.1.34",
+        "int_size": 8,
+        "gmp": "8.1.34"
+    },
+    "checks": {
+        "sha256_abc": true,
+        "ripemd160_empty": true,
+        "hmac_sha512_rfc4231_case1": true,
+        "uint32_roundtrip": [
+            true,
+            true,
+            true
+        ],
+        "tuupola_xpub_byte_split_roundtrips": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "tuupola_four_byte_version_option_matches": false,
+        "tuupola_empty_checked_decode": {
+            "outcome": "returned",
+            "value": ""
+        },
+        "tuupola_corrupt_checksum": {
+            "outcome": "threw",
+            "class": "RuntimeException",
+            "message": "Checksum \"ab473b1a\" does not match the expected \"ab473b21\""
+        },
+        "tuupola_leading_zeros": true,
+        "tuupola_invalid_alphabet": {
+            "outcome": "threw",
+            "class": "InvalidArgumentException",
+            "message": "Data contains invalid characters \"0IOl\""
+        },
+        "tuupola_p2pkh_vector": true,
+        "stephenhill_raw_corpus": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "stephenhill_invalid_alphabet": {
+            "outcome": "threw",
+            "class": "InvalidArgumentException",
+            "message": "Argument $base58 contains invalid characters."
+        },
+        "bech32_valid_generic": [
+            {
+                "outcome": "returned",
+                "value": true
+            },
+            {
+                "outcome": "returned",
+                "value": true
+            },
+            {
+                "outcome": "returned",
+                "value": true
+            },
+            {
+                "outcome": "returned",
+                "value": true
+            },
+            {
+                "outcome": "returned",
+                "value": true
+            },
+            {
+                "outcome": "returned",
+                "value": true
+            },
+            {
+                "outcome": "returned",
+                "value": true
+            }
+        ],
+        "bech32_invalid_generic": [
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Out of range character in bech32 string"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Out of range character in bech32 string"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Out of range character in bech32 string"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Bech32 string cannot exceed 90 characters in length"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Missing separator character"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Empty HRP"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid bech32 checksum"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Too short checksum"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Out of range character in bech32 string"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid bech32 checksum"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Bech32 string is too short"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Empty HRP"
+            }
+        ],
+        "segwit_v0_vectors": [
+            true,
+            true,
+            true
+        ],
+        "segwit_invalid_vectors": [
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid prefix for address"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid bech32 checksum"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid witness version"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Witness program size was out of valid range"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid length for segwit address"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid size for V0 witness program"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Data contains mixture of higher/lower case characters"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid data"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid data"
+            },
+            {
+                "outcome": "threw",
+                "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+                "message": "Invalid length for segwit address"
+            }
+        ],
+        "segwit_v0_bad_program": {
+            "outcome": "threw",
+            "class": "BitWasp\\Bech32\\Exception\\Bech32Exception",
+            "message": "Invalid size for V0 witness program"
+        },
+        "ecc_paragonie_zero": {
+            "outcome": "returned",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "ecc_simplito_zero": {
+            "outcome": "returned",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "ecc_paragonie_one": {
+            "outcome": "returned",
+            "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+        },
+        "ecc_simplito_one": {
+            "outcome": "returned",
+            "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+        },
+        "ecc_paragonie_order": {
+            "outcome": "returned",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "ecc_simplito_order": {
+            "outcome": "returned",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "ecc_paragonie_infinity": {
+            "outcome": "returned",
+            "value": "INFINITY"
+        },
+        "ecc_simplito_infinity": {
+            "outcome": "returned",
+            "value": "INFINITY"
+        },
+        "ecc_paragonie_wrong_length": {
+            "outcome": "returned",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "ecc_simplito_wrong_length": {
+            "outcome": "threw",
+            "class": "Exception",
+            "message": "Unknown point format"
+        }
+    },
+    "ecc_classes": [
+        "Mdanter\\Ecc\\Primitives\\GeneratorPoint",
+        "Mdanter\\Ecc\\Curves\\NamedCurveFp",
+        "Elliptic\\Curve\\ShortCurve\\Point"
+    ],
+    "diagnostics": []
+}

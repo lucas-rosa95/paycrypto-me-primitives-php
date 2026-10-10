@@ -42,8 +42,10 @@ entry point for the public address capability boundary. Its
 [historical Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) holds the recovered
 implementation sequence and technical gates.
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
-is its retrospective coordination anchor. The plan, old execution package and
-M01 draft do not establish v1.0 approval or current execution authorization.
+is its retrospective coordination anchor. Its [present-day approval decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
+pins the approved proposal revision; the historical plan, old execution package
+and M01 draft were not approval evidence. The [M02 protocol record](pips/PIP-0003/milestones/M02-PROTOCOL.md)
+tracks current implementation decisions and remaining provider qualification.
 The [independent plan review](reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
 
