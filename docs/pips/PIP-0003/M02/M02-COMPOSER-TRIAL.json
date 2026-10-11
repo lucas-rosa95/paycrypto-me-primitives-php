@@ -1,0 +1,17 @@
+{
+  "name": "paycrypto-me/pip3-m02-research",
+  "type": "project",
+  "require": {
+    "php": "^8.1",
+    "paragonie/ecc": "2.6.0",
+    "simplito/elliptic-php": "1.0.12",
+    "tuupola/base58": "2.2.0",
+    "stephenhill/base58": "2.1.0",
+    "bitwasp/bech32": "0.0.1",
+    "cjpgdk/bech32": "0.1.2",
+    "muvon/base58-codec": "0.1"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
