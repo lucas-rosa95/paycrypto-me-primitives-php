@@ -19,8 +19,9 @@ docs/
 ├── pips/
 │   ├── PIP-0003/
 │   │   ├── PIP-0003.md              # capability proposal and boundaries
-│   │   ├── EXECUTION-PLAN.md        # recovered historical implementation plan
-│   │   └── milestones/             # M01 draft, handoff and diagrams
+│   │   ├── EXECUTION-PLAN.md        # current execution reference
+│   │   ├── M00/                     # planning assessments and exact evidence
+│   │   └── M01/                     # contract draft, report and diagrams
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
 └── research/                         # repository evidence/proposals when applicable
 
@@ -37,13 +38,14 @@ tools/
 
 ## Authority and purpose
 
-The [historical PIP-0003 record](pips/PIP-0003/PIP-0003.md) is the current
-entry point for the public address capability boundary. Its
-[historical Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) holds the recovered
-implementation sequence and technical gates.
+The [PIP-0003 proposal](pips/PIP-0003/PIP-0003.md) defines the public address
+capability boundary. Its [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
+current operational reference; M00 and M01 contain scoped assessment evidence.
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
-is its retrospective coordination anchor. The plan, old execution package and
-M01 draft do not establish v1.0 approval or current execution authorization.
+is its retrospective coordination anchor. A
+[present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
+approved the exact proposal revision on 2026-10-10; the old package and M01
+draft did not establish that approval or verify the capability.
 The [independent plan review](reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
 
@@ -77,9 +79,10 @@ assesses an earlier plan only, recoverable at [revision `83ccd557`](https://gith
   unchanged when current documentation evolves.
 - The PIP-0003 execution package also predates v0.2. Its issued package manifest
   identifies the baseline at Git revision `95e83842ed9f4a577998e49851449230f56f56b2`;
-  the exact former plan is recoverable at `247f1f1`. The organized historical
-  Execution Plan provides a present reading path without changing those records
-  or establishing v1.0 approval.
+  the exact former plan is recoverable at `247f1f1`. M00's unchanged manifests
+  retain their original repository-relative paths, so verify those identities
+  against the archived snapshot or pinned Git revision, not today's layout.
+  The current Execution Plan reconciles that history and the later Issue decision.
 - `docs/research/` may contain evidence, investigations, spikes, and proposals.
   Those artifacts do not become canonical merely by being stored there.
 - `tools/skills/` contains reusable engineering/governance methods. Skills

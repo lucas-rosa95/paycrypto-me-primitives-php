@@ -29,9 +29,11 @@ On local `main` at `3f82141`, `src/` contains only `.gitkeep`, `composer.json` h
 production provider and `tests/SetupTest.php` tests autoload registration only.
 **No capability implementation or behavioral verification exists on `main`.**
 
-M00 recorded the planning baseline. M01 delivered the [contract draft](milestones/M01-CONTRACTS.md),
-[handoff](milestones/M01.md) and [diagrams](milestones/diagrams/README.md).
-Its [executor report](cp-executor-2026-10-06-210959.md) left CP-07, CP-10
+M00 recorded the planning baseline. M01 delivered the [contract draft](M01/M01-CONTRACTS.md)
+and [diagrams](M01/diagrams/README.md). Its original
+[handoff at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01.md)
+remains in Git; current status and continuation are here.
+Its [executor report](M01/cp-executor-2026-10-06-210959.md) left CP-07, CP-10
 and CP-11 unresolved; independent review is pending. These are documentation
 deliverables, not a verified runtime capability.
 [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5)
@@ -180,7 +182,7 @@ blocks independent search nor grants selection approval.
 
 ### R/Q responsibility and acceptance map
 
-The [assessed M01 draft](milestones/M01-CONTRACTS.md) supplies precise R01–R12,
+The [assessed M01 draft](M01/M01-CONTRACTS.md) supplies precise R01–R12,
 Q01–Q12 and O01–O07 identities. No row mandates its own class or package.
 
 | Requirement | Owned semantics and delegated operations | Required qualification |
@@ -266,8 +268,8 @@ requires them.
 | Source | Established result and limit |
 |---|---|
 | [Early first-capability plan at `83ccd55`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md), [embedded PIP plan at `247f1f1`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/247f1f11c484675bcc8f56aeb0a20c68edde4337/docs/pips/PIP-0003/PIP-0003.md), [package commit `95e8384`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/95e83842ed9f4a577998e49851449230f56f56b2) | Historical scope, sequence and delivery gates; no current approval or implementation was established by those records. |
-| [Independent plan-alignment review](../../reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](cp-executor-2026-10-03-171445.md) and [2026-10-04](cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
-| [M01 draft](milestones/M01-CONTRACTS.md), [handoff](milestones/M01.md), [diagrams](milestones/diagrams/README.md), [issued M01 report](cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge at assessed SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41`. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
+| [Independent plan-alignment review](../../reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
+| [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
 | [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) at `24cc739` | Proposed M02 O01–O06 dispositions and bounded probe artifacts. No merge, O07 closure, adapter qualification, final selection or production tests. |
 
@@ -317,22 +319,36 @@ for execution inside the approved boundary. The package's mandatory milestone
 handoffs, snapshots, template use and canonical-reading shortcut were historical
 process choices. PIP Specification v1.0 favors existing Issue/PR/Git/CI evidence
 and permits extra artifacts only for distinct responsibilities. The M01 draft is
-an assessed artifact with an issued hash; its handoff and diagrams explain
-completed work. The [execution context](EXECUTION-CONTEXT.md),
-[report templates](COUNTER-PROOF-TEMPLATES.md), [handoff template](MILESTONE-HANDOFF-TEMPLATE.md),
-[snapshots](snapshots/README.md), [2026-10-03 checksum manifest](SHA256SUMS-2026-10-03-milestones),
-and [2026-10-04 manifest](SHA256SUMS-2026-10-04-execution-package) are historical
+an assessed artifact with an issued hash; its diagrams explain completed work.
+The [snapshot](M00/snapshots/milestones-2026-10-03-171445.tar), [2026-10-03 checksum manifest](M00/SHA256SUMS-2026-10-03-milestones),
+and [2026-10-04 manifest](M00/SHA256SUMS-2026-10-04-execution-package) are historical
 package evidence, not active instructions. Git preserves the already-retired
 top-level `docs/PLAN-FIRST-CAPABILITY.md` after PR #6. If PR #9 merges, its
 M02 protocol file remains decision/probe evidence; execution direction stays here.
 
-No additional PIP-0003 file is retired in this reconciliation. Selective
-deletion would remove independently assessed or checksum-covered historical
-records; [PIP Specification v1.0 §9](../../specifications/paycrypto-pip-specification-v1.0.md#9-history-supersession-and-archival)
-protects issued records and reserves workspace archival for a closed Issue as
-an atomic operation. The proposal and this plan are the two active governance/
-operational documents; other files have evidence roles, not competing plan
-authority. Old references naming `PIP-0003.md` as a plan refer to its assessed
-Git revision, never the current proposal. Continue from this plan and the
-applicable authorities, consulting historical files only to verify or reproduce
-a claim.
+The workspace now groups two planning assessments, issued manifests and the
+snapshot under `M00/`; the contract draft, executor report and diagram
+sources/exports under `M01/`. Only the proposal and this plan remain at the PIP
+root. These are relocations for scope/navigation, not a new assessment. The
+redundant execution context, templates and snapshot instructions remain
+recoverable at `95e8384`;
+the M01 handoff remains recoverable at `96707dd`. The M00 snapshot also retains
+the original early handoff template. Links in current Markdown copies were
+repaired; the two M00 checksum manifests still name the original repository
+paths and hashes because they identify the **issued historical package**.
+To verify the M00 snapshot, extract its tar into a temporary directory and run
+`sha256sum -c` there against the M00 2026-10-03 manifest; the manifest's paths
+refer to paths **inside the tar**. The later package can be checked against Git
+revision `95e8384`. Verify the M01 contract hash from
+`96707dd:docs/pips/PIP-0003/milestones/M01-CONTRACTS.md`. Never interpret a changed
+live Markdown hash as a corrected old verdict. The exact issued reports and
+assessed content remain recoverable through Git, while current copies preserve
+their verdicts and use working links.
+
+[PIP Specification v1.0 §9](../../specifications/paycrypto-pip-specification-v1.0.md#9-history-supersession-and-archival)
+reserves whole-workspace archival for a closed Issue. The proposal and this plan
+are the active governance/operational documents; milestone files have evidence
+roles, not competing plan authority. Old references naming `PIP-0003.md` as a
+plan refer to its assessed Git revision. PR #9's M02 files are still on its
+unmerged branch under `milestones/`; move them into `M02/` as part of that PR's
+own integration so a later merge does not recreate the obsolete directory.

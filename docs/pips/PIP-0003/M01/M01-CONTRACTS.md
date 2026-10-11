@@ -5,7 +5,7 @@ Work: PIP-0003 / M01. Status: contract draft for M02 investigation.
 This document specifies semantic boundaries, not accepted PHP interfaces or
 selected implementations. Requirement and qualification IDs are local to this
 slice. A row does not require a separate class, package, interface or public API.
-The [plan](../PIP-0003.md), [execution context](../EXECUTION-CONTEXT.md) and
+The [current plan](../EXECUTION-PLAN.md) and
 [delegation inventory](../../../research/delegation-inventory.md) govern it.
 Production contracts freeze at M05 after relevant qualification.
 
