@@ -67,8 +67,11 @@ not a conformance verdict. API comparison is not independent cryptographic proof
 
 ## Reproduction
 
-From this directory, run `sha256sum -c SHA256SUMS` for stored artifacts. Download
-external source into a fresh scratch directory, leaving repository dependencies
+The issued `SHA256SUMS` identifies the original pack at Git revision `55b4a7b`.
+This README was revised after that assessment and its paths updated again when
+the pack moved. From this directory, verify the unchanged
+stored data and scripts with `sed '/  README.md$/d' SHA256SUMS | sha256sum -c`.
+Download external source into a fresh scratch directory, leaving repository dependencies
 unchanged:
 
 ```bash
@@ -84,8 +87,8 @@ references. External source code is not copied into Primitives production code.
 Set absolute paths and a recorded image available on your machine:
 
 ```bash
-research_root=/absolute/path/to/paycrypto-me-primitives-php/docs/research/provider-refresh-2026-10-02
-old_evidence=/absolute/path/to/paycrypto-me-primitives-php/docs/reviews/bitwasp-public-derivation
+research_root=/absolute/path/to/paycrypto-me-primitives-php/docs/pips/PIP-0003/M00/research/provider-refresh-2026-10-02
+old_evidence=/absolute/path/to/paycrypto-me-primitives-php/docs/pips/PIP-0003/M00/reviews/bitwasp-public-derivation
 reference_root=/absolute/path/to/paycrypto-me-for-woocommerce/src/trunk
 candidate_root=/tmp/primitives-provider-refresh
 research_image=sha256:67a488dd95f2067bb10406e48afb34dbd01f728ec0fca4eabffda736f1467b31

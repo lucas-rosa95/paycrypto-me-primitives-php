@@ -6,7 +6,7 @@ a dependency selection, a PHP API specification, or an implementation approval.
 The [current provider worksheet](public-address-provider-research.md) contains
 updated candidates, bounded probe evidence and the user's independent-research
 column. The [historical worksheet](public-address-candidate-worksheet.md) preserves
-the 2026-09-28 leads. The [consolidated capability record](../pips/PIP-0003/PIP-0003.md)
+the 2026-09-28 leads. The [consolidated capability record](../../PIP-0003.md)
 identifies the scope and evidence. This inventory supplies per-item research requirements,
 not architectural authority or evidence of current provider qualification.
 
@@ -32,11 +32,11 @@ elliptic-curve mathematics and standardized encoders/decoders must be provided
 by evaluated libraries or runtime facilities, regardless of implementation
 simplicity. A provider's API must not determine the domain model.
 
-The [current canonical](../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md)
+The [current canonical](../../../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md)
 sections 10A–14 establish the semantic/delegation boundaries. Section 13.3 still
 contains open wording about codec implementation ownership; canonical promotion
 must reconcile that wording with the explicit delegation instruction recorded
-in [AGENTS.md](../../AGENTS.md). This inventory does not silently revise it.
+in [AGENTS.md](../../../../../AGENTS.md). This inventory does not silently revise it.
 
 The items below are research requirements, not a mandate for one package,
 interface or class per row. One provider can satisfy several items. Runtime

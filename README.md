@@ -178,11 +178,11 @@ remains the authority for Primitives internals and its evolution.
 
 The [consolidated public address record (historical PIP-0003)](./docs/pips/PIP-0003/PIP-0003.md)
 identifies the first capability's scope, evidence and open decisions. Its
-[composition/API examples](./docs/research/public-address-composition-proposal.md)
+[composition/API examples](docs/pips/PIP-0003/M00/research/public-address-composition-proposal.md)
 are proposals, not implemented public APIs. Production crypto/codec providers
 and independent review remain pending.
 
-The [current provider research](./docs/research/public-address-provider-research.md)
+The [current provider research](docs/pips/PIP-0003/M00/research/public-address-provider-research.md)
 records versioned candidates, bounded runtime probes, remaining qualification
 gaps and a column for independently researched alternatives.
 

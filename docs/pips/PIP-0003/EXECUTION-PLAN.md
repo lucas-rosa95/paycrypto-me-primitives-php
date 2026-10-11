@@ -176,7 +176,7 @@ so they do not directly satisfy the PHP 8.1 baseline. The older BitWasp
 secp256k1 PHP binding declares PHP 7 only. Furqan Siddiqui Base58Check remains
 a footprint/API research lead, not a qualified fallback. Version/requirement
 observations are from the dated [PR #9 record](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/24cc739/docs/pips/PIP-0003/milestones/M02-PROTOCOL.md)
-and [provider research](../../research/public-address-provider-research.md);
+and [provider research](M00/research/public-address-provider-research.md);
 recheck before M05 selection. An empty user-candidate worksheet cell neither
 blocks independent search nor grants selection approval.
 
@@ -194,7 +194,7 @@ Q01–Q12 and O01–O07 identities. No row mandates its own class or package.
 | R09–R11 | P2PKH key HASH160 + version; P2SH-P2WPKH HASH160 of exact witness-v0 redeem script `0014` + 20-byte key hash + P2SH version; P2WPKH v0/20-byte witness program + HRP. Delegate D06–D09 codecs. | Q09 P2PKH, leading zeros/alphabet/checksum/length; Q10 exact redeem-script preimage, distinct key/redeem hashes; Q11 BIP173 valid/invalid, case, HRP, checksum, padding, v0 size and incompatible policies. |
 | R12 | Stable failure meanings, bounded work, explicit wiring and vendor containment. | Q12 missing runtime facilities, malformed provider outputs, vendor exceptions, no fallback and safe diagnostics. |
 
-The [delegation inventory](../../research/delegation-inventory.md) identifies
+The [delegation inventory](M00/research/delegation-inventory.md) identifies
 D01 SHA-256, D02 RIPEMD-160, D03 HMAC-SHA512, D04 point parsing/validation/
 serialization, D05 public tweak, D06 Base58, D07 Base58Check, D08 Bech32,
 D09 SegWit-v0 codec, D10 extended-key mechanical decoding and D11 fixed-width
@@ -218,7 +218,7 @@ boundaries, controlled rare outcomes and differential checks. Force invalid
 children at every path position, zero, n-or-greater, infinity and exhaustion;
 label forced outcomes distinctly from naturally observed cases. Test metadata
 after retries. Investigate disagreement rather than voting. The
-[BitWasp investigation](../../reviews/bitwasp-public-derivation/README.md)
+[BitWasp investigation](M00/reviews/bitwasp-public-derivation/README.md)
 provides 17 round trips, six public edges and 30 address regressions, plus
 known bad reference behavior: invalid root metadata admitted, trailing payload
 ignored, zero tweak rejected and a controlled infinity result. These become
@@ -235,10 +235,10 @@ independent ECC oracle. Research dependencies stay isolated from production
 Composer dependencies until M05. For each selected candidate pin release/source,
 license, maintenance/security evidence, PHP/extensions, complete Composer graph,
 actual executed dependency path, unsupported behavior and replacement/reference
-independence. The [provider research](../../research/public-address-provider-research.md),
-[candidate worksheet](../../research/public-address-candidate-worksheet.md),
-[composition proposal](../../research/public-address-composition-proposal.md) and
-[pinned probe pack](../../research/provider-refresh-2026-10-02/README.md) are
+independence. The [provider research](M00/research/public-address-provider-research.md),
+[candidate worksheet](M00/research/public-address-candidate-worksheet.md),
+[composition proposal](M00/research/public-address-composition-proposal.md) and
+[pinned probe pack](M00/research/provider-refresh-2026-10-02/README.md) are
 investigation inputs, not frozen implementations.
 
 ### Runtime and Counter-Proof execution
@@ -268,7 +268,7 @@ requires them.
 | Source | Established result and limit |
 |---|---|
 | [Early first-capability plan at `83ccd55`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md), [embedded PIP plan at `247f1f1`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/247f1f11c484675bcc8f56aeb0a20c68edde4337/docs/pips/PIP-0003/PIP-0003.md), [package commit `95e8384`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/95e83842ed9f4a577998e49851449230f56f56b2) | Historical scope, sequence and delivery gates; no current approval or implementation was established by those records. |
-| [Independent plan-alignment review](../../reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
+| [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
 | [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
 | [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) at `24cc739` | Proposed M02 O01–O06 dispositions and bounded probe artifacts. No merge, O07 closure, adapter qualification, final selection or production tests. |
@@ -326,10 +326,13 @@ package evidence, not active instructions. Git preserves the already-retired
 top-level `docs/PLAN-FIRST-CAPABILITY.md` after PR #6. If PR #9 merges, its
 M02 protocol file remains decision/probe evidence; execution direction stays here.
 
-The workspace now groups two planning assessments, issued manifests and the
-snapshot under `M00/`; the contract draft, executor report and diagram
+The workspace now groups early public-address research, its reference probes,
+the independent first-plan review, two planning assessments, issued manifests and
+the snapshot under `M00/`; the contract draft, executor report and diagram
 sources/exports under `M01/`. Only the proposal and this plan remain at the PIP
-root. These are relocations for scope/navigation, not a new assessment. The
+root. The research and reference probes began under PIP-0002; their M00 placement
+does not relabel their origin or turn feasibility observations into qualification.
+These are relocations for scope/navigation, not a new assessment. The
 redundant execution context, templates and snapshot instructions remain
 recoverable at `95e8384`;
 the M01 handoff remains recoverable at `96707dd`. The M00 snapshot also retains
@@ -344,6 +347,15 @@ revision `95e8384`. Verify the M01 contract hash from
 live Markdown hash as a corrected old verdict. The exact issued reports and
 assessed content remain recoverable through Git, while current copies preserve
 their verdicts and use working links.
+
+The moved probe and BitWasp investigation packs retain their issued `SHA256SUMS`
+files. Their README hashes identify Git revisions `55b4a7b` and `61c2e48`,
+respectively. The provider README was already revised after its issued hash;
+both current README copies now carry working paths. All other listed evidence
+files remain byte-for-byte unchanged. Verify the complete issued packs at those
+revisions, or verify their unchanged data/script entries in the current
+directories while excluding `README.md`. The checksum files are evidence
+identifiers, not new checksums for the reorganized workspace.
 
 [PIP Specification v1.0 §9](../../specifications/paycrypto-pip-specification-v1.0.md#9-history-supersession-and-archival)
 reserves whole-workspace archival for a closed Issue. The proposal and this plan

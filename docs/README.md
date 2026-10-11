@@ -20,10 +20,9 @@ docs/
 │   ├── PIP-0003/
 │   │   ├── PIP-0003.md              # capability proposal and boundaries
 │   │   ├── EXECUTION-PLAN.md        # current execution reference
-│   │   ├── M00/                     # planning assessments and exact evidence
+│   │   ├── M00/                     # early research, reviews and planning evidence
 │   │   └── M01/                     # contract draft, report and diagrams
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
-└── research/                         # repository evidence/proposals when applicable
 
 archives/                              # ignored, local to the archiving checkout
 └── pips/
@@ -46,7 +45,7 @@ is its retrospective coordination anchor. A
 [present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
 approved the exact proposal revision on 2026-10-10; the old package and M01
 draft did not establish that approval or verify the capability.
-The [independent plan review](reviews/plan-first-capability-canonical-alignment.md)
+The [independent plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
 
 - `README.md` is the public entry point for the Primitives repository.
@@ -83,8 +82,10 @@ assesses an earlier plan only, recoverable at [revision `83ccd557`](https://gith
   retain their original repository-relative paths, so verify those identities
   against the archived snapshot or pinned Git revision, not today's layout.
   The current Execution Plan reconciles that history and the later Issue decision.
-- `docs/research/` may contain evidence, investigations, spikes, and proposals.
-  Those artifacts do not become canonical merely by being stored there.
+- `docs/pips/PIP-0003/M00/research/` and `M00/reviews/` hold the early
+  public-address investigations and plan review. Some originated under PIP-0002;
+  their placement makes them accessible to PIP-0003 execution without changing
+  their original authorship, assessment scope or authority.
 - `tools/skills/` contains reusable engineering/governance methods. Skills
   govern how architectural documents are engineered or revised; they are not
   Primitives architecture.

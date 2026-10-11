@@ -1,7 +1,7 @@
 # Independent canonical alignment review: First Capability plan
 
 **Reviewed artifact:** [`docs/PLAN-FIRST-CAPABILITY.md` at `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md), as present on 2026-10-03.
-**Authorities at review time:** [Public Architecture v1.1](../canonicals/public-architecture/paycrypto-public-architecture-canonical-v1.1.md) and Primitives v1.6 (historical baseline; see the [current canonical v1.8](../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md)).
+**Authorities at review time:** [Public Architecture v1.1](../../../../canonicals/public-architecture/paycrypto-public-architecture-canonical-v1.1.md) and Primitives v1.6 (historical baseline; see the [current canonical v1.8](../../../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md)).
 **Supporting research reviewed:** [Current provider research](../research/public-address-provider-research.md), including its stated evidence limits.  
 **Review scope:** Shallow inspection of the plan and supporting research against the two canonicals, including whether the plan represents the research accurately. This is not a technical design review, independent validation of package claims or probe outputs, provider qualification, implementation review, or formal Counter-Proof report.
 

@@ -92,11 +92,15 @@ Normative comparison: [BIP32](https://github.com/bitcoin/bips/blob/master/bip-00
 
 ## Reproduction
 
-Verify `SHA256SUMS` from this directory. Set the two absolute host paths, then run with the recorded local image if available:
+The issued `SHA256SUMS` identifies the original pack at Git revision `61c2e48`.
+This README's path example was updated when the pack moved; its original hash
+therefore applies to that revision. Verify unchanged data and scripts here with
+`sed '/  README.md$/d' SHA256SUMS | sha256sum -c`. Set the two absolute host
+paths, then run with the recorded local image if available:
 
 ```bash
 reference_root=/absolute/path/to/paycrypto-me-for-woocommerce/src/trunk
-review_root=/absolute/path/to/paycrypto-me-primitives-php/docs/reviews/bitwasp-public-derivation
+review_root=/absolute/path/to/paycrypto-me-primitives-php/docs/pips/PIP-0003/M00/reviews/bitwasp-public-derivation
 review_image=$(cat "$review_root/image-id.txt")
 docker run --rm --network none --read-only \
   --mount "type=bind,src=$reference_root,dst=/reference,readonly" \
