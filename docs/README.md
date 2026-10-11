@@ -37,8 +37,9 @@ tools/
 
 ## Authority and purpose
 
-The [PIP-0003 proposal](pips/PIP-0003/PIP-0003.md) defines the public address
-capability boundary. Its [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
+The [approved PIP-0003 proposal](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
+defines the public address capability boundary. Its
+[Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
 current operational reference. Start with its Current state, Reading path and
 Execution roadmap; consult M00 and M01 for the specific research, draft contract
 or assessment evidence linked from the plan.

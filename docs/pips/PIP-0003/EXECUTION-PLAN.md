@@ -334,13 +334,16 @@ the snapshot under `M00/`; the contract draft, executor report and diagram
 sources/exports under `M01/`. Only the proposal and this plan remain at the PIP
 root. The research and reference probes began under PIP-0002; their M00 placement
 does not relabel their origin or turn feasibility observations into qualification.
-These are relocations for scope/navigation, not a new assessment. The
-redundant execution context, templates and snapshot instructions remain
-recoverable at `95e8384`;
+These are relocations for scope/navigation, not a new assessment. The approved
+proposal is restored byte-for-byte to its pinned `72c4fa1` revision; its
+historical relative links resolve at that revision. This plan supplies current
+navigation to relocated evidence. The redundant execution context, templates
+and snapshot instructions remain recoverable at `95e8384`;
 the M01 handoff remains recoverable at `96707dd`. The M00 snapshot also retains
-the original early handoff template. Links in current Markdown copies were
-repaired; the two M00 checksum manifests still name the original repository
-paths and hashes because they identify the **issued historical package**.
+the original early handoff template. Links in current Markdown copies outside
+the frozen proposal were repaired; the two M00 checksum manifests still name
+the original repository paths and hashes because they identify the **issued
+historical package**.
 To verify the M00 snapshot, extract its tar into a temporary directory and run
 `sha256sum -c` there against the M00 2026-10-03 manifest; the manifest's paths
 refer to paths **inside the tar**. The later package can be checked against Git
