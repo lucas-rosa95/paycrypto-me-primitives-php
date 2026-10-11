@@ -39,7 +39,9 @@ tools/
 
 The [PIP-0003 proposal](pips/PIP-0003/PIP-0003.md) defines the public address
 capability boundary. Its [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
-current operational reference; M00 and M01 contain scoped assessment evidence.
+current operational reference. Start with its Current state, Reading path and
+Execution roadmap; consult M00 and M01 for the specific research, draft contract
+or assessment evidence linked from the plan.
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
 is its retrospective coordination anchor. A
 [present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)

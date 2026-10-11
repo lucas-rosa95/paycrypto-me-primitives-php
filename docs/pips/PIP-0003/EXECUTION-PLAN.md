@@ -1,55 +1,57 @@
 # PIP-0003 — Public Address Derivation Execution Plan
 
-This is the single current HOW, ORDER, and EXECUTION reference for
+This is the current HOW, ORDER, and EXECUTION reference for
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
-The [proposal](PIP-0003.md) states WHAT, WHY, and BOUNDARIES. The Issue records
-coordination and decisions; PRs, commits, tests and reviews establish execution
-evidence. New work follows the [PIP Specification v1.0](../../specifications/paycrypto-pip-specification-v1.0.md),
-the [Primitives Canonical v1.8](../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md),
-the [Public Architecture v1.1](../../canonicals/public-architecture/paycrypto-public-architecture-canonical-v1.1.md),
-and the [Counter-Proof Protocol v1.5](../../protocols/primitives/COUNTER-PROOF-REPORT-v1.5.md)
-within their respective authority boundaries. This one-time reconciliation does
-not impose a new process on other PIPs.
 
-PIP-0003 predates the current Issue-origin model: Issue #3 is retrospective.
-On 2026-10-10 a [present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
-recorded `PIP Decision = Approved` and pinned the [approved proposal revision
-`72c4fa1f0a2c9449a93071b55bf20f85b0008621`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md).
-This does not backdate approval. The approved proposal remains unchanged; its
-pre-decision statement that no approval was then recorded is historically true.
-The later Issue decision supplies current status. Any material departure from
+## Current state — checked 2026-10-11
+
+**Goal:** provide a locally usable, public-only operation that derives Bitcoin
+P2PKH, P2SH-P2WPKH and P2WPKH addresses from an extended public key, a bounded
+relative path, an explicit network and an address policy.
+
+**Product status:** no capability implementation or behavioral verification
+exists on `main`. At checked revision `79ff5a9`, `src/` contains only `.gitkeep`,
+`composer.json` has no production provider, and `tests/SetupTest.php` verifies
+autoload registration only. Documentation and research progress must not be
+read as a working library feature.
+
+| Stage | What has actually been delivered | Verification and remaining gate |
+|---|---|---|
+| M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
+| M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) at `24cc739` proposes six protocol dispositions (O01–O06) and contains bounded PHP 8.1/GMP and SegWit codec probes. | Review those proposals; complete the provider comparison and qualification map (O07). The PR is unmerged and does not qualify providers or freeze contracts. |
+| M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
+
+**Next reviewable step:** review PR #9's protocol proposals against the approved
+scope and Canonical; record accepted or revised dispositions, then finish the
+provider candidate and qualification map. M03/M04 research adapters follow the
+relevant M02 decisions. Maintainers must judge the proposed version/policy allowlist,
+256-attempt budget, 64-bit host requirement, testnet label and public failure
+meanings before contracts freeze at M05. M01's independent review is still open.
+When evidence changes, update this status and the roadmap together with its
+exact PR, commit or test reference.
+
+## Reading path and authority
+
+| To answer | Read | Role |
+|---|---|---|
+| What is happening and what follows? | This section, then the [Execution roadmap](#execution-roadmap). | The only current execution-status and ordering reference. |
+| What was approved? | The [approved proposal revision at `72c4fa1`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md) and [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555). | Proposal defines WHAT, WHY and BOUNDARIES; the Issue records approval and coordination. |
+| What is under review now? | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), then [M02 guidance below](#m02-branch-proposals-review-before-contract-freeze). | Branch proposals and probes, awaiting review and O07 completion. |
+| Which contracts and evidence support execution? | [M01 draft](M01/M01-CONTRACTS.md) and the [technical guidance below](#technical-decisions-and-detailed-execution-guidance); consult [M00 research](M00/research/public-address-provider-research.md) or [reviews](M00/reviews/plan-first-capability-canonical-alignment.md) for a specific historical claim. | Detailed inputs and provenance; M00/M01 files do not carry current progress status. |
+
+New work follows the [PIP Specification v1.0](../../specifications/paycrypto-pip-specification-v1.0.md),
+[Primitives Canonical v1.8](../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md),
+[Public Architecture v1.1](../../canonicals/public-architecture/paycrypto-public-architecture-canonical-v1.1.md),
+and [Counter-Proof Protocol v1.5](../../protocols/primitives/COUNTER-PROOF-REPORT-v1.5.md)
+within their respective authority boundaries. PRs, commits, tests and reviews
+establish execution evidence. PIP-0003 predates the current Issue-origin model;
+Issue #3 is retrospective. The maintainer approved the pinned proposal on
+2026-10-10, without backdating that decision. The frozen proposal's statement
+that approval was not yet recorded describes its earlier revision; the Issue
+decision supplies current approval status. Any material departure from the
 approved boundaries or accepted Canonical decisions returns to the Materiality
-Gate, not a quiet edit to this plan.
-
-## Current state — 2026-10-11
-
-The approved capability is a locally usable, public-only extended-key-to-Bitcoin-
-address operation for P2PKH, P2SH-P2WPKH and P2WPKH on mainnet and testnet.
-On local `main` at `3f82141`, `src/` contains only `.gitkeep`, `composer.json` has no
-production provider and `tests/SetupTest.php` tests autoload registration only.
-**No capability implementation or behavioral verification exists on `main`.**
-
-M00 recorded the planning baseline. M01 delivered the [contract draft](M01/M01-CONTRACTS.md)
-and [diagrams](M01/diagrams/README.md). Its original
-[handoff at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01.md)
-remains in Git; current status and continuation are here.
-Its [executor report](M01/cp-executor-2026-10-06-210959.md) left CP-07, CP-10
-and CP-11 unresolved; independent review is pending. These are documentation
-deliverables, not a verified runtime capability.
-[Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5)
-separated the proposal and historical plan, without implementation.
-
-[Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9),
-head `24cc739`, contains an [M02 protocol record](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/24cc739/docs/pips/PIP-0003/milestones/M02-PROTOCOL.md)
-and isolated PHP 8.1/GMP and SegWit codec probes. It proposes O01–O06
-dispositions; these are branch evidence, not merged `main` behavior, qualified
-providers or frozen production contracts. O07 and the complete M02 candidate
-comparison remain open. M03–M09 are pending.
-
-**Next:** review PR #9 against the approved proposal and Canonical; accept or
-revise its decisions, complete O07's candidate/qualification map, then exercise
-M03/M04 research adapters. Do not infer completion from Issue checklist boxes,
-old handoff labels, merge status or a passing setup test.
+Gate. This one-time historical reconciliation adds no process for other PIPs.
 
 ## Execution roadmap
 
