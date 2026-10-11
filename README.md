@@ -176,15 +176,12 @@ Then read the current Primitives canonical architecture. The public
 architecture document provides context and navigation; the Primitives canonical
 remains the authority for Primitives internals and its evolution.
 
-The [consolidated public address record (historical PIP-0003)](./docs/pips/PIP-0003/PIP-0003.md)
-identifies the first capability's scope, evidence and open decisions. Its
-[composition/API examples](./docs/research/public-address-composition-proposal.md)
-are proposals, not implemented public APIs. Production crypto/codec providers
-and independent review remain pending.
-
-The [current provider research](./docs/research/public-address-provider-research.md)
-records versioned candidates, bounded runtime probes, remaining qualification
-gaps and a column for independently researched alternatives.
+For the first public-address capability, start with the [PIP-0003 Execution
+Plan](./docs/pips/PIP-0003/EXECUTION-PLAN.md) for current status, the next review
+step and the ordered roadmap. The [approved proposal revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
+defines scope; [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
+records approval and coordination. The plan links the M00/M01 research,
+contract draft and assessment evidence where needed.
 
 For human and AI-agent work, preserve this repository-first context. Material work is additionally identified by the current PayCrypto.Me Improvement Proposal (PIP), when applicable:
 

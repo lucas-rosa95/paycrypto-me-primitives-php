@@ -19,10 +19,11 @@ docs/
 ├── pips/
 │   ├── PIP-0003/
 │   │   ├── PIP-0003.md              # capability proposal and boundaries
-│   │   ├── EXECUTION-PLAN.md        # recovered historical implementation plan
-│   │   └── milestones/             # M01 draft, handoff and diagrams
+│   │   ├── EXECUTION-PLAN.md        # current execution reference
+│   │   ├── M00/                     # early research, reviews and planning evidence
+│   │   ├── M01/                     # contract draft, report and diagrams
+│   │   └── M02/                     # protocol decisions and provider research
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
-└── research/                         # repository evidence/proposals when applicable
 
 archives/                              # ignored, local to the archiving checkout
 └── pips/
@@ -37,16 +38,20 @@ tools/
 
 ## Authority and purpose
 
-The [historical PIP-0003 record](pips/PIP-0003/PIP-0003.md) is the current
-entry point for the public address capability boundary. Its
-[historical Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) holds the recovered
-implementation sequence and technical gates.
+The [approved PIP-0003 proposal](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
+defines the public address capability boundary. Its
+[Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
+current operational reference. Start with its Current state, Reading path and
+Execution roadmap; consult M00 and M01 for the specific research, draft contract
+or assessment evidence linked from the plan.
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
-is its retrospective coordination anchor. Its [present-day approval decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
-pins the approved proposal revision; the historical plan, old execution package
-and M01 draft were not approval evidence. The [M02 protocol record](pips/PIP-0003/milestones/M02-PROTOCOL.md)
-tracks current implementation decisions and remaining provider qualification.
-The [independent plan review](reviews/plan-first-capability-canonical-alignment.md)
+is its retrospective coordination anchor. A
+[present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
+approved the exact proposal revision on 2026-10-10; the old package and M01
+draft did not establish that approval or verify the capability.
+The [M02 protocol record](pips/PIP-0003/M02/M02-PROTOCOL.md) tracks current
+implementation decisions and remaining provider qualification.
+The [independent plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
 
 - `README.md` is the public entry point for the Primitives repository.
@@ -79,11 +84,14 @@ assesses an earlier plan only, recoverable at [revision `83ccd557`](https://gith
   unchanged when current documentation evolves.
 - The PIP-0003 execution package also predates v0.2. Its issued package manifest
   identifies the baseline at Git revision `95e83842ed9f4a577998e49851449230f56f56b2`;
-  the exact former plan is recoverable at `247f1f1`. The organized historical
-  Execution Plan provides a present reading path without changing those records
-  or establishing v1.0 approval.
-- `docs/research/` may contain evidence, investigations, spikes, and proposals.
-  Those artifacts do not become canonical merely by being stored there.
+  the exact former plan is recoverable at `247f1f1`. M00's unchanged manifests
+  retain their original repository-relative paths, so verify those identities
+  against the archived snapshot or pinned Git revision, not today's layout.
+  The current Execution Plan reconciles that history and the later Issue decision.
+- `docs/pips/PIP-0003/M00/research/` and `M00/reviews/` hold the early
+  public-address investigations and plan review. Some originated under PIP-0002;
+  their placement makes them accessible to PIP-0003 execution without changing
+  their original authorship, assessment scope or authority.
 - `tools/skills/` contains reusable engineering/governance methods. Skills
   govern how architectural documents are engineered or revised; they are not
   Primitives architecture.

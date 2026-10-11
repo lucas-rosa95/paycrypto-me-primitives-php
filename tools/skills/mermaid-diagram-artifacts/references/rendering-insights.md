@@ -82,7 +82,7 @@ authorization; this skill does not automatically install tools.
 
 ## Original artifacts and references
 
-- [M01 diagram sources, exports and provenance](../../../../docs/pips/PIP-0003/milestones/diagrams/README.md).
+- [M01 diagram sources, exports and provenance](../../../../docs/pips/PIP-0003/M01/diagrams/README.md).
 - [Originating capability work, retrospective Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
 - [Mermaid HTML-label configuration](https://mermaid.js.org/config/schema-docs/config.html#htmllabels).
 - [pngquant options and quality rejection](https://pngquant.org/).

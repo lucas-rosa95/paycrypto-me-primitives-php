@@ -3,7 +3,7 @@
 **Research checkpoint: 2026-10-02. Preliminary feasibility evidence; no production
 selection. Historical work: [PIP-0002](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/pips/PIP-0002/PIP-0002.md).**
 
-This is the research worksheet linked from the [consolidated first-capability record](../pips/PIP-0003/PIP-0003.md).
+This is the research worksheet linked from the [consolidated first-capability record](../../PIP-0003.md).
 It updates the [2026-09-28 recommendations](public-address-candidate-worksheet.md)
 with pinned package metadata, source inspection and bounded executable probes.
 The earlier worksheet and BitWasp observations remain historical evidence.
@@ -211,8 +211,8 @@ conformance verdict.
    boundaries. Run an actual Composer-resolved runtime/dependency matrix before
    final selection.
 
-Apply the [current canonical's](../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md)
-technical Counter-Proofs and the [current reporting protocol](../protocols/primitives/COUNTER-PROOF-REPORT-v1.5.md)
+Apply the [current canonical's](../../../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md)
+technical Counter-Proofs and the [current reporting protocol](../../../../protocols/primitives/COUNTER-PROOF-REPORT-v1.5.md)
 to the actual implementation artifact. The consolidated record identifies the
 historical plan's two-library exercise as a verification method to reassess,
 not an approved current gate.

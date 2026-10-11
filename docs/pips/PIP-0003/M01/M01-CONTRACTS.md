@@ -5,8 +5,8 @@ Work: PIP-0003 / M01. Status: contract draft for M02 investigation.
 This document specifies semantic boundaries, not accepted PHP interfaces or
 selected implementations. Requirement and qualification IDs are local to this
 slice. A row does not require a separate class, package, interface or public API.
-The [plan](../PIP-0003.md), [execution context](../EXECUTION-CONTEXT.md) and
-[delegation inventory](../../../research/delegation-inventory.md) govern it.
+The [current plan](../EXECUTION-PLAN.md) and
+[delegation inventory](../M00/research/delegation-inventory.md) govern it.
 Production contracts freeze at M05 after relevant qualification.
 
 ## 1. Requirements and responsibility map
@@ -202,18 +202,18 @@ alternatives, reasons, limitations and affected Q IDs.
 
 ## 5. Evidence baseline and limits
 
-The existing [provider research](../../../research/public-address-provider-research.md)
-and [BitWasp investigation](../../../reviews/bitwasp-public-derivation/README.md)
+The existing [provider research](../M00/research/public-address-provider-research.md)
+and [BitWasp investigation](../M00/reviews/bitwasp-public-derivation/README.md)
 are inputs only. Known admission and zero-tweak discrepancies become negative
 and controlled qualification cases; they are not behavior to reproduce.
 
 The draft's BIP32 widths/public-index conventions are checked against
 [BIP32 at revision 3a10b5b](https://github.com/bitcoin/bips/blob/3a10b5b5f0a7586df8928d580a3009744ebb2079/bip-0032.mediawiki),
 using its public derivation and serialization sections; retry contract decisions
-remain O01. The existing [BIP32 source snapshot](../../../reviews/bitwasp-public-derivation/bip-0032.mediawiki)
+remain O01. The existing [BIP32 source snapshot](../M00/reviews/bitwasp-public-derivation/bip-0032.mediawiki)
 is recoverable locally with its investigation provenance.
 The [BIP173 source at the same revision](https://github.com/bitcoin/bips/blob/3a10b5b5f0a7586df8928d580a3009744ebb2079/bip-0173.mediawiki)
-and [stored snapshot](../../../research/provider-refresh-2026-10-02/bip-0173.mediawiki)
+and [stored snapshot](../M00/research/provider-refresh-2026-10-02/bip-0173.mediawiki)
 anchor codec qualification, not a completed adapter.
 
 M01 introduces no production provider, concrete PHP API or algorithm/codec
