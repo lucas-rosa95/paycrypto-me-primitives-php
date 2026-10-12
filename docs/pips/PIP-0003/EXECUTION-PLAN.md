@@ -19,7 +19,7 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 exact-path, O02 strict version/network/policy, and O03 receiving-only account/index use case while retaining the generic relative-path contract; proposes O04–O06; records the PHP 8.3 minimum decision; and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | The additional entry point is now approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10); review O04–O07 and qualify generic behavior on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 exact-path, O02 strict version/network/policy, O03 receiving-only account/index use case and O04 empty-path rejection while retaining the generic relative-path contract; proposes remaining O04–O06 details; records the PHP 8.3 minimum decision; and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | The additional entry point is now approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10); review remaining O04–O07 details and qualify generic behavior on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
 **Next reviewable step:** O03 retains the approved generic `relativePath`
@@ -29,13 +29,14 @@ and supplies `[0, index]` to the generic operation. The additional entry point
 is approved in [PIP00010 at `badb9cd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md),
 with the decision recorded on [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10).
 Implementation and qualification remain. Generic qualification may proceed
-under PIP-0003. Review PR #9's remaining O04–O06 proposals and O07 candidate
+under PIP-0003. Review PR #9's remaining O04–O06 details and O07 candidate
 map against the approved scope and Canonical; record accepted or revised dispositions.
 M03/M04 research adapters follow the relevant M02 decisions.
-O01's exact-path behavior and O02's strict initial version/network/policy
-mapping are accepted but await qualification. Maintainers must judge the
-64-bit host requirement, testnet label and public failure representation
-before contracts freeze at M05. M01's independent review is still open.
+O01's exact-path behavior, O02's strict initial version/network/policy
+mapping and O04's generic empty-path rejection are accepted but await
+qualification. Maintainers must judge the testnet label and public failure
+representation before contracts freeze at M05. M01's independent review is
+still open.
 When evidence changes, update this status and the roadmap together with its
 exact PR, commit or test reference.
 
@@ -73,7 +74,7 @@ engineering observation, not a new PIP decision state.
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
-| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record the accepted O01 exact-path, O02 strict compatibility and O03 account/index consumer use case without replacing the generic contract; decide remaining path/definition/error limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | PIP00010 now governs the additional receiving entry point; review/accept or revise O04–O06 and the O07 candidate/qualification map. Qualify the approved generic capability in M03/M04; missing suitable providers remain explicit gaps. Eligibility is not selection. |
+| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record the accepted O01 exact-path, O02 strict compatibility, O03 account/index consumer use case and O04 empty-path rejection without replacing the generic contract; decide remaining path/definition/error limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | PIP00010 now governs the additional receiving entry point; review remaining O04–O06 details and the O07 candidate/qualification map. Qualify the approved generic capability in M03/M04; missing suitable providers remain explicit gaps. Eligibility is not selection. |
 | M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Counter-prove future Signet profile extension with shared address bytes and a distinct context identifier in test-only fixtures; do not expose it as initially supported. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
@@ -134,8 +135,9 @@ maintainer accepted O01's exact-path behavior, O02's strict initial
 version/network/policy mapping and O03's receiving-only account/index use case
 on 2026-10-12 after the earlier unsupported O01 acceptance label was corrected.
 O03 retains the generic relative-path contract; its additional receiving entry
-point is separately approved in PIP00010 but not implemented. O04–O06 remain
-proposals. None is executed or qualified production behavior; challenge them
+point is separately approved in PIP00010 but not implemented. O04 rejects an
+empty generic path; its remaining details and O05–O06 remain proposals. None
+is executed or qualified production behavior; challenge them
 through M03–M05.
 
 - **O01 (accepted M02 behavior; qualification pending):** one exact-index
@@ -179,12 +181,19 @@ through M03–M05.
   the consumer. The generic operation proceeds under PIP-0003; the additional
   Primitives-owned receiving entry point is governed by the [approved PIP00010 revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md)
   and still requires implementation and qualification.
-- **O04 (proposal under review):** the generic public operation accepts an
-  array of integer relative child indices. Empty path addresses the imported
-  node; indices are `0..2^31−1`, and path length is no greater than
-  `255 − imported depth` on a 64-bit PHP host. Attempt each requested
+- **O04 (empty-path rejection accepted; remaining details under review):** the
+  generic public operation requires a nonempty array of integer relative child
+  indices. `[]` fails; `[0]` is valid. Indices are `0..2^31−1`, and path length
+  is no greater than `255 − imported depth`. Attempt each requested
   component once and fail at an invalid child without choosing another path.
-  Review these limits within the generic contract before freezing them.
+  These path-shape choices apply to the generic operation only. The approved
+  PIP00010 receiving entry point requires separate explicit integer `account`
+  and `index` fields, both allowing `0`, and never accepts a caller path or
+  branch. Missing or malformed fields fail without defaults. It always calls
+  the generic operation with `[0, index]`. Its selected account key needs
+  capacity for two further derivation levels; insufficient capacity fails
+  before derivation. Qualify the generic `[]` rejection and receiving `(0, 0)`
+  parity with a direct generic `[0, 0]` call.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
@@ -209,13 +218,14 @@ test-only expanded registry must reject a malformed Signet definition.
 See the [M02 counter-proof](M02/M02-PROTOCOL.md) for the full cases. The Signet
 challenge is a consensus parameter outside this address-encoding definition.
 
-The accepted exact-path and strict version-policy choices still need
-consuming-use and adapter review; the 64-bit requirement remains proposed.
-A merge of PR #9 would record the O01/O02 decisions and remaining proposals; it
+The accepted exact-path, strict version-policy and empty-path rejection choices
+still need consuming-use and adapter review.
+A merge of PR #9 would record the O01/O02/O04 decisions and remaining proposals; it
 would not make Q tests pass.
-The assessed M01 Q05 draft contains advancing-path cases; M03 must execute the
-revised O01 exact-path cases in the M02 record rather than treating those old
-expectations as accepted behavior.
+The assessed M01 Q05 draft contains advancing-path cases, and its Q04 leaves
+the empty-path disposition open. M03/M04 must execute the revised O01 and O04
+cases in the M02 record rather than treating old expectations as accepted
+behavior.
 
 **O07 candidate position (dated research, no production selection):**
 
@@ -247,7 +257,7 @@ Q01–Q12 and O01–O07 identities. No row mandates its own class or package.
 | Requirement | Owned semantics and delegated operations | Required qualification |
 |---|---|---|
 | R01–R02 | Public request/result; immutable validated network definitions; D11 conversions as needed. | Q01 all six combinations, standalone use and direct-composition parity; Q02 two valid initial definitions, missing/extra/invalid fields and non-mutation, plus a test-only Signet profile with duplicate testnet encoding parameters and a distinct context identifier. Unknown public profiles fail until admitted. |
-| R03–R04 | Exact extended-public-key structure, metadata/version/material admission and bounded relative path; delegate D04, D06–D07, D10–D11. | Q03 valid/invalid BIP32 public fixtures, private/unknown/mismatched versions, checksum, exact length, trailing data, root metadata and point validity; Q04 empty path, index/depth/resource bounds and imported hardened ancestry. |
+| R03–R04 | Exact extended-public-key structure, metadata/version/material admission and bounded relative path; delegate D04, D06–D07, D10–D11. | Q03 valid/invalid BIP32 public fixtures, private/unknown/mismatched versions, checksum, exact length, trailing data, root metadata and point validity; Q04 rejects empty path, accepts `[0]`, checks index/depth/resource bounds and imported hardened ancestry; receiving `(0, 0)` matches direct generic `[0, 0]`. |
 | R05–R07 | CKDpub composition, child metadata, valid compressed key and public tweak; delegate D03–D05/D11, D01–D02 for fingerprint. | Q05 official public edges, invalid first/intermediate/last candidate, zero and exhaustion; Q06 exact 33 bytes, prefix and curve validity; Q07 tweak 0, 1, n−1, n+, wrong width, infinity and replacement through real ECC adapters. |
 | R08 | HASH160 and BIP32 message construction over delegated SHA-256, RIPEMD-160, HMAC-SHA512 and fixed-width conversion. | Q08 sourced known answers, empty/binary inputs, long HMAC keys, argument order, exact lengths and unsigned/endian extremes. |
 | R09–R11 | P2PKH key HASH160 + version; P2SH-P2WPKH HASH160 of exact witness-v0 redeem script `0014` + 20-byte key hash + P2SH version; P2WPKH v0/20-byte witness program + HRP. Delegate D06–D09 codecs. | Q09 P2PKH, leading zeros/alphabet/checksum/length; Q10 exact redeem-script preimage, distinct key/redeem hashes; Q11 BIP173 valid/invalid, case, HRP, checksum, padding, v0 size and incompatible policies. |
@@ -337,8 +347,9 @@ requires them.
 - Maintainers accepted PR #9's exact-path derivation behavior and strict
   six-version/policy allowlist, including initial rejection of legacy BIP49
   xpub/tpub nested-SegWit requests. M03/M04 must verify these through qualified
-  adapters and independent evidence. Review the 64-bit host requirement,
-  testnet label and public failure representation before M05 freezes a contract. Any
+  adapters and independent evidence. Qualify generic empty-path rejection;
+  review the testnet label and public failure representation before M05 freezes
+  a contract. Any
   material departure from the approved proposal/Canonical needs the current
   Materiality Gate.
 - Second checked-Base58Check and SegWit candidates have bounded probes, but
