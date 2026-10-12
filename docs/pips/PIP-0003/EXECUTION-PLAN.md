@@ -22,9 +22,12 @@ read as a working library feature.
 | M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 exact-path and O02 strict version/network/policy decisions, proposes O03–O06, records the PHP 8.3 minimum decision, and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | Review O03–O07; qualify accepted semantics on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
-**Next reviewable step:** review PR #9's O03–O06 proposals and O07 candidate
-map against the approved scope and Canonical; record accepted or revised
-dispositions. M03/M04 research adapters follow the relevant M02 decisions.
+**Next reviewable step:** resolve O03's newly clarified account/index receiving
+contract against the approved PIP boundary, including how account-level public
+keys are supplied. Apply the Materiality Gate before changing that boundary.
+Then review PR #9's remaining O04–O06 proposals and O07 candidate map against
+the approved scope and Canonical; record accepted or revised dispositions.
+M03/M04 research adapters follow the relevant M02 decisions.
 O01's exact-path behavior and O02's strict initial version/network/policy
 mapping are accepted but await qualification. Maintainers must judge the
 64-bit host requirement, testnet label and public failure representation
@@ -159,14 +162,14 @@ executed or qualified production behavior; challenge them through M03–M05.
   derived path. Empty path addresses imported node. Admit indices
   `0..2^31−1`, length no greater than `255 − imported depth`, on a 64-bit PHP
   host. Attempt each requested component once; an invalid child fails at that
-  index without choosing another path. The maintainer's multi-store use case
-  parameterizes account and address index separately: different hardened
-  accounts require their respective account-level public keys. Its receiving
-  integration always chooses external branch `0`, so that branch is omitted
-  from its account/index business request; the Primitives path remains
-  explicit. Whether O03 carries the caller's account number as context is
-  still under review; the number cannot prove the supplied key's account
-  origin.
+  index without choosing another path. This earlier O03 request shape is now
+  under reconsideration: the maintainer requests a receiving-only Primitives
+  operation whose consumer inputs are account and address index, with external
+  branch `0` fixed inside Primitives. Different hardened accounts require
+  their respective account-level public keys. Their source remains to be
+  defined. A fixed internal branch and account/index public request depart
+  from the approved PIP's explicit relative-path boundary; do not implement
+  them as an accepted M02 decision without the Materiality Gate.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
