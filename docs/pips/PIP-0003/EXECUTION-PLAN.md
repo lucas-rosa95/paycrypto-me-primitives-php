@@ -163,9 +163,11 @@ executed or qualified production behavior; challenge them through M03–M05.
   `0..2^31−1`, length no greater than `255 − imported depth`, on a 64-bit PHP
   host. Attempt each requested component once; an invalid child fails at that
   index without choosing another path. This earlier O03 request shape is now
-  under reconsideration: the maintainer requests a receiving-only Primitives
-  operation whose consumer inputs are account and address index, with external
-  branch `0` fixed inside Primitives. Different hardened accounts require
+  under reconsideration: the maintainer accepted receiving-only consumer
+  semantics whose inputs are account and address index, with external branch
+  `0` fixed inside Primitives. Logical coordinates `[0, 0, 1000]` and
+  `[1, 0, 5]` mean account/receiving branch/index, not relative paths from one
+  public key. Different hardened accounts require
   their respective account-level public keys. Their source remains to be
   defined. A fixed internal branch and account/index public request depart
   from the approved PIP's explicit relative-path boundary; do not implement
