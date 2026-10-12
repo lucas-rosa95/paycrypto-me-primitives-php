@@ -25,9 +25,9 @@ read as a working library feature.
 **Next reviewable step:** review PR #9's O01–O06 proposals and O07 candidate
 map against the approved scope and Canonical; record accepted or revised
 dispositions. M03/M04 research adapters follow the
-relevant M02 decisions. Maintainers must judge the proposed version/policy
-allowlist, including legacy BIP49 xpub/tpub compatibility, and the 256-attempt
-budget, 64-bit host requirement, testnet label and public failure
+relevant M02 decisions. Maintainers must judge the exact-path O01 recommendation,
+the proposed version/policy allowlist including legacy BIP49 xpub/tpub
+compatibility, the 64-bit host requirement, testnet label and public failure
 meanings before contracts freeze at M05. M01's independent review is still open.
 When evidence changes, update this status and the roadmap together with its
 exact PR, commit or test reference.
@@ -66,8 +66,8 @@ engineering observation, not a new PIP decision state.
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
-| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; decide invalid-child/effective-path semantics, compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | Review/accept or revise O01–O06 and the O07 candidate/qualification map. Missing suitable providers remain explicit gaps. Eligibility is not selection. |
-| M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child, effective path, depth, retry exhaustion, metadata and actual dependency paths. Record shared mathematical lineage. |
+| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; decide invalid-child/exact-path semantics, compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | Review/accept or revise O01–O06 and the O07 candidate/qualification map. Missing suitable providers remain explicit gaps. Eligibility is not selection. |
+| M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
 | M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.3/8.4; no vendor or higher-domain leakage. Record unsupported policies. |
@@ -127,17 +127,18 @@ remain proposals; the earlier O01 acceptance label lacked a recorded maintainer
 decision and was corrected. None is executed or qualified production behavior.
 Challenge them through M03–M05.
 
-- **O01 (proposed; retry limit remains O04):** one exact-index CKDpub attempt
-  returns the child at that index or a distinguished invalid-child outcome.
-  Outer orchestration retries the next
-  public index at each path level using the same parent until a valid child,
-  then derives the next requested level from that effective child. Return both
-  requested and effective relative paths. HMAC-SHA512 takes the 32-byte parent
+- **O01 (revised proposal):** one exact-index CKDpub attempt returns the child
+  at that index or a distinguished invalid-child outcome. The public address
+  operation attempts each requested path component once. An invalid child at
+  any level fails the request without an address or automatic advancement;
+  the caller that allocates paths decides whether to try another unassigned
+  path and persists the one used for its order. A successful derived path
+  equals the requested path. HMAC-SHA512 takes the 32-byte parent
   chain code as key and compressed parent key plus four-byte big-endian index
   as message; split the 64-byte output. A left half at/above group order or
   resulting infinity is invalid. **Zero is valid**: retain the point but update
   chain code and child metadata. Only successful right halves become chain code.
-  Parent fingerprint comes from the immediate effective parent's HASH160.
+  Parent fingerprint comes from the immediate parent's HASH160.
 - **O02:** compare all four decoded version bytes, with explicit policy/network.
   Proposed initial allowlist is mainnet `xpub/0488b21e` P2PKH,
   `ypub/049d7cb2` P2SH-P2WPKH, `zpub/04b24746` P2WPKH; testnet
@@ -149,24 +150,28 @@ Challenge them through M03–M05.
   not full chain identity. Do not infer account path/depth from SLIP examples.
 - **O03–O04:** proposed public request takes serialized extended public key,
   array of integer relative child indices, validated network definition and
-  explicit policy. Result contains address, network, policy, requested and
-  effective paths. Empty path addresses imported node. Admit indices
+  explicit policy. Result contains address, network, policy and the exact
+  derived path. Empty path addresses imported node. Admit indices
   `0..2^31−1`, length no greater than `255 − imported depth`, on a 64-bit PHP
-  host. Permit at most 256 candidate attempts per level, with distinct budget
-  and public-range exhaustion. The budget is operational, not a BIP32 constant.
+  host. Attempt each requested component once; an invalid child fails at that
+  index rather than consuming another caller-assigned index.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
   distinguish malformed input, unsupported or incompatible intent, bad
-  definition, depth/range/budget exhaustion and provider/environment failure.
+  definition, invalid child at the requested index, path/depth bounds and
+  provider/environment failure.
   Validate definition/request shape, checked decode and structure,
   compatibility, then derivation/encoding. No partial address or diagnostics
   containing keys, chain codes or full wallet paths. Final PHP failure form
   and physical definition representation remain M05 choices.
 
-The 256-attempt choice, 64-bit requirement and narrow version-policy allowlist
+The exact-path choice, 64-bit requirement and narrow version-policy allowlist
 need consuming-use review before public contract freeze. A merge of PR #9 would
 record the decision proposal and probes; it would not make Q tests pass.
+The assessed M01 Q05 draft contains advancing-path cases; M03 must execute the
+revised O01 exact-path cases in the M02 record rather than treating those old
+expectations as accepted behavior.
 
 **O07 candidate position (dated research, no production selection):**
 
@@ -285,11 +290,12 @@ requires them.
 
 ## Risks, gaps and decisions requiring judgment
 
-- Maintainers should review PR #9's six-version/policy allowlist, including the
-  proposed rejection of legacy BIP49 xpub/tpub nested-SegWit requests, along
-  with the 256-attempt operational budget, 64-bit host requirement, testnet label
-  and public failure meanings before M05 freezes a contract. Any actual material
-  departure from the approved proposal/Canonical needs the current Materiality Gate.
+- Maintainers should review PR #9's exact-path derivation proposal and
+  six-version/policy allowlist, including the proposed rejection of legacy
+  BIP49 xpub/tpub nested-SegWit requests, along with the 64-bit host requirement,
+  testnet label and public failure meanings before M05 freezes a contract. Any
+  material departure from the approved proposal/Canonical needs the current
+  Materiality Gate.
 - Second checked-Base58Check and SegWit candidates have bounded probes, but
   neither boundary has two qualified semantic adapters. An independent ECC
   oracle, PHP 8.3/8.4 Composer graphs, complete license/security/maintenance review
