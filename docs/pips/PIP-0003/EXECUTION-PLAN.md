@@ -68,7 +68,7 @@ engineering observation, not a new PIP decision state.
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
 | M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record the accepted O01 exact-path and O02 strict compatibility decisions, decide remaining request/definition/error limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | Review/accept or revise O03–O06 and the O07 candidate/qualification map. Qualify accepted O01/O02 in M03/M04; missing suitable providers remain explicit gaps. Eligibility is not selection. |
 | M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. |
-| M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Disclose any missing alternative. |
+| M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Counter-prove future Signet profile extension with shared address bytes and a distinct context identifier in test-only fixtures; do not expose it as initially supported. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
 | M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.3/8.4; no vendor or higher-domain leakage. Record unsupported policies. |
 | M07 — pending | After M06, add remaining policies and shared lower capabilities; assess Bitcoin Cash reuse only as design fitness. | Six policy/network combinations, direct-composition parity, distinct terminal semantics, failures and provider replacement pass. No CashAddr implementation. |
@@ -171,6 +171,19 @@ executed or qualified production behavior; challenge them through M03–M05.
   containing keys, chain codes or full wallet paths. Final PHP failure form
   and physical definition representation remain M05 choices.
 
+The maintainer raised Signet as an O05/Q02 extension challenge during the O02
+review. [Bitcoin Core's pinned chain parameters](https://github.com/bitcoin/bitcoin/blob/228877d7836a55c1d6fde90b0b7ba2d4c90248ab/src/kernel/chainparams.cpp)
+give Testnet3, Testnet4 and Signet identical address prefixes, `tb` HRP and
+test extended-public-key version. M04 must show that a test-only, separately
+identified Signet profile can reuse validated address parameters and the same
+composition without assuming encodings uniquely identify a chain. The same
+key/path/policy should yield the same address text under either profile, while
+the result identifies only caller-supplied validated context. The initial
+public allowlist must reject an explicitly Signet-labeled definition; the
+test-only expanded registry must reject a malformed Signet definition.
+See the [M02 counter-proof](M02/M02-PROTOCOL.md) for the full cases. The Signet
+challenge is a consensus parameter outside this address-encoding definition.
+
 The accepted exact-path and strict version-policy choices still need
 consuming-use and adapter review; the 64-bit requirement remains proposed.
 A merge of PR #9 would record the O01/O02 decisions and remaining proposals; it
@@ -208,7 +221,7 @@ Q01–Q12 and O01–O07 identities. No row mandates its own class or package.
 
 | Requirement | Owned semantics and delegated operations | Required qualification |
 |---|---|---|
-| R01–R02 | Public request/result; immutable validated network definitions; D11 conversions as needed. | Q01 all six combinations, standalone use and direct-composition parity; Q02 two valid definitions, missing/extra/invalid fields and non-mutation. |
+| R01–R02 | Public request/result; immutable validated network definitions; D11 conversions as needed. | Q01 all six combinations, standalone use and direct-composition parity; Q02 two valid initial definitions, missing/extra/invalid fields and non-mutation, plus a test-only Signet profile with duplicate testnet encoding parameters and a distinct context identifier. Unknown public profiles fail until admitted. |
 | R03–R04 | Exact extended-public-key structure, metadata/version/material admission and bounded relative path; delegate D04, D06–D07, D10–D11. | Q03 valid/invalid BIP32 public fixtures, private/unknown/mismatched versions, checksum, exact length, trailing data, root metadata and point validity; Q04 empty path, index/depth/resource bounds and imported hardened ancestry. |
 | R05–R07 | CKDpub composition, child metadata, valid compressed key and public tweak; delegate D03–D05/D11, D01–D02 for fingerprint. | Q05 official public edges, invalid first/intermediate/last candidate, zero and exhaustion; Q06 exact 33 bytes, prefix and curve validity; Q07 tweak 0, 1, n−1, n+, wrong width, infinity and replacement through real ECC adapters. |
 | R08 | HASH160 and BIP32 message construction over delegated SHA-256, RIPEMD-160, HMAC-SHA512 and fixed-width conversion. | Q08 sourced known answers, empty/binary inputs, long HMAC keys, argument order, exact lengths and unsigned/endian extremes. |
