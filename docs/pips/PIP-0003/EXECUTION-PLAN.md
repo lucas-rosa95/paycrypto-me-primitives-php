@@ -25,8 +25,9 @@ read as a working library feature.
 **Next reviewable step:** review PR #9's O02–O06 proposals and O07 candidate
 map against the approved scope and Canonical; record accepted or revised
 dispositions. M03/M04 research adapters follow the
-relevant M02 decisions. Maintainers must judge the proposed version/policy allowlist,
-256-attempt budget, 64-bit host requirement, testnet label and public failure
+relevant M02 decisions. Maintainers must judge the proposed version/policy
+allowlist, including legacy BIP49 xpub/tpub compatibility, and the 256-attempt
+budget, 64-bit host requirement, testnet label and public failure
 meanings before contracts freeze at M05. M01's independent review is still open.
 When evidence changes, update this status and the roadmap together with its
 exact PR, commit or test reference.
@@ -283,10 +284,11 @@ requires them.
 
 ## Risks, gaps and decisions requiring judgment
 
-- Maintainers should review PR #9's six-version/policy allowlist, 256-attempt
-  operational budget, 64-bit host requirement, testnet label and public failure
-  meanings before M05 freezes a contract. Any actual material departure from
-  the approved proposal/Canonical needs the current Materiality Gate.
+- Maintainers should review PR #9's six-version/policy allowlist, including the
+  proposed rejection of legacy BIP49 xpub/tpub nested-SegWit requests, along
+  with the 256-attempt operational budget, 64-bit host requirement, testnet label
+  and public failure meanings before M05 freezes a contract. Any actual material
+  departure from the approved proposal/Canonical needs the current Materiality Gate.
 - Second checked-Base58Check and SegWit candidates have bounded probes, but
   neither boundary has two qualified semantic adapters. An independent ECC
   oracle, PHP 8.3/8.4 Composer graphs, complete license/security/maintenance review
