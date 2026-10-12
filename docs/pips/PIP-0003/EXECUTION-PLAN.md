@@ -162,7 +162,9 @@ executed or qualified production behavior; challenge them through M03–M05.
   not full chain identity. Do not infer account path/depth from SLIP examples.
 - **O03 (accepted M02 direction; governance pending):** the receiving-only
   public request takes account and address index, plus explicit network and
-  policy. Primitives fixes external branch `0` internally and selects an
+  policy. This replaces the proposed consumer-facing generic relative-path
+  request while retaining internal path composition. Primitives fixes external
+  branch `0` internally and selects an
   account-level public key from an explicitly provisioned immutable source
   keyed by network, policy and account. Logical coordinates `[0, 0, 1000]`
   and `[1, 0, 5]` mean account/receiving branch/index; the respective public
@@ -174,12 +176,13 @@ executed or qualified production behavior; challenge them through M03–M05.
   from the approved PIP's explicit relative-path boundary. The product
   question is closed, but implementation requires the [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10)
   Materiality Gate assessment and a separate governed decision.
-- **O04 (proposal under review):** the earlier generic operation accepts an
-  array of integer relative child indices. Empty path addresses the imported
+- **O04 (proposal under review):** internal public-derivation composition
+  accepts an array of integer relative child indices. Empty path addresses the imported
   node; indices are `0..2^31−1`, and path length is no greater than
   `255 − imported depth` on a 64-bit PHP host. Attempt each requested
   component once and fail at an invalid child without choosing another path.
-  Review this proposal against O03's governed boundary before freezing it.
+  Review these limits against O03's governed boundary before freezing them;
+  they do not add a second consumer-facing request.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
