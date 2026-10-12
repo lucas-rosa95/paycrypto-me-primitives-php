@@ -3,7 +3,7 @@
 This is the current HOW, ORDER, and EXECUTION reference for
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
 
-## Current state — checked 2026-10-11
+## Current state — checked 2026-10-12
 
 **Goal:** provide a locally usable, public-only operation that derives Bitcoin
 P2PKH, P2SH-P2WPKH and P2WPKH addresses from an extended public key, a bounded
@@ -19,7 +19,7 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) proposes six protocol dispositions (O01–O06). Its local continuation now adds an O07 candidate comparison, PHP 8.1 Composer graph and second checked Base58 probe. | Review the protocol choices and O07 map; finish PHP 8.3 and adapter qualification in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) proposes six protocol dispositions (O01–O06). The PR now adds an O07 candidate comparison, PHP 8.1 Composer graph and second checked Base58 probe. | Review the protocol choices and O07 map; finish PHP 8.3 and adapter qualification in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
 **Next reviewable step:** review PR #9's protocol proposals and O07 candidate
@@ -273,7 +273,7 @@ requires them.
 | [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
 | [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
-| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [local M02 continuation](M02/M02-PROTOCOL.md) | Proposed O01–O06 dispositions, O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. No merge, maintainer acceptance, adapter qualification, final selection or production tests. |
+| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Proposed O01–O06 dispositions, O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. No merge, maintainer acceptance, adapter qualification, final selection or production tests. |
 
 ## Risks, gaps and decisions requiring judgment
 
@@ -368,6 +368,6 @@ identifiers, not new checksums for the reorganized workspace.
 reserves whole-workspace archival for a closed Issue. The proposal and this plan
 are the active governance/operational documents; milestone files have evidence
 roles, not competing plan authority. Old references naming `PIP-0003.md` as a
-plan refer to its assessed Git revision. The local continuation of PR #9 has
-relocated its M02 files to `M02/` after merging current `main`; the PR remains
-unmerged, and the relocation must be included in its eventual integration.
+plan refer to its assessed Git revision. PR #9 has relocated its M02 files to
+`M02/` after merging current `main`; the PR remains unmerged, and the relocation
+is part of its proposed integration.

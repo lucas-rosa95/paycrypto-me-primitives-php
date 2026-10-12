@@ -6,8 +6,8 @@ require '/candidate/Base58Codec.php';
 use Muvon\KISS\Base58Codec;
 
 $spec = file_get_contents('/evidence/bip-0032.mediawiki');
-if ($spec === false || !preg_match_all('/^\*\* ext pub: (xpub\S+)/m', $spec, $matches)) {
-    throw new RuntimeException('BIP32 public vectors unavailable');
+if ($spec === false || preg_match_all('/^\*\* ext pub: (xpub\S+)/m', $spec, $matches) !== 17) {
+    throw new RuntimeException('Expected seventeen BIP32 public vectors');
 }
 
 $roundTrips = [];
