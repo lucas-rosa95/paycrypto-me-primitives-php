@@ -159,7 +159,11 @@ executed or qualified production behavior; challenge them through M03–M05.
   derived path. Empty path addresses imported node. Admit indices
   `0..2^31−1`, length no greater than `255 − imported depth`, on a 64-bit PHP
   host. Attempt each requested component once; an invalid child fails at that
-  index without choosing another path.
+  index without choosing another path. The maintainer's multi-store use case
+  parameterizes account and address index separately: different hardened
+  accounts require their respective account-level public keys. Whether O03
+  carries the caller's account number as context is still under review; the
+  number cannot prove the supplied key's account origin.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
