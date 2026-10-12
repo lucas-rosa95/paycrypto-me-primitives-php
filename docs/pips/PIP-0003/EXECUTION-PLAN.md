@@ -130,10 +130,9 @@ Challenge them through M03–M05.
 - **O01 (revised proposal):** one exact-index CKDpub attempt returns the child
   at that index or a distinguished invalid-child outcome. The public address
   operation attempts each requested path component once. An invalid child at
-  any level fails the request without an address or automatic advancement;
-  the caller that allocates paths decides whether to try another unassigned
-  path and persists the one used for its order. A successful derived path
-  equals the requested path. HMAC-SHA512 takes the 32-byte parent
+  any level fails the request without an address or automatic advancement.
+  A successful derived path equals the requested path. The operation keeps
+  no allocation or consumer state. HMAC-SHA512 takes the 32-byte parent
   chain code as key and compressed parent key plus four-byte big-endian index
   as message; split the 64-byte output. A left half at/above group order or
   resulting infinity is invalid. **Zero is valid**: retain the point but update
@@ -154,7 +153,7 @@ Challenge them through M03–M05.
   derived path. Empty path addresses imported node. Admit indices
   `0..2^31−1`, length no greater than `255 − imported depth`, on a 64-bit PHP
   host. Attempt each requested component once; an invalid child fails at that
-  index rather than consuming another caller-assigned index.
+  index without choosing another path.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
