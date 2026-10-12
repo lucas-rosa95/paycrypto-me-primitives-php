@@ -161,9 +161,12 @@ executed or qualified production behavior; challenge them through M03–M05.
   host. Attempt each requested component once; an invalid child fails at that
   index without choosing another path. The maintainer's multi-store use case
   parameterizes account and address index separately: different hardened
-  accounts require their respective account-level public keys. Whether O03
-  carries the caller's account number as context is still under review; the
-  number cannot prove the supplied key's account origin.
+  accounts require their respective account-level public keys. Its receiving
+  integration always chooses external branch `0`, so that branch is omitted
+  from its account/index business request; the Primitives path remains
+  explicit. Whether O03 carries the caller's account number as context is
+  still under review; the number cannot prove the supplied key's account
+  origin.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
   missing/extra/duplicate/conflicting/cross-network fields. Proposed failures
