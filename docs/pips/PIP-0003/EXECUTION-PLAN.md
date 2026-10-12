@@ -19,16 +19,17 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) proposes O01–O06, records the PHP 8.3 minimum decision, and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | Review O01–O07; qualify on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records the accepted O01 exact-path decision, proposes O02–O06, records the PHP 8.3 minimum decision, and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | Review O02–O07; qualify O01 and the other agreed semantics on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
-**Next reviewable step:** review PR #9's O01–O06 proposals and O07 candidate
+**Next reviewable step:** review PR #9's O02–O06 proposals and O07 candidate
 map against the approved scope and Canonical; record accepted or revised
-dispositions. M03/M04 research adapters follow the
-relevant M02 decisions. Maintainers must judge the exact-path O01 recommendation,
-the proposed version/policy allowlist including legacy BIP49 xpub/tpub
-compatibility, the 64-bit host requirement, testnet label and public failure
-meanings before contracts freeze at M05. M01's independent review is still open.
+dispositions. M03/M04 research adapters follow the relevant M02 decisions.
+The O01 exact-path behavior is accepted but awaits qualification. Maintainers
+must judge the proposed version/policy allowlist, including legacy BIP49
+xpub/tpub compatibility, the 64-bit host requirement, testnet label and public
+failure meanings before contracts freeze at M05. M01's independent review is
+still open.
 When evidence changes, update this status and the roadmap together with its
 exact PR, commit or test reference.
 
@@ -66,7 +67,7 @@ engineering observation, not a new PIP decision state.
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
-| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; decide invalid-child/exact-path semantics, compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | Review/accept or revise O01–O06 and the O07 candidate/qualification map. Missing suitable providers remain explicit gaps. Eligibility is not selection. |
+| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record the accepted O01 exact-path decision, decide remaining compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | Review/accept or revise O02–O06 and the O07 candidate/qualification map. Qualify accepted O01 in M03; missing suitable providers remain explicit gaps. Eligibility is not selection. |
 | M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
@@ -122,14 +123,15 @@ delegated SHA-256 and RIPEMD-160.
 ### M02 branch proposals: review before contract freeze
 
 The [M02 protocol record on the PR #9 branch](M02/M02-PROTOCOL.md)
-pins BIP32, SLIP-0132, BIP49/84, BIP141/173 and Bitcoin Core sources. O01–O06
-remain proposals; the earlier O01 acceptance label lacked a recorded maintainer
-decision and was corrected. None is executed or qualified production behavior.
-Challenge them through M03–M05.
+pins BIP32, SLIP-0132, BIP49/84, BIP141/173 and Bitcoin Core sources. The
+maintainer accepted O01's exact-path behavior on 2026-10-12 after the earlier
+unsupported acceptance label was corrected. O02–O06 remain proposals. None is
+executed or qualified production behavior; challenge them through M03–M05.
 
-- **O01 (revised proposal):** one exact-index CKDpub attempt returns the child
-  at that index or a distinguished invalid-child outcome. The public address
-  operation attempts each requested path component once. An invalid child at
+- **O01 (accepted M02 behavior; qualification pending):** one exact-index
+  CKDpub attempt returns the child at that index or a distinguished
+  invalid-child outcome. The public address operation attempts each requested
+  path component once. An invalid child at
   any level fails the request without an address or automatic advancement.
   A successful derived path equals the requested path. The operation keeps
   no allocation or consumer state. HMAC-SHA512 takes the 32-byte parent
@@ -165,9 +167,10 @@ Challenge them through M03–M05.
   containing keys, chain codes or full wallet paths. Final PHP failure form
   and physical definition representation remain M05 choices.
 
-The exact-path choice, 64-bit requirement and narrow version-policy allowlist
-need consuming-use review before public contract freeze. A merge of PR #9 would
-record the decision proposal and probes; it would not make Q tests pass.
+The accepted exact-path choice still needs consuming-use and adapter review;
+the 64-bit requirement and narrow version-policy allowlist remain proposed.
+A merge of PR #9 would record the O01 decision and remaining proposals; it
+would not make Q tests pass.
 The assessed M01 Q05 draft contains advancing-path cases; M03 must execute the
 revised O01 exact-path cases in the M02 record rather than treating those old
 expectations as accepted behavior.
@@ -285,11 +288,12 @@ requires them.
 | [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
 | [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
-| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Proposed O01–O06 dispositions, O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. No merge, acceptance of protocol choices, adapter qualification, final selection or production tests. |
+| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 exact-path behavior, proposed O02–O06 dispositions, O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. No merge, adapter qualification, final selection or production tests. |
 
 ## Risks, gaps and decisions requiring judgment
 
-- Maintainers should review PR #9's exact-path derivation proposal and
+- Maintainers accepted PR #9's exact-path derivation behavior; M03 must verify
+  it through qualified adapters and independent evidence. Review the
   six-version/policy allowlist, including the proposed rejection of legacy
   BIP49 xpub/tpub nested-SegWit requests, along with the 64-bit host requirement,
   testnet label and public failure meanings before M05 freezes a contract. Any
