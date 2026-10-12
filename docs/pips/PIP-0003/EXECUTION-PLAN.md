@@ -169,14 +169,17 @@ record the decision proposal and probes; it would not make Q tests pass.
 | Delegated need | Candidate evidence and remaining gate |
 |---|---|
 | D01–D03 and D11 | PHP `hash`, `hash_hmac`, `pack` and `unpack` have bounded PHP 8.1/8.3 probes. Complete binary/length, long-HMAC, argument-order and width/endianness conformance is pending. |
-| D04–D05 ECC | Paragonie ECC 2.6.0 and Simplito elliptic-php 1.0.12 have different raw APIs and bounded PHP 8.1+GMP probes. Both require strict adapter scalar admission; exact point corpus, unchanged CKDpub consumer and independent mathematical reference remain pending. The PHP 8.1 Composer trial records their transitive dependency paths. Native libsecp256k1 is a reference lead, not a selected PHP backend. |
+| D04–D05 ECC | Paragonie ECC 2.6.0 and Simplito elliptic-php 1.0.12 have different raw APIs and bounded PHP 8.1+GMP probes. Both require strict adapter scalar admission; exact point corpus, unchanged CKDpub consumer and independent mathematical reference remain pending. The PHP 8.1 Composer trial records their transitive dependency paths. User-supplied uma/secp256k1-php 0.1.2 exposes a native public tweak API on PHP 8.2+ and is an M03 reference/adapter lead pending runtime decision and build qualification. It is not a selected backend. |
 | D06–D07 Base58Check | User-contributed leads StephenHill Base58 2.1.0 and Tuupola Base58 2.2.0 were already mapped: StephenHill is raw binary Base58 only; Tuupola has bounded checked-key/address results, but its checked API uses a one-byte option while extended-key versions are four bytes. The third lead, mattallty/base58, is an integer/number codec without binary or checked support and uses PHP 8-incompatible string-offset syntax, so it cannot serve D06–D07 on PHP 8.1. Muvon Base58 Codec 0.1 remains a second conditional checked-codec candidate with a bounded BIP32 public-key round-trip probe; its undeclared BCMath use and empty-string invalid decode require explicit adapter handling. No two checked codecs have passed semantic qualification. |
-| D08–D09 SegWit | Focused BitWasp Bech32 0.0.1 has bounded BIP173 probes and a maintenance question. cjpgdk Bech32 0.1.2 is a second lead probed in PR #9; explicit HRP/v0 length/checksum semantics need adapter tests. Both need complete comparison and qualification. Their PHP 8.1 Composer dependency paths are recorded. |
+| D08–D09 SegWit | Focused BitWasp Bech32 0.0.1 has bounded BIP173 probes and a maintenance question. cjpgdk Bech32 0.1.2 is a second lead probed in PR #9; explicit HRP/v0 length/checksum semantics need adapter tests. Both need complete comparison and qualification. Their PHP 8.1 Composer dependency paths are recorded. Cardano PHP Bech32 1.1.0 becomes another generic codec lead only above the PHP 8.1 baseline, with Bitcoin SegWit admission and BitWasp lineage still to assess. |
 | D10 structural decode | Runtime fixed-width conversion plus Primitives-owned exact structure/admission is the research lead. No bespoke standardized decoder or broad Bitcoin package is selected. |
 
-Cardano PHP Bech32 1.1.0 and uma/secp256k1-php 0.1.1 declare PHP 8.2+,
-so they do not directly satisfy the PHP 8.1 baseline. The older BitWasp
-secp256k1 PHP binding declares PHP 7 only. Composer rejected Furqan Siddiqui
+Cardano PHP Bech32 1.1.0 requires PHP `^8.2`, and the user-supplied
+uma/secp256k1-php 0.1.2 native binding requires PHP `>=8.2`; neither directly
+satisfies the PHP 8.1 baseline. The older BitWasp secp256k1 binding has an
+unresolved PHP 8 build report. PHP 8.1 is end of life, while PHP 8.2 security
+support ends in December 2026; the runtime baseline decision is pending in the
+[M02 record](M02/M02-PROTOCOL.md). Composer rejected Furqan Siddiqui
 Base58Check 0.1.5 on PHP 8.1.34 because it requires `php-64bit: ^7.2`.
 Version/requirement observations are from the dated [M02 record](M02/M02-PROTOCOL.md)
 and [provider research](M00/research/public-address-provider-research.md);
