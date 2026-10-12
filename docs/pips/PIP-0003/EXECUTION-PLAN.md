@@ -19,7 +19,7 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 semantics, proposes O02–O06, and adds an O07 candidate comparison, PHP 8.1 Composer graph and second checked Base58 probe. | Review O02–O07; finish PHP 8.3 and adapter qualification in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 semantics and the PHP 8.3 minimum decision, proposes O02–O06, and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | Review O02–O07; qualify on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
 **Next reviewable step:** review PR #9's O02–O06 proposals and O07 candidate
@@ -66,12 +66,12 @@ engineering observation, not a new PIP decision state.
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
 | M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; decide invalid-child/effective-path semantics, compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | O01 is accepted for M02; review/accept or revise O02–O06 and the O07 candidate/qualification map. Missing suitable providers remain explicit gaps. Eligibility is not selection. |
-| M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.1/8.3 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child, effective path, depth, retry exhaustion, metadata and actual dependency paths. Record shared mathematical lineage. |
+| M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child, effective path, depth, retry exhaustion, metadata and actual dependency paths. Record shared mathematical lineage. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
-| M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.1/8.3; no vendor or higher-domain leakage. Record unsupported policies. |
+| M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.3/8.4; no vendor or higher-domain leakage. Record unsupported policies. |
 | M07 — pending | After M06, add remaining policies and shared lower capabilities; assess Bitcoin Cash reuse only as design fitness. | Six policy/network combinations, direct-composition parity, distinct terminal semantics, failures and provider replacement pass. No CashAddr implementation. |
-| M08 — pending | After M07, verify assembled candidate, with exact source/dependency/definition/runtime revisions and requirement-to-evidence map. | Run `composer ci` on PHP 8.1/8.3 plus conformance/differential suites; challenge all applicable CPs against actual artifact. Unresolved applicable CPs prevent readiness claim. |
+| M08 — pending | After M07, verify assembled candidate, with exact source/dependency/definition/runtime revisions and requirement-to-evidence map. | Run `composer ci` on PHP 8.3/8.4 plus conformance/differential suites; challenge all applicable CPs against actual artifact. Unresolved applicable CPs prevent readiness claim. |
 | M09 — pending | After M08, obtain independent challenge and correct findings on new revisions. | Reviewer identifies exact artifact/evidence; no applicable CP remains failed or unresolved before compliance claim. Preserve issued reports. |
 
 M03 and M04 can overlap only where their M02 inputs are settled; M04 key-admission
@@ -95,9 +95,11 @@ Shared behavior runs until distinct terminal address semantics diverge. Network
 variation is validated data, never executable configuration. No implicit account
 path, depth, policy or network conversion comes from the reference application.
 
-Historical delivery choices retained here include PHP 8.1 baseline plus PHP
-8.3 verification, explicit GMP requirements if selected, and two suitable
-distinct libraries per library-backed boundary using real semantic adapters,
+The M02 review on 2026-10-12 raised the supported consumer minimum to PHP 8.3,
+with PHP 8.3/8.4 verification. The earlier PHP 8.1 trials remain historical
+feasibility evidence, not support claims. Other delivery choices retained here
+include explicit GMP requirements if selected, and two suitable distinct
+libraries per library-backed boundary using real semantic adapters,
 one contract suite and unchanged consuming compositions. The two-library rule
 is a **slice-level plan choice**, not a universal Canonical rule or proof of
 mathematical independence. Runtime facilities need conformance without fake
@@ -169,17 +171,17 @@ record the decision proposal and probes; it would not make Q tests pass.
 | Delegated need | Candidate evidence and remaining gate |
 |---|---|
 | D01–D03 and D11 | PHP `hash`, `hash_hmac`, `pack` and `unpack` have bounded PHP 8.1/8.3 probes. Complete binary/length, long-HMAC, argument-order and width/endianness conformance is pending. |
-| D04–D05 ECC | Paragonie ECC 2.6.0 and Simplito elliptic-php 1.0.12 have different raw APIs and bounded PHP 8.1+GMP probes. Both require strict adapter scalar admission; exact point corpus, unchanged CKDpub consumer and independent mathematical reference remain pending. The PHP 8.1 Composer trial records their transitive dependency paths. User-supplied uma/secp256k1-php 0.1.2 exposes a native public tweak API on PHP 8.2+ and is an M03 reference/adapter lead pending runtime decision and build qualification. It is not a selected backend. |
-| D06–D07 Base58Check | User-contributed leads StephenHill Base58 2.1.0 and Tuupola Base58 2.2.0 were already mapped: StephenHill is raw binary Base58 only; Tuupola has bounded checked-key/address results, but its checked API uses a one-byte option while extended-key versions are four bytes. The third lead, mattallty/base58, is an integer/number codec without binary or checked support and uses PHP 8-incompatible string-offset syntax, so it cannot serve D06–D07 on PHP 8.1. Muvon Base58 Codec 0.1 remains a second conditional checked-codec candidate with a bounded BIP32 public-key round-trip probe; its undeclared BCMath use and empty-string invalid decode require explicit adapter handling. No two checked codecs have passed semantic qualification. |
-| D08–D09 SegWit | Focused BitWasp Bech32 0.0.1 has bounded BIP173 probes and a maintenance question. cjpgdk Bech32 0.1.2 is a second lead probed in PR #9; explicit HRP/v0 length/checksum semantics need adapter tests. Both need complete comparison and qualification. Their PHP 8.1 Composer dependency paths are recorded. Cardano PHP Bech32 1.1.0 becomes another generic codec lead only above the PHP 8.1 baseline, with Bitcoin SegWit admission and BitWasp lineage still to assess. |
+| D04–D05 ECC | Paragonie ECC 2.6.0 and Simplito elliptic-php 1.0.12 have different raw APIs and bounded historical PHP 8.1+GMP probes. Both require strict adapter scalar admission; exact point corpus, unchanged CKDpub consumer and independent mathematical reference remain pending. The historical PHP 8.1 Composer trial records their transitive dependency paths. User-supplied uma/secp256k1-php 0.1.2 exposes a native public tweak API and is an M03 reference/adapter lead now eligible for PHP 8.3 investigation, pending build qualification. It is not a selected backend. |
+| D06–D07 Base58Check | User-contributed leads StephenHill Base58 2.1.0 and Tuupola Base58 2.2.0 were already mapped: StephenHill is raw binary Base58 only; Tuupola has bounded checked-key/address results, but its checked API uses a one-byte option while extended-key versions are four bytes. The third lead, mattallty/base58, is an integer/number codec without binary or checked support and uses PHP 8-incompatible string-offset syntax, so it cannot serve D06–D07 on PHP 8.3. Muvon Base58 Codec 0.1 remains a second conditional checked-codec candidate with a bounded BIP32 public-key round-trip probe; its undeclared BCMath use and empty-string invalid decode require explicit adapter handling. No two checked codecs have passed semantic qualification. |
+| D08–D09 SegWit | Focused BitWasp Bech32 0.0.1 has bounded BIP173 probes and a maintenance question. cjpgdk Bech32 0.1.2 is a second lead probed in PR #9; explicit HRP/v0 length/checksum semantics need adapter tests. Both need complete comparison and qualification. Their historical PHP 8.1 Composer dependency paths are recorded. Cardano PHP Bech32 1.1.0 is now eligible for PHP 8.3 investigation as a generic codec lead, with Bitcoin SegWit admission and BitWasp lineage still to assess. |
 | D10 structural decode | Runtime fixed-width conversion plus Primitives-owned exact structure/admission is the research lead. No bespoke standardized decoder or broad Bitcoin package is selected. |
 
 Cardano PHP Bech32 1.1.0 requires PHP `^8.2`, and the user-supplied
-uma/secp256k1-php 0.1.2 native binding requires PHP `>=8.2`; neither directly
-satisfies the PHP 8.1 baseline. The older BitWasp secp256k1 binding has an
-unresolved PHP 8 build report. PHP 8.1 is end of life, while PHP 8.2 security
-support ends in December 2026; the runtime baseline decision is pending in the
-[M02 record](M02/M02-PROTOCOL.md). Composer rejected Furqan Siddiqui
+uma/secp256k1-php 0.1.2 native binding requires PHP `>=8.2`; both meet the
+new PHP 8.3 version floor, with actual API/runtime qualification still pending.
+The older BitWasp secp256k1 binding has an unresolved PHP 8 build report.
+The [M02 record](M02/M02-PROTOCOL.md) explains the baseline decision and
+candidate limits. A historical Composer trial rejected Furqan Siddiqui
 Base58Check 0.1.5 on PHP 8.1.34 because it requires `php-64bit: ^7.2`.
 Version/requirement observations are from the dated [M02 record](M02/M02-PROTOCOL.md)
 and [provider research](M00/research/public-address-provider-research.md);
@@ -249,7 +251,7 @@ investigation inputs, not frozen implementations.
 
 ### Runtime and Counter-Proof execution
 
-Run the repository's `composer ci` workflow on PHP 8.1 and 8.3 for M06–M08;
+Run the repository's `composer ci` workflow on PHP 8.3 and 8.4 for M06–M08;
 it includes Composer metadata/platform checks, PHP lint, PHPUnit and PHPStan.
 Supplement it with the semantic corpus and a standalone example. Pin exact
 source, dependency, definition and runtime revisions plus commands/results in
@@ -287,7 +289,7 @@ requires them.
   the approved proposal/Canonical needs the current Materiality Gate.
 - Second checked-Base58Check and SegWit candidates have bounded probes, but
   neither boundary has two qualified semantic adapters. An independent ECC
-  oracle, PHP 8.3 Composer graph, complete license/security/maintenance review
+  oracle, PHP 8.3/8.4 Composer graphs, complete license/security/maintenance review
   and real replacement exercise remain open. The PHP 8.1 trial lock records
   candidate dependencies, not a production selection. If two suitable
   libraries cannot qualify, document the affected plan-level gate and an
