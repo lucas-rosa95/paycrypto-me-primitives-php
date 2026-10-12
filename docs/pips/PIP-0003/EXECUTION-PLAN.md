@@ -19,10 +19,10 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) proposes six protocol dispositions (O01–O06). The PR now adds an O07 candidate comparison, PHP 8.1 Composer graph and second checked Base58 probe. | Review the protocol choices and O07 map; finish PHP 8.3 and adapter qualification in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 semantics, proposes O02–O06, and adds an O07 candidate comparison, PHP 8.1 Composer graph and second checked Base58 probe. | Review O02–O07; finish PHP 8.3 and adapter qualification in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
-**Next reviewable step:** review PR #9's protocol proposals and O07 candidate
+**Next reviewable step:** review PR #9's O02–O06 proposals and O07 candidate
 map against the approved scope and Canonical; record accepted or revised
 dispositions. M03/M04 research adapters follow the
 relevant M02 decisions. Maintainers must judge the proposed version/policy allowlist,
@@ -65,7 +65,7 @@ engineering observation, not a new PIP decision state.
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
-| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; decide invalid-child/effective-path semantics, compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | Review/accept or revise PR #9's O01–O06 and O07 candidate/qualification map. Missing suitable providers remain explicit gaps. Eligibility is not selection. |
+| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; decide invalid-child/effective-path semantics, compatibility and limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | O01 is accepted for M02; review/accept or revise O02–O06 and the O07 candidate/qualification map. Missing suitable providers remain explicit gaps. Eligibility is not selection. |
 | M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.1/8.3 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child, effective path, depth, retry exhaustion, metadata and actual dependency paths. Record shared mathematical lineage. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
@@ -119,12 +119,13 @@ delegated SHA-256 and RIPEMD-160.
 ### M02 branch proposals: review before contract freeze
 
 The [M02 protocol record on the PR #9 branch](M02/M02-PROTOCOL.md)
-pins BIP32, SLIP-0132, BIP49/84, BIP141/173 and Bitcoin Core sources. The
-following is its **proposed** O01–O06 disposition, not executed/accepted
-production behavior. Review it at M02 and challenge it through M03–M05.
+pins BIP32, SLIP-0132, BIP49/84, BIP141/173 and Bitcoin Core sources. O01
+was accepted in M02 review on 2026-10-12; O02–O06 remain proposals. None is
+executed or qualified production behavior. Challenge them through M03–M05.
 
-- **O01:** one exact-index CKDpub attempt returns the child at that index or a
-  distinguished invalid-child outcome. Outer orchestration retries the next
+- **O01 (accepted; retry limit remains O04):** one exact-index CKDpub attempt
+  returns the child at that index or a distinguished invalid-child outcome.
+  Outer orchestration retries the next
   public index at each path level using the same parent until a valid child,
   then derives the next requested level from that effective child. Return both
   requested and effective relative paths. HMAC-SHA512 takes the 32-byte parent
@@ -169,7 +170,7 @@ record the decision proposal and probes; it would not make Q tests pass.
 |---|---|
 | D01–D03 and D11 | PHP `hash`, `hash_hmac`, `pack` and `unpack` have bounded PHP 8.1/8.3 probes. Complete binary/length, long-HMAC, argument-order and width/endianness conformance is pending. |
 | D04–D05 ECC | Paragonie ECC 2.6.0 and Simplito elliptic-php 1.0.12 have different raw APIs and bounded PHP 8.1+GMP probes. Both require strict adapter scalar admission; exact point corpus, unchanged CKDpub consumer and independent mathematical reference remain pending. The PHP 8.1 Composer trial records their transitive dependency paths. Native libsecp256k1 is a reference lead, not a selected PHP backend. |
-| D06–D07 Base58Check | Tuupola Base58 2.2.0 has bounded checked-key/address results, but its checked API uses a one-byte option while extended-key versions are four bytes. Muvon Base58 Codec 0.1 is a second conditional checked-codec candidate with a bounded BIP32 public-key round-trip probe; its undeclared BCMath use and empty-string invalid decode require explicit adapter handling. StephenHill Base58 2.1.0 is **raw** Base58 only. No two checked codecs have passed semantic qualification. |
+| D06–D07 Base58Check | User-contributed leads StephenHill Base58 2.1.0 and Tuupola Base58 2.2.0 were already mapped: StephenHill is raw binary Base58 only; Tuupola has bounded checked-key/address results, but its checked API uses a one-byte option while extended-key versions are four bytes. The third lead, mattallty/base58, is an integer/number codec without binary or checked support and uses PHP 8-incompatible string-offset syntax, so it cannot serve D06–D07 on PHP 8.1. Muvon Base58 Codec 0.1 remains a second conditional checked-codec candidate with a bounded BIP32 public-key round-trip probe; its undeclared BCMath use and empty-string invalid decode require explicit adapter handling. No two checked codecs have passed semantic qualification. |
 | D08–D09 SegWit | Focused BitWasp Bech32 0.0.1 has bounded BIP173 probes and a maintenance question. cjpgdk Bech32 0.1.2 is a second lead probed in PR #9; explicit HRP/v0 length/checksum semantics need adapter tests. Both need complete comparison and qualification. Their PHP 8.1 Composer dependency paths are recorded. |
 | D10 structural decode | Runtime fixed-width conversion plus Primitives-owned exact structure/admission is the research lead. No bespoke standardized decoder or broad Bitcoin package is selected. |
 
@@ -273,7 +274,7 @@ requires them.
 | [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
 | [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
-| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Proposed O01–O06 dispositions, O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. No merge, maintainer acceptance, adapter qualification, final selection or production tests. |
+| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 disposition, proposed O02–O06 dispositions, O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. No merge, acceptance of remaining choices, adapter qualification, final selection or production tests. |
 
 ## Risks, gaps and decisions requiring judgment
 
