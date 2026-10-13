@@ -19,7 +19,7 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 exact-path, O02 strict version/network/policy, O03 receiving-only account/index use case and O04 empty-path rejection while retaining the generic relative-path contract; proposes remaining O04–O06 details; records the PHP 8.3 minimum decision; and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | The additional entry point is now approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10); review remaining O04–O07 details and qualify generic behavior on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
+| M02 — in progress | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01 exact-path, O02 strict version/network/policy, O03 receiving-only account/index use case and O04 bounded nonempty generic path while retaining the generic relative-path contract; proposes O05–O06 details; records the PHP 8.3 minimum decision; and adds an O07 candidate comparison, historical PHP 8.1 Composer graph and second checked Base58 probe. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10); review O05–O07 and qualify accepted path behavior on PHP 8.3/8.4 in M03/M04. The PR is unmerged and does not select providers or freeze contracts. |
 | M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
 **Next reviewable step:** O03 retains the approved generic `relativePath`
@@ -29,8 +29,8 @@ and supplies `[0, index]` to the generic operation. The additional entry point
 is approved in [PIP00010 at `badb9cd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md),
 with the decision recorded on [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10).
 Implementation and qualification remain. Generic qualification may proceed
-under PIP-0003. Review PR #9's remaining O04–O06 details and O07 candidate
-map against the approved scope and Canonical; record accepted or revised dispositions.
+under PIP-0003. Review PR #9's O05–O06 proposals and O07 candidate map
+against the approved scope and Canonical; record accepted or revised dispositions.
 M03/M04 research adapters follow the relevant M02 decisions.
 O01's exact-path behavior, O02's strict initial version/network/policy
 mapping and O04's generic empty-path rejection are accepted but await
@@ -74,7 +74,7 @@ engineering observation, not a new PIP decision state.
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
-| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record the accepted O01 exact-path, O02 strict compatibility, O03 account/index consumer use case and O04 empty-path rejection without replacing the generic contract; decide remaining path/definition/error limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | PIP00010 now governs the additional receiving entry point; review remaining O04–O06 details and the O07 candidate/qualification map. Qualify the approved generic capability in M03/M04; missing suitable providers remain explicit gaps. Eligibility is not selection. |
+| M02 — in progress on open PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record accepted O01 exact-path, O02 strict compatibility, O03 account/index consumer use case and O04 bounded nonempty generic path without replacing the generic contract; decide definition/error limits; compare focused providers by required operation, runtime, license, security, footprint and actual dependency path. | PIP00010 governs the additional receiving entry point; review O05–O06 and the O07 candidate/qualification map. Qualify the approved generic capability in M03/M04; missing suitable providers remain explicit gaps. Eligibility is not selection. |
 | M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Counter-prove future Signet profile extension with shared address bytes and a distinct context identifier in test-only fixtures; do not expose it as initially supported. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
@@ -135,9 +135,9 @@ maintainer accepted O01's exact-path behavior, O02's strict initial
 version/network/policy mapping and O03's receiving-only account/index use case
 on 2026-10-12 after the earlier unsupported O01 acceptance label was corrected.
 O03 retains the generic relative-path contract; its additional receiving entry
-point is separately approved in PIP00010 but not implemented. O04 rejects an
-empty generic path; its remaining details and O05–O06 remain proposals. None
-is executed or qualified production behavior; challenge them
+point is separately approved in PIP00010 but not implemented. O04's bounded
+nonempty generic path is accepted; O05–O06 remain proposals. None is executed
+or qualified production behavior; challenge them
 through M03–M05.
 
 - **O01 (accepted M02 behavior; qualification pending):** one exact-index
@@ -167,7 +167,8 @@ through M03–M05.
   not full chain identity. Do not infer account path/depth from SLIP examples.
 - **O03 (consumer use case accepted; additional entry point approved in
   PIP00010):** retain the generic public operation that takes an admitted
-  xpub and explicit integer-array `relativePath`, with network and policy.
+  xpub and explicit relative-index sequence `relativePath`, with network and
+  policy. M05 sets its concrete PHP representation.
   The receiving-only entry point takes separate integer `account` and `index`
   fields, plus explicit network and policy; it selects the account-level xpub
   from an explicitly provisioned immutable source keyed by network, policy and
@@ -181,18 +182,20 @@ through M03–M05.
   the consumer. The generic operation proceeds under PIP-0003; the additional
   Primitives-owned receiving entry point is governed by the [approved PIP00010 revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md)
   and still requires implementation and qualification.
-- **O04 (empty-path rejection accepted; remaining details under review):** the
-  generic public operation requires a nonempty array of integer relative child
-  indices. `[]` fails; `[0]` is valid. Indices are `0..2^31−1`, and path length
-  is no greater than `255 − imported depth`. Attempt each requested
-  component once and fail at an invalid child without choosing another path.
-  These path-shape choices apply to the generic operation only. The approved
-  PIP00010 receiving entry point requires separate explicit integer `account`
-  and `index` fields, both allowing `0`, and never accepts a caller path or
-  branch. Missing or malformed fields fail without defaults. It always calls
-  the generic operation with `[0, index]`. Its selected account key needs
-  capacity for two further derivation levels; insufficient capacity fails
-  before derivation. Qualify the generic `[]` rejection and receiving `(0, 0)`
+- **O04 (semantic decision accepted; qualification pending):** the generic
+  public operation requires a nonempty ordered sequence of integer relative
+  child indices. An empty sequence fails; index `0` is valid. Indices are
+  `0..2^31−1`, and path length is no greater than `255 − imported depth`.
+  Attempt each requested component once and fail at an invalid child without
+  choosing another path.
+  These path rules apply to the generic operation only; M05 sets its concrete
+  PHP representation. The approved PIP00010 receiving entry point requires
+  separate explicit integer `account` and `index` fields, both allowing `0`,
+  and never accepts a caller path or branch. Missing or malformed fields fail
+  without defaults. It always calls the generic operation with `[0, index]`.
+  Its selected account key needs capacity for two further derivation levels;
+  insufficient capacity fails before derivation. Qualify the generic `[]`
+  rejection and receiving `(0, 0)`
   parity with a direct generic `[0, 0]` call.
 - **O05–O06:** proposed immutable definition holds identifier, one-byte address
   versions, lowercase HRP and four-byte public-version/policy map; reject
@@ -340,7 +343,7 @@ requires them.
 | [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
 | [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
-| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 exact-path, O02 strict admission and O03 account/index consumer use case, while retaining the generic relative-path contract; proposed O04–O06 dispositions; O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. The additional receiving entry point is approved in PIP00010 but unimplemented. No merge, adapter qualification, final selection or production tests. |
+| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 exact-path, O02 strict admission, O03 account/index consumer use case and O04 bounded nonempty generic path, while retaining the generic relative-path contract; proposed O05–O06 dispositions; O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. The additional receiving entry point is approved in PIP00010 but unimplemented. No merge, adapter qualification, final selection or production tests. |
 
 ## Risks, gaps and decisions requiring judgment
 
