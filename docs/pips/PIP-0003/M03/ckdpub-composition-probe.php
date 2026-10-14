@@ -157,7 +157,7 @@ function publicPayload(array $node): string
 
 function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Closure $hmac = null): array
 {
-    if ($path === []) {
+    if ($path === [] || !array_is_list($path)) {
         throw new TrialFailure('path_bounds');
     }
     foreach ($path as $index) {
@@ -316,19 +316,104 @@ if ($lastPublic['child_number'] !== 2147483647 || $attempt !== 1) {
     throw new RuntimeException('Last public index changed');
 }
 $report['forced_cases']['last_public_index'] = 2147483647;
+$lastIndexCalls = 0;
+$lastIndexHmac = static function (string $key, string $message) use ($base, &$lastIndexCalls, $right): string {
+    ++$lastIndexCalls;
+    if ($key !== $base['chain_code'] || $message !== $base['point'] . "\x7f\xff\xff\xff") {
+        throw new RuntimeException('Last public index was not encoded exactly');
+    }
+    return hex2bin(CURVE_ORDER) . $right;
+};
+requireFailure('last_public_invalid', 'invalid_child', fn () => deriveExact($base, [2147483647], $provider, $lastIndexHmac));
+if ($lastIndexCalls !== 1) {
+    throw new RuntimeException('Last public index was retried');
+}
+$report['forced_cases']['last_public_invalid'] = ['category' => 'invalid_child', 'attempts' => $lastIndexCalls];
 $attempt = 0;
 $hmac = $forced(1, hex2bin('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364142'), $attempt);
 requireFailure('order_plus_one', 'invalid_child', fn () => deriveExact($base, [0], $provider, $hmac));
 $report['forced_cases']['order_plus_one'] = 'invalid_child';
 
-foreach (['empty' => [], 'hardened' => [2147483648], 'negative' => [-1], 'string' => ['0']] as $label => $path) {
-    requireFailure($label, 'path_bounds', fn () => deriveExact($base, $path, $provider));
+foreach ([
+    'empty' => [],
+    'hardened' => [2147483648],
+    'negative' => [-1],
+    'string' => ['0'],
+    'fractional' => [0.5],
+    'boolean' => [true],
+    'null' => [null],
+    'integer_overflow' => [PHP_INT_MAX],
+    'associative' => ['index' => 0],
+    'nested' => [[0]],
+    'root_over_capacity' => array_fill(0, 256, 0),
+] as $label => $path) {
+    $calls = 0;
+    requireFailure($label, 'path_bounds', fn () => deriveExact($base, $path, $provider,
+        static function () use (&$calls): never {
+            ++$calls;
+            throw new RuntimeException('HMAC called for rejected path');
+        }));
+    if ($calls !== 0) {
+        throw new RuntimeException("$label: derivation began before path admission");
+    }
     $report['forced_cases']["path_$label"] = 'path_bounds';
+}
+
+// These depths are synthetic capacity probes, not canonical imported nodes.
+// A zero tweak keeps their point finite while exercising metadata increments.
+$zeroHmac = static fn (): string => str_repeat("\0", 32) . $right;
+$fullPath = array_fill(0, 255, 0);
+$fullPath[254] = 2147483647;
+$fullCalls = 0;
+$fullDepth = deriveExact($base, $fullPath, $provider,
+    static function () use (&$fullCalls, $zeroHmac): string {
+        ++$fullCalls;
+        return $zeroHmac();
+    });
+if ($fullDepth['depth'] !== 255 || $fullDepth['child_number'] !== 2147483647 || $fullCalls !== 255) {
+    throw new RuntimeException('Full 255-level capacity mismatch');
+}
+$report['forced_cases']['root_full_capacity'] = ['depth' => 255, 'attempts' => $fullCalls, 'last_index' => 2147483647];
+$at253 = $base;
+$at253['depth'] = 253;
+$twoLevels = deriveExact($at253, [0, 2147483647], $provider, $zeroHmac);
+if ($twoLevels['depth'] !== 255 || $twoLevels['child_number'] !== 2147483647) {
+    throw new RuntimeException('Depth 253 two-level capacity mismatch');
+}
+$at254 = $base;
+$at254['depth'] = 254;
+$oneLevel = deriveExact($at254, [0], $provider, $zeroHmac);
+if ($oneLevel['depth'] !== 255 || $oneLevel['child_number'] !== 0) {
+    throw new RuntimeException('Depth 254 one-level capacity mismatch');
 }
 $atMaximum = $base;
 $atMaximum['depth'] = 255;
-requireFailure('depth', 'path_bounds', fn () => deriveExact($atMaximum, [0], $provider));
-$report['forced_cases']['depth'] = 'path_bounds';
+foreach ([
+    'depth_254_two_levels' => [$at254, [0, 0]],
+    'depth_255_one_level' => [$atMaximum, [0]],
+] as $label => [$parent, $path]) {
+    $calls = 0;
+    requireFailure($label, 'path_bounds', fn () => deriveExact($parent, $path, $provider,
+        static function () use (&$calls): never {
+            ++$calls;
+            throw new RuntimeException('HMAC called after depth exhaustion');
+        }));
+    if ($calls !== 0) {
+        throw new RuntimeException("$label: derivation began before depth admission");
+    }
+    $report['forced_cases'][$label] = 'path_bounds';
+}
+$report['forced_cases']['depth_capacity'] = ['depth_253_two_levels' => 255, 'depth_254_one_level' => 255];
+
+// The approved receiving suffix is [0, index]. Its generic path must equal
+// two explicit CKDpub calls without admitting a caller-supplied branch.
+$receivingPath = deriveExact($base, [0, 0], $provider);
+$externalNode = deriveExact($base, [0], $provider);
+$receivingSequential = deriveExact($externalNode, [0], $provider);
+if (publicPayload($receivingPath) !== publicPayload($receivingSequential)) {
+    throw new RuntimeException('Receiving suffix and sequential CKDpub disagree');
+}
+$report['forced_cases']['receiving_suffix_0_0'] = bin2hex(publicPayload($receivingPath));
 
 requireFailure('short_hmac', 'provider_failure', fn () => deriveExact($base, [0], $provider,
     static fn (): string => str_repeat("\0", 63)));

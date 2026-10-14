@@ -119,34 +119,46 @@ HMAC, HASH160 and fixed-width operations. The research composition does not
 decode Base58Check or implement curve arithmetic. It is not a selected public
 PHP API, production package or general extended-key admission implementation.
 
-The [public-only fixture file](ckdpub-public-fixtures.json) contains BIP32
-vectors 1 and 2: `m/0H -> 1`, `m/0H/1/2H -> 2 -> 1000000000`, and `m -> 0`.
-The textual xpubs appear in the pinned [BIP32 snapshot](../M00/reviews/bitwasp-public-derivation/bip-0032.mediawiki).
+The [public-only fixture file](ckdpub-public-fixtures.json) contains six
+public derivation cases from BIP32 vectors 1 and 2: `m/0H -> 1`,
+`m/0H/1/2H -> 2` and `2 -> 1000000000`, `m -> 0`,
+`m/0/2147483647H -> 1`, and
+`m/0/2147483647H/1/2147483646H -> 2`. The textual xpubs appear in the
+pinned [BIP32 snapshot](../M00/reviews/bitwasp-public-derivation/bip-0032.mediawiki).
 The 78-byte public payloads were taken from BitWasp bitcoin-php v1.1.0's
-`tests/Data/bip32testvectors.json`; all seven participating public payloads
-were separately Base58Check-encoded with the Tuupola trial codec and matched
-their published xpub strings. No private fixture field is copied. The exact
-expected child payload checks compressed public key, chain code, depth,
+`tests/Data/bip32testvectors.json`; all 12 public payloads in those two source
+vectors were separately Base58Check-encoded with the Tuupola trial codec and
+matched their published xpub strings. Eleven of those payloads participate in
+the six cases. No private fixture field is copied. The exact expected child
+payload checks compressed public key, chain code, depth,
 immediate-parent fingerprint and child number at once. The two-step fixture
 also checks that the intermediate child is used as the next parent.
 
 The [comparison record](ckdpub-comparison.json) captures six executions:
 three unchanged-provider runs on PHP 8.3.35 and the same three on PHP 8.4.26.
-All six agreed exactly on the three published vector payloads and the forced
+All six agreed exactly on the six published vector payloads and the forced
 case record. Injected HMAC left halves at group order failed at first,
 intermediate and last requested positions, with exactly one HMAC call for each
 attempted level and no later request or index advance. Zero preserved the
 point while updating chain code and metadata; `G + (n-1)G` failed as infinity;
-order-plus-one failed before ECC; and the last public index remained exact.
-The probe rejected empty, hardened, negative and wrong-type paths, depth
-exhaustion, malformed payload length, wrong point prefix and invalid/out-of-field
-points. It checked HMAC key/message order and normalized injected short HMAC,
-HMAC exception, ECC exception, malformed ECC output, admission exception and
-changed point on admission as provider failures.
+order-plus-one failed before ECC; and the last public index remained exact,
+including an invalid child there without retry. The probe rejected empty,
+hardened, negative, fractional, wrong-type, non-list and overlong paths before
+HMAC. A 255-component path from depth zero reached depth 255; synthetic imported
+depths 253 and 254 accepted exactly their remaining capacity, while depths 254
+and 255 rejected paths beyond it before HMAC. A generic `[0, 0]` derivation
+matched two sequential exact-index calls, exercising the approved receiving
+suffix without claiming a finished receiving API or account-key mapping.
+The probe also rejected malformed payload length, wrong point prefix and
+invalid/out-of-field points. It checked HMAC key/message order and normalized
+injected short HMAC, HMAC exception, ECC exception, malformed ECC output,
+admission exception and changed point on admission as provider failures.
 
-This closes the unchanged-consumer comparison for these sourced paths and
-forced cases. It does **not** close M03: the point corpus and scalar/domain
-extremes remain bounded; long-key/empty/binary hash and conversion Q08 cases,
+This closes the Q04/Q05 research comparison for these sourced public edges and
+path/depth cases. It does **not** close M03: a concrete receiving API and
+provisioned account-key mapping remain later implementation/qualification work;
+the point corpus and scalar/domain extremes remain bounded;
+long-key/empty/binary hash and conversion Q08 cases,
 other missing runtime facilities and broader provider-fault containment still
 need qualification. The PHP adapters' parser exceptions are still treated as
 malformed points for known bad fixtures; unexpected faults inside those parsers

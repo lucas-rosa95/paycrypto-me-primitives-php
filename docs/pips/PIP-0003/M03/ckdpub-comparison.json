@@ -55,6 +55,24 @@
           0
         ],
         "node": "0488b21e01bd16bee500000000f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea"
+      },
+      "vector_1_hardened_parent_to_2": {
+        "path": [
+          2
+        ],
+        "node": "0488b21e04ee7ab90c00000002cfb71883f01676f587d023cc53a35bc7f88f724b1f8c2892ac1275ac822a3edd02e8445082a72f29b75ca48748a914df60622a609cacfce8ed0e35804560741d29"
+      },
+      "vector_2_hardened_parent_to_1": {
+        "path": [
+          1
+        ],
+        "node": "0488b21e03d8ab493700000001f366f48f1ea9f2d1d3fe958c95ca84ea18e4c4ddb9366c336c927eb246fb38cb03a7d1d856deb74c508e05031f9895dab54626251b3806e16b4bd12e781a7df5b9"
+      },
+      "vector_2_hardened_parent_to_2": {
+        "path": [
+          2
+        ],
+        "node": "0488b21e0531a507b8000000029452b549be8cea3ecb7a84bec10dcfd94afe4d129ebfd3b3cb58eedf394ed271024d902e1a2fc7a8755ab5b694c575fce742c48d9ff192e63df5193e4c7afe1f9c"
       }
     },
     "forced_cases": {
@@ -80,12 +98,34 @@
       "zero_tweak": "0488b21e01bd16bee500000000555555555555555555555555555555555555555555555555555555555555555503cbcaa9c98c877a26977d00825c956a238e8dddfbd322cce4f74b0b5bd6ace4a7",
       "infinity": "invalid_child",
       "last_public_index": 2147483647,
+      "last_public_invalid": {
+        "category": "invalid_child",
+        "attempts": 1
+      },
       "order_plus_one": "invalid_child",
       "path_empty": "path_bounds",
       "path_hardened": "path_bounds",
       "path_negative": "path_bounds",
       "path_string": "path_bounds",
-      "depth": "path_bounds",
+      "path_fractional": "path_bounds",
+      "path_boolean": "path_bounds",
+      "path_null": "path_bounds",
+      "path_integer_overflow": "path_bounds",
+      "path_associative": "path_bounds",
+      "path_nested": "path_bounds",
+      "path_root_over_capacity": "path_bounds",
+      "root_full_capacity": {
+        "depth": 255,
+        "attempts": 255,
+        "last_index": 2147483647
+      },
+      "depth_254_two_levels": "path_bounds",
+      "depth_255_one_level": "path_bounds",
+      "depth_capacity": {
+        "depth_253_two_levels": 255,
+        "depth_254_one_level": 255
+      },
+      "receiving_suffix_0_0": "0488b21e025a61ff8e00000000b52d0e29b56e7e3796ccc41b559d0f0dda90b46bd8735fc9cac6f63f886c16eb0205c8897fd0ff5644adba4545a84020cd6aa94d90e1e0a56bb4b8eb7522e3ef8c",
       "provider_faults": [
         "short_hmac",
         "hmac_exception",
