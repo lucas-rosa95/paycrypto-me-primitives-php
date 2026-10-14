@@ -173,14 +173,70 @@ admission exception and changed point on admission as provider failures.
 This closes the Q04/Q05 research comparison for these sourced public edges and
 path/depth cases. It does **not** close M03: a concrete receiving API and
 provisioned account-key mapping remain later implementation/qualification work;
-the point corpus and scalar/domain extremes remain bounded;
-long-key/empty/binary hash and conversion Q08 cases,
-other missing runtime facilities and broader provider-fault containment still
-need qualification. The PHP adapters' parser exceptions are still treated as
+the point corpus and scalar/domain extremes remain bounded; the remaining
+M04 end-to-end Q08 integration and broader Q12 provider-fault containment
+still need qualification. The PHP adapters' parser exceptions are still treated as
 malformed points for known bad fixtures; unexpected faults inside those parsers
 are not independently distinguishable here. The native false classification
 below is bounded to the pinned source and tested API operations. M05 must not
 select an adapter based on this subset alone.
+
+## Q08 runtime hash/conversion and Q12 facility challenge
+
+The [focused research probe](hash-conversion-probe.php) ran on PHP 8.3.35 and
+8.4.26 with separate [8.3](hash-conversion-php83.json) and
+[8.4](hash-conversion-php84.json) outputs. Its SHA-256 `abc` and million-`a`
+expected answers come from [NIST's published test data](https://www.nist.gov/itl/ai/ai-standards-and-guidelines-group/nsrl-test-data).
+The RIPEMD-160 empty and `abc` answers come from the
+[algorithm authors' test table](https://homes.esat.kuleuven.be/~bosselae/ripemd160.html).
+HMAC-SHA512 cases 1, 4 and 6 use the exact published key, data and full digest
+from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html): case 4 includes
+binary key/data and case 6 crosses SHA-512's 128-byte HMAC key block. Both
+runtimes returned 32/20/64 binary bytes, matched the hex answers and rejected
+swapped HMAC argument order. Empty SHA-256 and empty-key/message HMAC are also
+exercised; the latter is recorded as a runtime observation without a claimed
+published answer.
+
+For composition, the probe hashes the 33-byte compressed key in the pinned
+[BIP32 vector 2](ckdpub-public-fixtures.json) and gets the published child
+fingerprint `bd16bee5` from the first four bytes of its 20-byte HASH160. It
+also detects hex-text input and reversed hash order. PHP `pack('N')` and
+`unpack('N')` preserved four-byte big-endian values at zero, one, `2^31-1`,
+`2^31` and `2^32-1` on both tested 64-bit runtimes. The BIP32 vector 1
+child number `1000000000` independently anchors bytes `3b9aca00`.
+The [PHP pack manual](https://www.php.net/manual/en/function.pack.php) specifies
+`N` as an unsigned four-byte big-endian value. This probe qualifies the
+tested runtime width only; a representation strategy for narrower integer
+runtimes remains an implementation decision, not an assumed baseline.
+Research-level guards rejected negative, out-of-range, float, string, boolean
+and null values, plus short/trailing byte fields. Direct `unpack('N')` on three
+bytes emitted a warning and returned `false` on both runtimes, so exact length
+admission must precede that call. These guards are examples for the eventual
+boundary; they are not a production implementation.
+
+Both runs normalized an actual unknown PHP hash/HMAC algorithm `ValueError`,
+injected short/non-string results and a vendor exception to a stable
+`provider_environment_failure` category without echoing the injected detail.
+An explicit facility preflight likewise failed for an unavailable native
+extension and unknown algorithm. Running the same probe with `php -n` proved
+the missing-GMP preflight on [8.3](missing-gmp-php83.json) and
+[8.4](missing-gmp-php84.json). This is bounded Q12 environment evidence: the
+research preflight chooses no replacement provider. It does not prove that
+arbitrary future adapter internals contain every provider fault.
+
+Q08's M03 runtime/conversion subset now has sourced known answers and tested
+boundaries; M04 still has its own codec and end-to-end composition qualification.
+Q12 remains open. In particular, a PHP ECC adapter's unexpected null/tweak
+outcome can look like claimed infinity to the current research consumer: a
+synthetic adapter returned null on an [officially finite vector 2 child](ckdpub-comparison.json),
+and all six unchanged-consumer runs classified it as `invalid_child`. No real
+provider did this; the injection exposes the adapter trust boundary. The
+selected adapter must establish infinity from its actual provider's documented
+result, normalize other returns as provider failure, and be reviewed against
+faults at that lower boundary. An unexpected parser exception can also look
+like a known malformed point under the current research adapter. Native
+`false` is challenged separately below, but M03 still needs a broader fault
+distinction and common-mode challenge before its final gate can pass.
 
 ## Native `false`: source path and bounded resolution
 
@@ -362,3 +418,19 @@ are invoked. With the focused ECC Composer install at `/research`, run
 `php /probe/native-false-crosscheck-probe.php` on both runtimes and compare its
 `results` field with `php_adapter_crosscheck.agreed_results` in the record.
 The false classifier and fault injections are research-only.
+
+To repeat the Q08/Q12 runtime probe, mount M03 read-only at `/probe` in each
+M03 GMP image and run both commands:
+
+```sh
+php /probe/hash-conversion-probe.php
+php -n /probe/hash-conversion-probe.php --expect-missing-gmp
+```
+
+The first output matches `hash-conversion-php83.json` or
+`hash-conversion-php84.json`; the second matches `missing-gmp-php83.json` or
+`missing-gmp-php84.json`. `php -n` intentionally disables the separately
+installed GMP extension. Only the PHP patch-version header may differ on a
+later image. The missing-native check in the first command assumes the native
+extension is not loaded in the GMP image; run the ECC/native probes separately
+with the source-pinned extension when testing the native adapter.

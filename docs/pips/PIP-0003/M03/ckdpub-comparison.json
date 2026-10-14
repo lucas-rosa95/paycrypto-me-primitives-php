@@ -133,7 +133,8 @@
         "ecc_malformed_output",
         "ecc_admission_exception",
         "ecc_mutating_admission"
-      ]
+      ],
+      "unconfirmed_infinity_gap": "fabricated_null_on_official_finite_child_is_misclassified_as_invalid_child"
     }
   }
 }

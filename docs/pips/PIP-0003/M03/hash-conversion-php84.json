@@ -1,0 +1,100 @@
+{
+    "php": "8.4.26",
+    "int_size": 8,
+    "sha256": {
+        "nist_abc": {
+            "bytes": 32,
+            "hex": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        "nist_million_a": {
+            "bytes": 32,
+            "hex": "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0"
+        },
+        "empty_binary": {
+            "bytes": 32,
+            "hex": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+    },
+    "ripemd160": {
+        "author_empty": {
+            "bytes": 20,
+            "hex": "9c1185a5c5e9fc54612808977ee8f548b2258d31"
+        },
+        "author_abc": {
+            "bytes": 20,
+            "hex": "8eb208f7e05d987a9b044a8e98c6b087f15a0bfc"
+        }
+    },
+    "hmac_sha512": {
+        "rfc4231_case1": {
+            "key_bytes": 20,
+            "data_bytes": 8,
+            "hex": "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854"
+        },
+        "rfc4231_case4": {
+            "key_bytes": 25,
+            "data_bytes": 50,
+            "hex": "b0ba465637458c6990e5a8c5f61d4af7e576d97ff94b872de76f8050361ee3dba91ca5c11aa25eb4d679275cc5788063a5f19741120c4f2de2adebeb10a298dd"
+        },
+        "rfc4231_case6": {
+            "key_bytes": 131,
+            "data_bytes": 54,
+            "hex": "80b24263c7c1a3ebb71493c1dd7be8b49b46d1f41b4aeec1121b013783f8f3526b56d037e05f2598bd0fd2215d6a1e5295e64f73f63f0aec8b915a985d786598"
+        },
+        "empty_key_and_message": {
+            "bytes": 64,
+            "hex": "b936cee86c9f87aa5d3c6f2e84cb5a4239a5fe50480a6ec66b70ab5b1f4ac6730c6c515421b327ec1d69402e53dfb49ad7381eb067b338fd7b0cb22247225d47",
+            "oracle": "runtime observation; no cited published answer"
+        }
+    },
+    "hash160": {
+        "bip32_vector2_parent": {
+            "parent_key_bytes": 33,
+            "digest_bytes": 20,
+            "published_child_fingerprint": "bd16bee5",
+            "actual_fingerprint": "bd16bee5"
+        }
+    },
+    "uint32": {
+        "zero": {
+            "integer": 0,
+            "hex": "00000000"
+        },
+        "one": {
+            "integer": 1,
+            "hex": "00000001"
+        },
+        "signed_boundary": {
+            "integer": 2147483647,
+            "hex": "7fffffff"
+        },
+        "high_bit": {
+            "integer": 2147483648,
+            "hex": "80000000"
+        },
+        "unsigned_max": {
+            "integer": 4294967295,
+            "hex": "ffffffff"
+        },
+        "rejected_inputs": [
+            "negative",
+            "above_uint32",
+            "float",
+            "numeric_string",
+            "boolean",
+            "null",
+            "short_bytes",
+            "trailing_bytes",
+            "empty_bytes"
+        ]
+    },
+    "failure": {
+        "unknown_hash": "ValueError",
+        "unknown_hmac": "ValueError",
+        "short_result": "invalid_result",
+        "non_string_result": "invalid_result",
+        "vendor_exception": "RuntimeException",
+        "missing_native_extension": "RuntimeException",
+        "missing_algorithm_preflight": "RuntimeException"
+    }
+}
