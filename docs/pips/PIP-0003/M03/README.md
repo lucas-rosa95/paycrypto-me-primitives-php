@@ -129,8 +129,17 @@ The 78-byte public payloads were taken from BitWasp bitcoin-php v1.1.0's
 `tests/Data/bip32testvectors.json`; all 12 public payloads in those two source
 vectors were separately Base58Check-encoded with the Tuupola trial codec and
 matched their published xpub strings. Eleven of those payloads participate in
-the six cases. No private fixture field is copied. The exact expected child
-payload checks compressed public key, chain code, depth,
+the six cases. The [official-xpub provenance probe](bip32-official-xpub-probe.php)
+checks those eleven against the BIP's own xpub text in the SHA-256-pinned
+snapshot, decodes each with both Tuupola Base58 2.2.0 and StephenHill Base58
+2.1.0 from the M02 trial lock, verifies its four-byte double-SHA-256 checksum,
+and compares the 78-byte payload with the BitWasp-sourced fixture. Its
+[PHP 8.3/8.4 record](bip32-official-xpub-comparison.json) passed for all six
+cases. This gives the payload oracle an independent normative source; the two
+decoders still share runtime hashing/GMP, which M04 qualifies separately. The
+broad M02 trial autoload emitted its already-known unrelated `cjpgdk/bech32`
+nullable-parameter deprecation on PHP 8.4. No private fixture field is copied.
+The exact expected child payload checks compressed public key, chain code, depth,
 immediate-parent fingerprint and child number at once. The two-step fixture
 also checks that the intermediate child is used as the next parent.
 
@@ -315,6 +324,18 @@ at `/native`. Each command exits nonzero if a sourced vector or forced semantic
 case changes. Excluding only `php` and `provider`, the six output objects must
 match one another and the `common_result` in the comparison record. The
 matrix entries record the observed patch versions and provider identity.
+
+To counter-check the public fixture payloads directly against the official
+BIP32 xpub text, mount the M02 trial Composer install at `/research` and the
+whole `PIP-0003` directory at `/pip`, then run on both PHP runtimes:
+
+```sh
+php /pip/M03/bip32-official-xpub-probe.php
+```
+
+Its successful JSON result must match the corresponding entry in
+`bip32-official-xpub-comparison.json`. The broad M02 trial autoload may also
+print the unrelated PHP 8.4 `cjpgdk/bech32` deprecation noted above.
 
 To repeat the native false/fault probe in each pinned native container, with
 M03 mounted at `/probe` and the compiled extension at `/native`, run:

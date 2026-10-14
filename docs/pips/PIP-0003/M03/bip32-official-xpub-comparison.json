@@ -1,0 +1,29 @@
+{
+  "matrix": {
+    "83": {
+      "php": "8.3.35",
+      "source": "pinned BIP32 vectors 1 and 2",
+      "public_derivation_cases": 6,
+      "distinct_public_nodes": 11,
+      "decoders": [
+        "tuupola/base58",
+        "stephenhill/base58"
+      ],
+      "checksum": "double SHA-256, first 4 bytes",
+      "all_match": true
+    },
+    "84": {
+      "php": "8.4.26",
+      "source": "pinned BIP32 vectors 1 and 2",
+      "public_derivation_cases": 6,
+      "distinct_public_nodes": 11,
+      "decoders": [
+        "tuupola/base58",
+        "stephenhill/base58"
+      ],
+      "checksum": "double SHA-256, first 4 bytes",
+      "all_match": true
+    }
+  },
+  "observation": "Both decoders agree with the pinned BIP32 xpub text, checksum, and separately captured BitWasp public payload bytes. The broad M02 trial Composer autoload emits a known unrelated cjpgdk/bech32 nullable-parameter deprecation on PHP 8.4."
+}

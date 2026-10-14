@@ -20,7 +20,7 @@ read as a working library feature.
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
 | M02 — merged | [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01–O06 protocol and boundary decisions, the O07 candidate/qualification map, and the PHP 8.3 minimum decision while retaining the generic relative-path contract. It includes historical PHP 8.1 Composer and bounded probe evidence. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10). M03/M04 must qualify accepted behavior and candidates on PHP 8.3/8.4. No provider is selected or concrete PHP type frozen. |
-| M03 — research in progress | The [ECC, unchanged CKDpub and native-false probes](M03/README.md) exercise two Composer-installed PHP adapters and a pinned native libsecp256k1 reference on PHP 8.3/8.4. Six sourced public-path payloads and forced exact-index, path/depth, metadata and fault cases agree across all six composition runs; a focused classifier distinguishes confirmed infinity from forced native `false` on finite sums. | Q04/Q05 research path/depth and sourced-public-edge comparison is expanded; complete point/hash/failure corpus and independent/common-mode fault challenge remain open. No provider is selected. |
+| M03 — research in progress | The [ECC, unchanged CKDpub and native-false probes](M03/README.md) exercise two Composer-installed PHP adapters and a pinned native libsecp256k1 reference on PHP 8.3/8.4. Six sourced public-path payloads and forced exact-index, path/depth, metadata and fault cases agree across all six composition runs; the pinned BIP32 xpub text independently counter-checks their payload bytes through two Base58 decoders. A focused classifier distinguishes confirmed infinity from forced native `false` on finite sums. | Q04/Q05 research path/depth and sourced-public-edge comparison is expanded; complete point/hash/failure corpus and independent/common-mode fault challenge remain open. No provider is selected. |
 | M04–M09 — pending | Codec qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
 **Next reviewable step:** M02's accepted decisions are on `main` through PR #9.
@@ -310,7 +310,15 @@ independently justified expected outputs, admitted regressions, malformed
 boundaries, controlled rare outcomes and differential checks. Force invalid
 children at every path position, zero, n-or-greater, infinity and exhaustion;
 label forced outcomes distinctly from naturally observed cases. Test metadata
-after retries. Investigate disagreement rather than voting. The
+after successful exact-index edges and verify no child is emitted after an
+invalid attempt. Investigate disagreement rather than voting. The
+official Bitcoin BIP vectors are the primary expected-output source wherever
+they cover a case; record the exact source snapshot and compare their published
+text through an independently checked decode path. External implementations
+and their fixture bytes provide secondary counter-proofs, never the sole oracle
+for a case with a published BIP vector. For cases without a normative vector,
+use independently justified calculations or a separately implemented reference
+and label synthetic fault injections explicitly. The
 [BitWasp investigation](M00/reviews/bitwasp-public-derivation/README.md)
 provides 17 round trips, six public edges and 30 address regressions, plus
 known bad reference behavior: invalid root metadata admitted, trailing payload
