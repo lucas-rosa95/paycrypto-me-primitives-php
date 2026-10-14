@@ -89,12 +89,18 @@
         ]
     },
     "failure": {
-        "unknown_hash": "ValueError",
-        "unknown_hmac": "ValueError",
-        "short_result": "invalid_result",
-        "non_string_result": "invalid_result",
-        "vendor_exception": "RuntimeException",
-        "missing_native_extension": "RuntimeException",
-        "missing_algorithm_preflight": "RuntimeException"
+        "unknown_hash": {
+            "raw": "ValueError",
+            "public": "provider_environment_failure"
+        },
+        "unknown_hmac": {
+            "raw": "ValueError",
+            "public": "provider_environment_failure"
+        },
+        "short_result": "provider_environment_failure",
+        "non_string_result": "provider_environment_failure",
+        "vendor_exception": "provider_environment_failure",
+        "missing_native_extension": "provider_environment_failure",
+        "missing_algorithm_preflight": "provider_environment_failure"
     }
 }

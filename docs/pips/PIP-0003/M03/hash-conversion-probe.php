@@ -34,8 +34,10 @@ function ownedRuntimeCall(Closure $operation, int $bytes): string
 {
     try {
         $result = $operation();
-    } catch (Throwable $error) {
-        throw new RuntimeException('provider_environment_failure', 0, $error);
+    } catch (Throwable) {
+        // A public exception must not expose unsanitized vendor details through
+        // getPrevious(), even when its own message is safe.
+        throw new RuntimeException('provider_environment_failure');
     }
     if (!is_string($result) || strlen($result) !== $bytes) {
         throw new RuntimeException('provider_environment_failure');
@@ -49,10 +51,21 @@ function expectRuntimeFailure(string $label, Closure $operation): string
         ownedRuntimeCall($operation, 32);
     } catch (RuntimeException $error) {
         check($error->getMessage() === 'provider_environment_failure', "$label category");
+        check($error->getPrevious() === null, "$label previous exception containment");
         check(!str_contains($error->getMessage(), 'secret'), "$label safe public diagnostic");
-        return $error->getPrevious() === null ? 'invalid_result' : get_class($error->getPrevious());
+        return $error->getMessage();
     }
     throw new RuntimeException("Failed: $label should fail");
+}
+
+function observedRawFailure(string $label, Closure $operation): string
+{
+    try {
+        $operation();
+    } catch (Throwable $error) {
+        return get_class($error);
+    }
+    throw new RuntimeException("Failed: $label should fail at the raw runtime boundary");
 }
 
 function requireFacilities(array $extensions, array $algorithms): void
@@ -171,8 +184,11 @@ foreach (["\0\0\0", "\0\0\0\0\0", ''] as $invalid) {
 }
 $report['uint32']['rejected_inputs'] = ['negative', 'above_uint32', 'float', 'numeric_string', 'boolean', 'null', 'short_bytes', 'trailing_bytes', 'empty_bytes'];
 
-$report['failure']['unknown_hash'] = expectRuntimeFailure('unknown hash', static fn () => hash('primitives_missing_sha256', 'secret', true));
-$report['failure']['unknown_hmac'] = expectRuntimeFailure('unknown HMAC', static fn () => hash_hmac('primitives_missing_sha512', 'secret', 'key', true));
+$badHash = static fn () => hash('primitives_missing_sha256', 'secret', true);
+$badHmac = static fn () => hash_hmac('primitives_missing_sha512', 'secret', 'key', true);
+$report['failure']['unknown_hash'] = ['raw' => observedRawFailure('unknown hash', $badHash), 'public' => expectRuntimeFailure('unknown hash', $badHash)];
+$report['failure']['unknown_hmac'] = ['raw' => observedRawFailure('unknown HMAC', $badHmac), 'public' => expectRuntimeFailure('unknown HMAC', $badHmac)];
+check($report['failure']['unknown_hash']['raw'] === 'ValueError' && $report['failure']['unknown_hmac']['raw'] === 'ValueError', 'unknown algorithms raise ValueError');
 $report['failure']['short_result'] = expectRuntimeFailure('short result', static fn () => str_repeat("\0", 31));
 $report['failure']['non_string_result'] = expectRuntimeFailure('non-string result', static fn () => false);
 $report['failure']['vendor_exception'] = expectRuntimeFailure('vendor exception', static fn () => throw new RuntimeException('secret vendor detail'));

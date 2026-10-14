@@ -1,5 +1,5 @@
 {
     "php": "8.3.35",
     "gmp_loaded": false,
-    "missing_gmp": "RuntimeException"
+    "missing_gmp": "provider_environment_failure"
 }

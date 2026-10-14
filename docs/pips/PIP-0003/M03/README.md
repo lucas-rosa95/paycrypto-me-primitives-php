@@ -217,6 +217,8 @@ boundary; they are not a production implementation.
 Both runs normalized an actual unknown PHP hash/HMAC algorithm `ValueError`,
 injected short/non-string results and a vendor exception to a stable
 `provider_environment_failure` category without echoing the injected detail.
+The research public wrapper also drops the raw exception from `getPrevious()`;
+the probe records the raw `ValueError` class separately from that wrapper.
 An explicit facility preflight likewise failed for an unavailable native
 extension and unknown algorithm. Running the same probe with `php -n` proved
 the missing-GMP preflight on [8.3](missing-gmp-php83.json) and
