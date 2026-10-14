@@ -1,0 +1,47 @@
+{
+    "runtime": "8.1.34",
+    "checks": {
+        "generic_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "generic_invalid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "segwit_v0_valid": [
+            true,
+            true,
+            true
+        ],
+        "segwit_invalid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+        ],
+        "encode_21_byte_v0_rejected": true,
+        "decode_21_byte_v0_rejected": false
+    }
+}

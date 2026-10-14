@@ -21,7 +21,8 @@ docs/
 │   │   ├── PIP-0003.md              # capability proposal and boundaries
 │   │   ├── EXECUTION-PLAN.md        # current execution reference
 │   │   ├── M00/                     # early research, reviews and planning evidence
-│   │   └── M01/                     # contract draft, report and diagrams
+│   │   ├── M01/                     # contract draft, report and diagrams
+│   │   └── M02/                     # protocol proposals and provider research
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
 
 archives/                              # ignored, local to the archiving checkout
@@ -48,6 +49,8 @@ is its retrospective coordination anchor. A
 [present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
 approved the exact proposal revision on 2026-10-10; the old package and M01
 draft did not establish that approval or verify the capability.
+The [M02 protocol record](pips/PIP-0003/M02/M02-PROTOCOL.md) tracks current
+proposed protocol rules and the provider qualification handoff.
 The [independent plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
 

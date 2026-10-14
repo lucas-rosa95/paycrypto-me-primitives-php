@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # Mechanical checks complement the required human architectural review.
-canonical=docs/architecture/paycrypto-primitives-canonical-architecture-reference-v1.4.md
+canonical=docs/canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md
 test -s "$canonical"
 test -s LICENSE
 grep -Fq "./$canonical" README.md

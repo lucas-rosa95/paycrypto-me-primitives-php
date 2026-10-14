@@ -13,6 +13,16 @@ simple they appear. Research and validate suitable libraries or runtime
 facilities before selecting implementations. Reference implementation internals
 are evidence to study, not code or architecture to reproduce.
 
+# Operation results and failures
+
+Give each Primitives-owned operation a documented meaning for its return values
+and failures. Boolean, nullable, object, and explicit outcome values are allowed
+when their meanings are clear. Do not use an undocumented sentinel or partial
+success for a failure, or alternate between return values and exceptions for
+the same failure. Public capability failures use Primitives-owned PHP exceptions;
+normalize provider conventions at that boundary and do not expose vendor
+exception types as the domain contract.
+
 # Material work and PIPs
 
 Follow the current [PayCrypto.Me PIP Specification](docs/specifications/paycrypto-pip-specification-v1.0.md)

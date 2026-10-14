@@ -92,6 +92,10 @@ Network constants are definitions, not subclasses.
 
 When two networks differ only by parameters, Primitives represents that difference as validated data. A new capability is justified only when the behavior itself diverges.
 
+### Clear results and failures
+
+Every operation defines what its return values mean and how it reports failure. Booleans, nullable values, objects, and explicit internal outcomes are valid when they express the operation's documented semantics. An error must not masquerade as an undocumented `false`, `null`, empty value, or partial success. Public capability failures use Primitives-owned PHP exceptions, with provider-specific behavior normalized at the boundary.
+
 ---
 
 ## Auditable by design
@@ -300,8 +304,8 @@ server, or a database.
 The tool container uses Docker's default bridge network (`network_mode: bridge`),
 matching the release containers. It needs no Compose service discovery.
 
-The supported consumer baseline is PHP 8.1. The Docker image runs PHP 8.3 and
-Composer is configured with an 8.1 platform target, so dependency resolution
+The supported consumer baseline is PHP 8.3. The Docker image runs PHP 8.3 and
+Composer is configured with an 8.3 platform target, so dependency resolution
 does not accidentally require a newer PHP release.
 
 ```bash
@@ -309,7 +313,7 @@ bash scripts/setup.sh
 ```
 
 This builds the image, installs dependencies and runs `composer ci` in an
-ephemeral container. Use `bash scripts/setup.sh 8.1` to check the minimum runtime.
+ephemeral container. Use `bash scripts/setup.sh 8.4` to check the newer runtime.
 The shared runtime/image list for setup, CI and release is `scripts/php-images.sh`.
 After selecting another runtime, rerun setup without arguments to restore PHP 8.3.
 
@@ -321,7 +325,7 @@ docker compose run --rm app composer ci
 
 For versioned releases, follow the [release guide](docs/GUIDE-RELEASE.md).
 Preview the release flow with `bash scripts/release.sh -v 0.1.0 --git --dry-run`
-after committing your changes on `main`. CI tests real PHP 8.1 and 8.3 runtimes.
+after committing your changes on `main`. CI tests real PHP 8.3 and 8.4 runtimes.
 
 It validates Composer metadata, syntax-checks PHP files, runs PHPUnit, and
 runs PHPStan. GitHub Actions executes that same containerized sequence.

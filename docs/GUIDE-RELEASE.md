@@ -15,8 +15,8 @@ Composer metadata or ship `vendor/` with this library.
 3. Preview: `bash scripts/release.sh -v 0.1.0 --git --dry-run`.
 4. Validate: `bash scripts/release.sh -v 0.1.0`. This checks the distribution
    archive and docs, then installs development dependencies and runs Composer
-   metadata validation, syntax checks, PHPUnit and PHPStan under real PHP 8.1
-   and 8.3 in isolated temporary directories. Platform requirements are checked
+   metadata validation, syntax checks, PHPUnit and PHPStan under real PHP 8.3
+   and 8.4 in isolated temporary directories. Platform requirements are checked
    against each actual runtime too. All gates must pass; there are no skip flags.
 5. Validate and create an annotated tag:
    `bash scripts/release.sh -v 0.1.0 --git`.
@@ -28,9 +28,9 @@ Composer metadata or ship `vendor/` with this library.
    indexing succeeded. If indexing is delayed, inspect the Packagist update
    status before attempting another release. Never move a published tag.
 
-GitHub Actions runs the same Composer quality gates for PHP 8.1 and 8.3 and
+GitHub Actions runs the same Composer quality gates for PHP 8.3 and 8.4 and
 checks the distribution archive. Docker network access is required to download
-tooling. The supported PHP baseline is 8.1; the matrix provides actual runtime
+tooling. The supported PHP baseline is 8.3; the matrix provides actual runtime
 evidence beyond Composer's platform pin.
 
 `composer.lock` is intentionally ignored for this library. Each validation
