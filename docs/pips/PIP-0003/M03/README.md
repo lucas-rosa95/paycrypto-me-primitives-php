@@ -21,13 +21,17 @@ lock at this checkpoint. That response is not a security certification.
 The [bounded probe](ecc-boundary-probe.php) ran through Composer autoloading on
 both runtimes, with [PHP 8.3 output](ecc-probe-php83.json) and
 [PHP 8.4 output](ecc-probe-php84.json). Its two research adapters agreed on
-seven point-admission cases and six tweak cases. They admitted the compressed
-generator; rejected short, long, wrong-prefix, off-curve and out-of-field
-points; preserved the generator for a zero tweak; returned a point for tweak
-one; reported infinity for an order-minus-one tweak; and rejected order,
-order-plus-one and wrong-width tweaks. The full result objects match across
-both runtimes. These are controlled cases, not independent proof that the
-resulting point for tweak one is correct.
+13 point-admission cases, nine generator-tweak cases and two additional
+cross-point infinity cases. Three malformed public keys are the actual bytes
+from [BIP32 test vector 5](../M00/reviews/bitwasp-public-derivation/bip-0032.mediawiki),
+not locally invented substitutes: wrong prefixes `04` and `01`, and the
+off-curve compressed point with x-coordinate `7`. The separate
+[xpub provenance probe](bip32-official-xpub-probe.php) checks their published
+Base58Check text and 33-byte key fields through two decoders on both runtimes.
+The remaining boundary cases are controlled, independently justified by
+secp256k1's field/order bounds or compared with pinned libsecp256k1; they are
+not presented as published BIP vectors. The full PHP result objects match
+across both runtimes and both adapters.
 
 The raw Paragonie parser/serializer returned `02` followed by 32 `ff` bytes
 as a point, even though its x-coordinate exceeds the secp256k1 field prime.
@@ -36,7 +40,7 @@ The shared semantic guard now checks the coordinate bound before either
 provider. The observed agreement depends on that guard; it is not evidence
 that the raw APIs are interchangeable without validation.
 
-This first probe is only a Q06/Q07 boundary subset. The CKDpub composition
+This probe is still a Q06/Q07 boundary subset. The CKDpub composition
 probe below adds public-path evidence; it does not close M03's full Q04–Q08/Q12
 gate. The ECC probe maps exceptions from known malformed point fixtures to
 `invalid_point`; it does not establish a general distinction between malformed
@@ -90,15 +94,18 @@ the extension loaded as binding 0.1.2 / libsecp256k1 0.8.0 on both, and its
 32 local PHPT tests passed on each runtime with no skips. The
 [bounded native probe](native-ecc-reference-probe.php) and its
 [8.3](native-probe-php83.json) and [8.4](native-probe-php84.json) outputs show
-the same generator and zero/one-tweak points as both PHP adapters, including
-the compressed `2G` result. Native parsing rejected the same six malformed
-point fixtures, including x-coordinates at or above the field prime. Raw
-native tweak-add returned `false` for both the infinity case (`n - 1`) and
-invalid order-sized scalars, while a short scalar threw `ValueError`. The
-adapter must distinguish those owned failure meanings before or around the
-native call; `false` alone does not identify the cause. The two native output
-objects match after excluding the PHP-version header. This narrows the
-independent Q06/Q07 evidence; it does not verify CKDpub or all M03 cases.
+the same 13 point-admission outcomes and nine scalar-boundary outcomes as both
+PHP adapters, including compressed `2G` and `−G`. Native parsing rejected all
+three published BIP32 invalid points and the controlled malformed points,
+including x-coordinates at or above the field prime. `G + (n−2)G` produced
+`−G`; `2G + (n−2)G` and `−G + G` reached infinity. Raw native tweak-add
+returned `false` for these infinity sums and invalid order-sized scalars,
+while both short and long scalars threw `ValueError`. The adapter must
+distinguish those owned failure meanings before or around the native call;
+`false` alone does not identify the cause. The two native output objects match
+after excluding the PHP-version header. This narrows the independent Q06/Q07
+evidence; the raw binding result still needs semantic classification and these
+cases do not verify all M03 behavior.
 
 The binding is new and pre-1.0, even though its underlying
 [libsecp256k1](https://github.com/bitcoin-core/secp256k1) is separately

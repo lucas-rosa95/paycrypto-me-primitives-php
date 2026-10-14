@@ -12,6 +12,14 @@
                     "kind": "point",
                     "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
                 },
+                "negative_generator": {
+                    "kind": "point",
+                    "value": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
+                "double_generator": {
+                    "kind": "point",
+                    "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+                },
                 "short": {
                     "kind": "invalid",
                     "reason": "invalid_point_shape"
@@ -35,6 +43,22 @@
                 "x_at_field_prime": {
                     "kind": "invalid",
                     "reason": "invalid_point_coordinate"
+                },
+                "x_field_prime_minus_one": {
+                    "kind": "invalid",
+                    "reason": "invalid_point"
+                },
+                "bip32_vector_5_prefix_04": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "bip32_vector_5_prefix_01": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "bip32_vector_5_off_curve_02": {
+                    "kind": "invalid",
+                    "reason": "invalid_point"
                 }
             },
             "tweaks": {
@@ -50,6 +74,10 @@
                     "kind": "infinity",
                     "value": null
                 },
+                "order_minus_two": {
+                    "kind": "point",
+                    "value": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
                 "order": {
                     "kind": "invalid",
                     "reason": "invalid_scalar"
@@ -58,9 +86,27 @@
                     "kind": "invalid",
                     "reason": "invalid_scalar"
                 },
+                "max_256_bit": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                },
                 "short": {
                     "kind": "invalid",
                     "reason": "invalid_scalar"
+                },
+                "long": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                }
+            },
+            "cross_tweaks": {
+                "double_generator_plus_order_minus_two": {
+                    "kind": "infinity",
+                    "value": null
+                },
+                "negative_generator_plus_one": {
+                    "kind": "infinity",
+                    "value": null
                 }
             }
         },
@@ -70,6 +116,14 @@
                     "kind": "point",
                     "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
                 },
+                "negative_generator": {
+                    "kind": "point",
+                    "value": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
+                "double_generator": {
+                    "kind": "point",
+                    "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+                },
                 "short": {
                     "kind": "invalid",
                     "reason": "invalid_point_shape"
@@ -93,6 +147,22 @@
                 "x_at_field_prime": {
                     "kind": "invalid",
                     "reason": "invalid_point_coordinate"
+                },
+                "x_field_prime_minus_one": {
+                    "kind": "invalid",
+                    "reason": "invalid_point"
+                },
+                "bip32_vector_5_prefix_04": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "bip32_vector_5_prefix_01": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "bip32_vector_5_off_curve_02": {
+                    "kind": "invalid",
+                    "reason": "invalid_point"
                 }
             },
             "tweaks": {
@@ -108,6 +178,10 @@
                     "kind": "infinity",
                     "value": null
                 },
+                "order_minus_two": {
+                    "kind": "point",
+                    "value": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
                 "order": {
                     "kind": "invalid",
                     "reason": "invalid_scalar"
@@ -116,9 +190,27 @@
                     "kind": "invalid",
                     "reason": "invalid_scalar"
                 },
+                "max_256_bit": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                },
                 "short": {
                     "kind": "invalid",
                     "reason": "invalid_scalar"
+                },
+                "long": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                }
+            },
+            "cross_tweaks": {
+                "double_generator_plus_order_minus_two": {
+                    "kind": "infinity",
+                    "value": null
+                },
+                "negative_generator_plus_one": {
+                    "kind": "infinity",
+                    "value": null
                 }
             }
         }

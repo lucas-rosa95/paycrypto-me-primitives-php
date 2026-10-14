@@ -71,11 +71,35 @@ if (count($uniqueNodes) !== 11) {
     throw new RuntimeException('Unexpected number of participating public nodes');
 }
 
+// Vector 5 publishes full, checksummed xpubs for malformed public material.
+// The expected point bytes were independently captured into the fixture file;
+// both decoders must recover those bytes from the pinned BIP text.
+$invalid = json_decode(file_get_contents(__DIR__ . '/ecc-official-invalid-points.json'), true, 512, JSON_THROW_ON_ERROR);
+$section = explode('==Acknowledgements==', explode('===Test vector 5===', $bip, 2)[1], 2)[0];
+foreach ($invalid as $label => $fixture) {
+    if (!str_contains($section, $fixture['xpub']) || strlen($fixture['point']) !== 66) {
+        throw new RuntimeException("$label differs from pinned BIP32 vector 5");
+    }
+    foreach ($decoders as $name => $decoder) {
+        $decoded = $decoder->decode($fixture['xpub']);
+        if (strlen($decoded) !== 82) {
+            throw new RuntimeException("$label: $name decoded wrong length");
+        }
+        $payload = substr($decoded, 0, 78);
+        $checksum = substr($decoded, 78, 4);
+        $computed = substr(hash('sha256', hash('sha256', $payload, true), true), 0, 4);
+        if (!hash_equals($computed, $checksum) || bin2hex(substr($payload, 45, 33)) !== $fixture['point']) {
+            throw new RuntimeException("$label: $name disagrees with BIP32 malformed point bytes");
+        }
+    }
+}
+
 echo json_encode([
     'php' => PHP_VERSION,
-    'source' => 'pinned BIP32 vectors 1 and 2',
+    'source' => 'pinned BIP32 vectors 1, 2 and 5',
     'public_derivation_cases' => count($positions),
     'distinct_public_nodes' => count($uniqueNodes),
+    'published_invalid_public_points' => count($invalid),
     'decoders' => array_keys($decoders),
     'checksum' => 'double SHA-256, first 4 bytes',
     'all_match' => true,
