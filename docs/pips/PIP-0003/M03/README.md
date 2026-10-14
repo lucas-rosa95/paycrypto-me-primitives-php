@@ -103,10 +103,9 @@ independent Q06/Q07 evidence; it does not verify CKDpub or all M03 cases.
 The binding is new and pre-1.0, even though its underlying
 [libsecp256k1](https://github.com/bitcoin-core/secp256k1) is separately
 maintained. The CKDpub comparison below challenges it against unchanged PHP
-consumers for sourced paths and forced invalid cases; extension absence, false
-returns, mutation and vendor faults still need broader qualification. M05 must
-separately weigh deployment footprint
-and maintenance before any production selection. The older
+consumers for sourced paths and forced invalid cases; the focused native-false
+probe below checks another failure boundary. M05 must separately weigh
+deployment footprint and maintenance before any production selection. The older
 [BitWasp binding](https://github.com/Bit-Wasp/secp256k1-php) remains historical
 reference only; its latest tag is `v0.2.2` from 2019.
 
@@ -148,14 +147,72 @@ changed point on admission as provider failures.
 This closes the unchanged-consumer comparison for these sourced paths and
 forced cases. It does **not** close M03: the point corpus and scalar/domain
 extremes remain bounded; long-key/empty/binary hash and conversion Q08 cases,
-missing runtime facilities, native `false` fault-versus-infinity classification,
-native mutation/failure behavior, and broader provider-fault containment still
+other missing runtime facilities and broader provider-fault containment still
 need qualification. The PHP adapters' parser exceptions are still treated as
 malformed points for known bad fixtures; unexpected faults inside those parsers
-are not independently distinguishable here. The native binding's tweak-add
-`false` is treated as infinity only after scalar and point pre-admission in this
-research consumer, but a native internal failure with the same return remains
-ambiguous. M05 must not select an adapter based on this subset alone.
+are not independently distinguishable here. The native false classification
+below is bounded to the pinned source and tested API operations. M05 must not
+select an adapter based on this subset alone.
+
+## Native `false`: source path and bounded resolution
+
+The pinned [PHP binding's tweak-add wrapper](https://github.com/1ma/secp256k1-php/blob/3ee95fa4299c108877e0527e8bd1efc4f57982ba/ext_secp256k1.c#L231-L257)
+checks 32-byte width, copies the opaque key into a temporary, calls
+libsecp256k1, returns `false` without replacing the PHP object on failure,
+and replaces it only on success. The pinned [libsecp256k1 public-tweak API](https://github.com/bitcoin-core/secp256k1/blob/6e2c8bc4ecdc6e71dbe7a368f360d8d453ce435d/include/secp256k1.h#L793-L811)
+documents invalid arguments and an invalid sum as failure. Its [implementation](https://github.com/bitcoin-core/secp256k1/blob/6e2c8bc4ecdc6e71dbe7a368f360d8d453ce435d/src/secp256k1.c#L712-L734)
+returns zero for scalar overflow, an invalid opaque key, or the [point at
+infinity](https://github.com/bitcoin-core/secp256k1/blob/6e2c8bc4ecdc6e71dbe7a368f360d8d453ce435d/src/eckey_impl.h#L62-L75).
+Fresh parsing and exact serialization of an admitted compressed point exclude
+the invalid-key route in ordinary execution. Exact 32-byte and `< n` checks
+exclude the width and overflow routes before tweak-add. The focused probe also
+found that direct construction, reflection without a constructor, cloning,
+serialization and unserialization do not produce an opaque key object on
+either tested PHP runtime. This is bounded evidence for the PHP-facing object
+boundary, not a claim about arbitrary native memory corruption. Under the pinned
+implementation's contract, infinity is the remaining expected `false`.
+
+The [research-only classifier](native-false-classifier.php) goes further: after
+`false`, it verifies that the PHP key stayed unchanged, then confirms infinity
+through separate native point operations. For a nonzero public BIP32 tweak,
+it compares the point `tweak × G` with the negated parent; equality means the
+sum is infinity. A `false` for zero, a changed object, a failed confirmation,
+or an exception is a provider failure. This calls the binding's
+`ec_pubkey_create` with **publicly derived HMAC material** as a point-multiply
+facility; no wallet private key, seed, signing or private derivation enters the
+research composition. M05 must review whether that API route is acceptable
+inside a selected public-only adapter or require an equivalent delegated
+confirmation. The classifier is a qualification spike, not a frozen API.
+
+The [focused probe](native-false-classification-probe.php) and
+[comparison record](native-false-comparison.json) cover both PHP 8.3.35 and
+8.4.26 against the same pinned extension. Raw `false` occurred for three
+distinct infinity cases (`G + (n−1)G`, `2G + (n−2)G`, `−G + G`) and for
+order-sized scalars. Wrong width threw `ValueError`; zero and one succeeded.
+The PHP object and its alias remained unchanged after each raw failure, and
+the same object succeeded on the next valid tweak. Forced `false` on finite
+and zero sums, mutation followed by `false`, non-boolean return and injected
+vendor exceptions all became provider failures. A forced `false` where the
+separate native equality check confirms infinity remained an invalid child. The
+classifier also reports `provider_unavailable` when the extension is absent.
+The unchanged CKDpub consumer still matched its prior outputs on both runtimes
+after using the classifier.
+
+The [independent PHP adapter cross-check](native-false-crosscheck-probe.php)
+ran the same three infinity sums plus the zero and one finite controls through
+both Paragonie and Simplito on PHP 8.3/8.4. Their point and infinity outcomes
+agreed with one another and the native results, as recorded in the comparison
+file. This checks the mathematics through distinct PHP implementations; it
+does not make the two native confirmation calls independent at runtime.
+
+This resolves the observed **multi-meaning `false`** for the pinned, admitted
+inputs and tested faults. It does not prove that every possible native defect
+can be diagnosed by another operation in the same library. A common-mode ECC
+fault could fool both operations; broader independent qualification and M05's
+selection gate remain necessary. If the public-only adapter boundary cannot
+admit this confirmation route, the native binding must remain an independent
+reference or be rejected for production until an equivalent qualified route
+exists. No false result is silently treated as a successful child.
 
 ## Reproduction
 
@@ -246,3 +303,22 @@ at `/native`. Each command exits nonzero if a sourced vector or forced semantic
 case changes. Excluding only `php` and `provider`, the six output objects must
 match one another and the `common_result` in the comparison record. The
 matrix entries record the observed patch versions and provider identity.
+
+To repeat the native false/fault probe in each pinned native container, with
+M03 mounted at `/probe` and the compiled extension at `/native`, run:
+
+```sh
+LD_LIBRARY_PATH=/native/build/secp256k1/lib \
+    php -d extension=/native/modules/secp256k1.so \
+    /probe/native-false-classification-probe.php
+```
+
+The command exits nonzero if any raw or classified outcome changes. Compare
+both outputs with `native-false-comparison.json`, excluding only `php` before
+checking equality. To check the missing-extension branch, require
+`native-false-classifier.php` in the same PHP image without loading the
+extension; a call must raise `provider_unavailable` before native functions
+are invoked. With the focused ECC Composer install at `/research`, run
+`php /probe/native-false-crosscheck-probe.php` on both runtimes and compare its
+`results` field with `php_adapter_crosscheck.agreed_results` in the record.
+The false classifier and fault injections are research-only.

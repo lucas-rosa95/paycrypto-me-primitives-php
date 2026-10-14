@@ -4,6 +4,7 @@ declare(strict_types=1);
 // Research-only CKDpub composition. Invoke once per provider with the same
 // fixture set; no ECC arithmetic or standardized encoding is implemented here.
 require '/research/vendor/autoload.php';
+require_once __DIR__ . '/native-false-classifier.php';
 
 const CURVE_ORDER = 'fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141';
 const FIELD_PRIME = 'fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f';
@@ -116,13 +117,9 @@ final class NativePointTrial implements PublicPointTrial
     }
     public function tweak(string $point, string $scalar): ?string
     {
-        // Parsing anew contains the native binding's by-reference mutation.
-        $parsed = secp256k1_ec_pubkey_parse($point);
-        if ($parsed === false) {
-            throw new TrialFailure('provider_failure');
-        }
-        return secp256k1_ec_pubkey_tweak_add($parsed, $scalar)
-            ? secp256k1_ec_pubkey_serialize($parsed) : null;
+        // The helper reparses for every call and confirms a native false as
+        // infinity before exposing the invalid-child outcome to CKDpub.
+        return qualifiedNativeTweak($point, $scalar);
     }
 }
 
