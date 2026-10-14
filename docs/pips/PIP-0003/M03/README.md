@@ -37,8 +37,8 @@ provider. The observed agreement depends on that guard; it is not evidence
 that the raw APIs are interchangeable without validation.
 
 This is only a Q06/Q07 boundary subset. M03 still needs a full invalid-point
-corpus, unchanged CKDpub consumer and exact-path Q04/Q05 fixtures, independent
-libsecp256k1 evidence, Q08 HMAC/metadata checks, deliberate provider/environment
+corpus, unchanged CKDpub consumer and exact-path Q04/Q05 fixtures, complete
+independent libsecp256k1 evidence, Q08 HMAC/metadata checks, deliberate provider/environment
 fault injection and Q12 failure containment, as well as maintenance and
 dependency-path review. The probe maps exceptions from known malformed point
 fixtures to `invalid_point`; it does not establish a general distinction
@@ -83,12 +83,28 @@ expose public-key parse, serialize and tweak-add operations. Its
 requires PHP 8.2+, and its [CI workflow](https://github.com/1ma/secp256k1-php/blob/v0.1.2/.github/workflows/ci.yml)
 includes PHP 8.3 and 8.4. These upstream declarations and passing
 [tagged CI run](https://github.com/1ma/secp256k1-php/actions/runs/38165368958)
-are feasibility evidence, not our qualification result.
+were feasibility evidence before our local trial.
+
+The tag's libsecp256k1 submodule is pinned to
+`6e2c8bc4ecdc6e71dbe7a368f360d8d453ce435d` (v0.8.0). We built this
+exact pair in disposable PHP 8.3.35 and 8.4.26 research containers with GMP;
+the extension loaded as binding 0.1.2 / libsecp256k1 0.8.0 on both, and its
+32 local PHPT tests passed on each runtime with no skips. The
+[bounded native probe](native-ecc-reference-probe.php) and its
+[8.3](native-probe-php83.json) and [8.4](native-probe-php84.json) outputs show
+the same generator and zero/one-tweak points as both PHP adapters, including
+the compressed `2G` result. Native parsing rejected the same six malformed
+point fixtures, including x-coordinates at or above the field prime. Raw
+native tweak-add returned `false` for both the infinity case (`n - 1`) and
+invalid order-sized scalars, while a short scalar threw `ValueError`. The
+adapter must distinguish those owned failure meanings before or around the
+native call; `false` alone does not identify the cause. The two native output
+objects match after excluding the PHP-version header. This narrows the
+independent Q06/Q07 evidence; it does not verify CKDpub or all M03 cases.
 
 The binding is new and pre-1.0, even though its underlying
 [libsecp256k1](https://github.com/bitcoin-core/secp256k1) is separately
-maintained. M03 must pin and build the binding and native library on both
-supported PHP runtimes, compare exact CKDpub outputs and invalid cases with
+maintained. M03 must still compare exact CKDpub outputs and invalid cases with
 the unchanged PHP consumers, and challenge extension absence, false returns,
 mutation and vendor faults. M05 must separately weigh deployment footprint
 and maintenance before any production selection. The older
@@ -130,3 +146,40 @@ read-only at `/probe`, and run `php /probe/ecc-boundary-probe.php` with
 two adapter outcomes differ. Compare its JSON with the stored runtime output,
 excluding only the runtime header if patch versions differ. Research packages
 must remain outside the library's production Composer manifest.
+
+For the native reference probe, clone tag `v0.1.2` with its submodule into a
+scratch directory, verify the binding and libsecp256k1 commits above, and
+copy the checkout separately for each runtime. The following commands were
+run inside each copy mounted at `/probe` in the corresponding M03 GMP image,
+with this M03 directory mounted read-only at `/research`. Build commands need
+network access to install CMake; the final probe runs with `--network none`.
+The Debian CMake package was not snapshot-pinned, so these are source-pinned
+results rather than bit-for-bit reproducible binary builds.
+
+```sh
+apt-get update
+apt-get install -y --no-install-recommends cmake
+cd /probe
+cmake -S secp256k1 -B build/secp256k1 \
+    -DCMAKE_INSTALL_PREFIX=/probe/build/secp256k1 \
+    -DSECP256K1_ENABLE_MODULE_RECOVERY=ON \
+    -DSECP256K1_BUILD_BENCHMARK=OFF \
+    -DSECP256K1_BUILD_CTIME_TESTS=OFF \
+    -DSECP256K1_BUILD_TESTS=OFF \
+    -DSECP256K1_BUILD_EXHAUSTIVE_TESTS=OFF
+cmake --build build/secp256k1 -j2
+cmake --install build/secp256k1
+phpize
+PKG_CONFIG_PATH=/probe/build/secp256k1/lib/pkgconfig ./configure --with-secp256k1
+make -j2
+NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    LD_LIBRARY_PATH=/probe/build/secp256k1/lib make test TESTS="-q"
+LD_LIBRARY_PATH=/probe/build/secp256k1/lib \
+    php -d extension=/probe/modules/secp256k1.so \
+    /research/native-ecc-reference-probe.php
+```
+
+The probe exits nonzero if its bounded expectations change. Compare the JSON
+output with the file for the corresponding PHP runtime. The native extension
+and build dependencies are research-only and are not in Primitives' Composer
+manifest.
