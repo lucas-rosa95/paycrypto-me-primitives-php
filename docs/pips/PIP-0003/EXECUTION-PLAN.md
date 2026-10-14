@@ -10,7 +10,7 @@ P2PKH, P2SH-P2WPKH and P2WPKH addresses from an extended public key, a bounded
 relative path, an explicit network and an address policy.
 
 **Product status:** no capability implementation or behavioral verification
-exists on `main`. At checked revision `79ff5a9`, `src/` contains only `.gitkeep`,
+exists on `main`. At checked revision `6e5c5be`, `src/` contains only `.gitkeep`,
 `composer.json` has no production provider, and `tests/SetupTest.php` verifies
 autoload registration only. Documentation and research progress must not be
 read as a working library feature.
@@ -19,13 +19,16 @@ read as a working library feature.
 |---|---|---|
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — decisions recorded, PR pending merge | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01–O06 protocol and boundary decisions, the O07 candidate/qualification map, and the PHP 8.3 minimum decision while retaining the generic relative-path contract. It includes historical PHP 8.1 Composer and bounded probe evidence. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10). M03/M04 must qualify accepted behavior and candidates on PHP 8.3/8.4. The PR remains draft and unmerged; no provider is selected or concrete PHP type frozen. |
-| M03–M09 — pending | Adapter qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
+| M02 — merged | [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01–O06 protocol and boundary decisions, the O07 candidate/qualification map, and the PHP 8.3 minimum decision while retaining the generic relative-path contract. It includes historical PHP 8.1 Composer and bounded probe evidence. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10). M03/M04 must qualify accepted behavior and candidates on PHP 8.3/8.4. No provider is selected or concrete PHP type frozen. |
+| M03 — research in progress | The [bounded ECC probe](M03/README.md) exercises two Composer-installed candidate adapters on PHP 8.3/8.4 and records an out-of-field point-admission discrepancy. | A Q06/Q07 subset only; unchanged CKDpub composition, independent ECC evidence and the full Q04–Q08/Q12 gate remain open. No provider is selected. |
+| M04–M09 — pending | Codec qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
-**Next reviewable step:** PR #9 holds the accepted M02 decisions and awaits the
-maintainer's manual merge. M03/M04 research adapters can proceed from these
-decisions, with no provider selected yet. O03 retains the approved generic
-`relativePath` contract. Its separately approved [PIP00010 receiving entry
+**Next reviewable step:** M02's accepted decisions are on `main` through PR #9.
+[Draft PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12)
+begins M03's bounded ECC adapter probe; its next gate is an unchanged CKDpub
+consumer and independent ECC reference. M04 can
+proceed from settled M02 decisions, with no provider selected yet. O03 retains
+the approved generic `relativePath` contract. Its separately approved [PIP00010 receiving entry
 point at `badb9cd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md)
 takes separate integer `account` and `index` fields, selects the account-level
 key from an explicit immutable source, and supplies `[0, index]` to the generic
@@ -41,7 +44,7 @@ exact PR, commit or test reference.
 |---|---|---|
 | What is happening and what follows? | This section, then the [Execution roadmap](#execution-roadmap). | The only current execution-status and ordering reference. |
 | What was approved? | The [approved proposal revision at `72c4fa1`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md) and [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555). | Proposal defines WHAT, WHY and BOUNDARIES; the Issue records approval and coordination. |
-| What is under review now? | [Draft PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), [M02 protocol record](M02/M02-PROTOCOL.md), then [M02 guidance below](#m02-branch-proposals-review-before-contract-freeze). | Branch proposals, candidate map and probes awaiting review. |
+| What is under review now? | [Draft PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12), [M03 research](M03/README.md), then [M02 protocol record](M02/M02-PROTOCOL.md). | Bounded ECC evidence and the accepted protocol/qualification inputs; no production selection. |
 | Which contracts and evidence support execution? | [M01 draft](M01/M01-CONTRACTS.md) and the [technical guidance below](#technical-decisions-and-detailed-execution-guidance); consult [M00 research](M00/research/public-address-provider-research.md) or [reviews](M00/reviews/plan-first-capability-canonical-alignment.md) for a specific historical claim. | Detailed inputs and provenance; M00/M01 files do not carry current progress status. |
 
 New work follows the [PIP Specification v1.0](../../specifications/paycrypto-pip-specification-v1.0.md),
@@ -69,8 +72,8 @@ engineering observation, not a new PIP decision state.
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
-| M02 — decisions recorded on draft PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record accepted O01–O06 behavior and boundaries without replacing the generic contract; accept the O07 focused-provider/runtime candidate and qualification map by required operation, runtime, license, security, footprint and dependency path. | PIP00010 governs the additional receiving entry point. PR #9 awaits manual merge; qualify the accepted generic capability in M03/M04, with missing suitable providers explicit. Candidate eligibility is not selection. |
-| M03 — pending | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. Research spike only. | Run Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. |
+| M02 — merged in PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record accepted O01–O06 behavior and boundaries without replacing the generic contract; accept the O07 focused-provider/runtime candidate and qualification map by required operation, runtime, license, security, footprint and dependency path. | PIP00010 governs the additional receiving entry point. Qualify the accepted generic capability in M03/M04, with missing suitable providers explicit. Candidate eligibility is not selection. |
+| M03 — research in progress | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. The first bounded Q06/Q07 probe and six-package ECC Composer graph are recorded under [M03](M03/README.md). Research spike only. | Complete Q04–Q08/Q12: valid/invalid points, zero, n or greater, infinity, invalid first/intermediate/last child without advancement, exact path, depth, metadata and actual dependency paths. Record shared mathematical lineage. The current probe does not close this gate. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Counter-prove future Signet profile extension with shared address bytes and a distinct context identifier in test-only fixtures; do not expose it as initially supported. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
 | M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.3/8.4; no vendor or higher-domain leakage. Record unsupported policies. |
@@ -122,9 +125,9 @@ exceptions stay behind adapters. A whole BIP32 package is not a prerequisite:
 CKDpub is an owned protocol composition over delegated HMAC/ECC. HASH160 composes
 delegated SHA-256 and RIPEMD-160.
 
-### M02 branch proposals: review before contract freeze
+### M02 decisions: qualification before contract freeze
 
-The [M02 protocol record on the PR #9 branch](M02/M02-PROTOCOL.md)
+The [M02 protocol record merged in PR #9](M02/M02-PROTOCOL.md)
 pins BIP32, SLIP-0132, BIP49/84, BIP141/173 and Bitcoin Core sources. The
 maintainer accepted O01's exact-path behavior, O02's strict initial
 version/network/policy mapping and O03's receiving-only account/index use case
@@ -239,7 +242,7 @@ challenge is a consensus parameter outside this address-encoding definition.
 
 The accepted exact-path, strict version-policy, bounded-path and data-only
 definition/composition choices still need consuming-use and adapter review.
-A merge of PR #9 would record the O01–O07 M02 dispositions; it would not make
+PR #9 recorded the O01–O07 M02 dispositions; it did not make
 Q tests pass or select a provider.
 The assessed M01 Q05 draft contains advancing-path cases, and its Q04 leaves
 the empty-path disposition open. M03/M04 must execute the revised O01 and O04
@@ -359,7 +362,7 @@ requires them.
 | [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
 | [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
-| [Open PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 exact-path, O02 strict admission, O03 account/index consumer use case, O04 bounded nonempty generic path, O05 data-only validated definitions and O06 public exception/failure rules, while retaining the generic relative-path contract; O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. The additional receiving entry point is approved in PIP00010 but unimplemented. No merge, adapter qualification, final selection or production tests. |
+| [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 exact-path, O02 strict admission, O03 account/index consumer use case, O04 bounded nonempty generic path, O05 data-only validated definitions and O06 public exception/failure rules, while retaining the generic relative-path contract; O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. The additional receiving entry point is approved in PIP00010 but unimplemented. No adapter qualification, final selection or production tests. |
 
 ## Risks, gaps and decisions requiring judgment
 
@@ -417,8 +420,8 @@ an assessed artifact with an issued hash; its diagrams explain completed work.
 The [snapshot](M00/snapshots/milestones-2026-10-03-171445.tar), [2026-10-03 checksum manifest](M00/SHA256SUMS-2026-10-03-milestones),
 and [2026-10-04 manifest](M00/SHA256SUMS-2026-10-04-execution-package) are historical
 package evidence, not active instructions. Git preserves the already-retired
-top-level `docs/PLAN-FIRST-CAPABILITY.md` after PR #6. If PR #9 merges, its
-M02 protocol file remains decision/probe evidence; execution direction stays here.
+top-level `docs/PLAN-FIRST-CAPABILITY.md` after PR #6. PR #9's merged M02
+protocol file remains decision/probe evidence; execution direction stays here.
 
 The workspace now groups early public-address research, its reference probes,
 the independent first-plan review, two planning assessments, issued manifests and
@@ -458,6 +461,5 @@ identifiers, not new checksums for the reorganized workspace.
 reserves whole-workspace archival for a closed Issue. The proposal and this plan
 are the active governance/operational documents; milestone files have evidence
 roles, not competing plan authority. Old references naming `PIP-0003.md` as a
-plan refer to its assessed Git revision. PR #9 has relocated its M02 files to
-`M02/` after merging current `main`; the PR remains unmerged, and the relocation
-is part of its proposed integration.
+plan refer to its assessed Git revision. PR #9 relocated its M02 files to
+`M02/` and merged that layout into `main`.

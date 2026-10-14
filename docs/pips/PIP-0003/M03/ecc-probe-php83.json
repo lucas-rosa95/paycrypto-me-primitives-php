@@ -1,0 +1,126 @@
+{
+    "php": "8.3.35",
+    "gmp": "8.3.35",
+    "raw_paragonie_x_over_field": {
+        "kind": "point",
+        "value": "02ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    "results": {
+        "paragonie/ecc": {
+            "points": {
+                "generator": {
+                    "kind": "point",
+                    "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
+                "short": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "long": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "bad_prefix": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "x_zero": {
+                    "kind": "invalid",
+                    "reason": "invalid_point"
+                },
+                "x_over_field": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_coordinate"
+                },
+                "x_at_field_prime": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_coordinate"
+                }
+            },
+            "tweaks": {
+                "zero": {
+                    "kind": "point",
+                    "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
+                "one": {
+                    "kind": "point",
+                    "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+                },
+                "order_minus_one": {
+                    "kind": "infinity",
+                    "value": null
+                },
+                "order": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                },
+                "order_plus_one": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                },
+                "short": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                }
+            }
+        },
+        "simplito/elliptic-php": {
+            "points": {
+                "generator": {
+                    "kind": "point",
+                    "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
+                "short": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "long": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "bad_prefix": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_shape"
+                },
+                "x_zero": {
+                    "kind": "invalid",
+                    "reason": "invalid_point"
+                },
+                "x_over_field": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_coordinate"
+                },
+                "x_at_field_prime": {
+                    "kind": "invalid",
+                    "reason": "invalid_point_coordinate"
+                }
+            },
+            "tweaks": {
+                "zero": {
+                    "kind": "point",
+                    "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+                },
+                "one": {
+                    "kind": "point",
+                    "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+                },
+                "order_minus_one": {
+                    "kind": "infinity",
+                    "value": null
+                },
+                "order": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                },
+                "order_plus_one": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                },
+                "short": {
+                    "kind": "invalid",
+                    "reason": "invalid_scalar"
+                }
+            }
+        }
+    }
+}
