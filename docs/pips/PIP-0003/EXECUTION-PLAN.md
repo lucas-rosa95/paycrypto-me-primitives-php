@@ -143,8 +143,9 @@ or qualified production behavior; challenge them
 through M03–M05.
 
 - **O01 (accepted M02 behavior; qualification pending):** one exact-index
-  CKDpub attempt returns the child at that index or a distinguished
-  invalid-child outcome. The public address operation attempts each requested
+  CKDpub attempt returns the complete child at that index or throws a
+  distinguished Primitives-owned invalid-child exception. The public address
+  operation attempts each requested
   path component once. An invalid child at
   any level fails the request without an address or automatic advancement.
   A successful derived path equals the requested path. The operation keeps
@@ -210,9 +211,12 @@ through M03–M05.
   PIP00010's account source with policy and account. Test-only Signet may reuse
   testnet encoding under its own validated identifier; initial Signet intent
   fails. The source format and shared PHP semantic type remain M05 choices.
-- **O06 (accepted public exception/failure rule; qualification pending):** both
-  entry points expose one Primitives-owned PHP exception form with stable
-  semantic categories. Failures distinguish malformed input, unsupported or
+- **O06 (accepted complete-result-or-exception rule; qualification pending):**
+  Primitives-owned operations return a complete documented success value or
+  throw a Primitives-owned PHP exception with a stable semantic category.
+  `false`, `null`, empty values and partial values are never failure sentinels;
+  a falsy value is valid only as a documented complete domain result. Failures
+  distinguish malformed input, unsupported or
   incompatible intent, invalid network definition, exact-index invalid child,
   path/depth bounds and provider/environment failure. The receiving entry point
   additionally distinguishes a missing exact account mapping from invalid
@@ -221,7 +225,8 @@ through M03–M05.
   then derivation/encoding; the first failing stage determines the category.
   No account, key or provider fallback, partial address or diagnostics exposing
   keys, chain codes, full wallet paths or raw vendor details. M05 sets concrete
-  exception classes and signatures, not a second error-result channel.
+  exception classes and signatures, not a second error-result channel. Q12
+  checks that provider false/null returns become owned exceptions.
 
 The maintainer raised Signet as an O05/Q02 extension challenge during the O02
 review. [Bitcoin Core's pinned chain parameters](https://github.com/bitcoin/bitcoin/blob/228877d7836a55c1d6fde90b0b7ba2d4c90248ab/src/kernel/chainparams.cpp)
