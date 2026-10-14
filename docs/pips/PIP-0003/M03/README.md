@@ -69,6 +69,32 @@ the older package cannot supply M03's independent ECC reference. BitWasp's
 release remains useful historical integration evidence; no additional M03
 provider or production dependency is selected by this check.
 
+## Native libsecp256k1 reference candidate
+
+For the next M03 gate, Paragonie remains the provisional PHP adapter lead and
+Simplito the comparison adapter. The newer
+[`1ma/secp256k1-php` v0.1.2](https://github.com/1ma/secp256k1-php/tree/v0.1.2)
+(Composer package `uma/secp256k1-php`, tag commit
+`3ee95fa4299c108877e0527e8bd1efc4f57982ba`) is a candidate for the
+independently implemented libsecp256k1 reference, and possibly a native
+adapter if later qualification justifies it. Its [API stubs](https://github.com/1ma/secp256k1-php/blob/v0.1.2/secp256k1.stub.php)
+expose public-key parse, serialize and tweak-add operations. Its
+[Composer manifest](https://github.com/1ma/secp256k1-php/blob/v0.1.2/composer.json)
+requires PHP 8.2+, and its [CI workflow](https://github.com/1ma/secp256k1-php/blob/v0.1.2/.github/workflows/ci.yml)
+includes PHP 8.3 and 8.4. These upstream declarations and passing
+[tagged CI run](https://github.com/1ma/secp256k1-php/actions/runs/38165368958)
+are feasibility evidence, not our qualification result.
+
+The binding is new and pre-1.0, even though its underlying
+[libsecp256k1](https://github.com/bitcoin-core/secp256k1) is separately
+maintained. M03 must pin and build the binding and native library on both
+supported PHP runtimes, compare exact CKDpub outputs and invalid cases with
+the unchanged PHP consumers, and challenge extension absence, false returns,
+mutation and vendor faults. M05 must separately weigh deployment footprint
+and maintenance before any production selection. The older
+[BitWasp binding](https://github.com/Bit-Wasp/secp256k1-php) remains historical
+reference only; its latest tag is `v0.2.2` from 2019.
+
 ## Reproduction
 
 The local runs used research images
