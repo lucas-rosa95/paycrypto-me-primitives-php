@@ -92,9 +92,9 @@ Network constants are definitions, not subclasses.
 
 When two networks differ only by parameters, Primitives represents that difference as validated data. A new capability is justified only when the behavior itself diverges.
 
-### Complete results or exceptions
+### Clear results and failures
 
-Primitives-owned operations return their complete documented result on success and throw a Primitives-owned PHP exception on failure. They do not use `false`, `null`, an empty value, or a partial result as a failure sentinel. A falsy value can still be a valid result when the operation explicitly defines it as such. Provider errors are normalized at the boundary, so consumers do not need to interpret each dependency's return and exception conventions.
+Every operation defines what its return values mean and how it reports failure. Booleans, nullable values, objects, and explicit internal outcomes are valid when they express the operation's documented semantics. An error must not masquerade as an undocumented `false`, `null`, empty value, or partial success. Public capability failures use Primitives-owned PHP exceptions, with provider-specific behavior normalized at the boundary.
 
 ---
 

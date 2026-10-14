@@ -15,12 +15,13 @@ are evidence to study, not code or architecture to reproduce.
 
 # Operation results and failures
 
-Primitives-owned operations return a complete documented success value or throw
-a Primitives-owned PHP exception on failure. Do not mix exceptions with `false`,
-`null`, empty values, or partial values used as failure sentinels. A falsy value
-is permitted only when it is itself a documented, complete domain result.
-Normalize provider failure returns and exceptions at Primitives boundaries;
-do not expose vendor exception types as the domain contract.
+Give each Primitives-owned operation a documented meaning for its return values
+and failures. Boolean, nullable, object, and explicit outcome values are allowed
+when their meanings are clear. Do not use an undocumented sentinel or partial
+success for a failure, or alternate between return values and exceptions for
+the same failure. Public capability failures use Primitives-owned PHP exceptions;
+normalize provider conventions at that boundary and do not expose vendor
+exception types as the domain contract.
 
 # Material work and PIPs
 
