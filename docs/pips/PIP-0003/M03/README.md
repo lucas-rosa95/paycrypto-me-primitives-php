@@ -36,14 +36,12 @@ The shared semantic guard now checks the coordinate bound before either
 provider. The observed agreement depends on that guard; it is not evidence
 that the raw APIs are interchangeable without validation.
 
-This is only a Q06/Q07 boundary subset. M03 still needs a full invalid-point
-corpus, unchanged CKDpub consumer and exact-path Q04/Q05 fixtures, complete
-independent libsecp256k1 evidence, Q08 HMAC/metadata checks, deliberate provider/environment
-fault injection and Q12 failure containment, as well as maintenance and
-dependency-path review. The probe maps exceptions from known malformed point
-fixtures to `invalid_point`; it does not establish a general distinction
-between malformed input and unexpected provider faults. No ECC provider is
-selected for production.
+This first probe is only a Q06/Q07 boundary subset. The CKDpub composition
+probe below adds public-path evidence; it does not close M03's full Q04–Q08/Q12
+gate. The ECC probe maps exceptions from known malformed point fixtures to
+`invalid_point`; it does not establish a general distinction between malformed
+input and unexpected provider faults. No ECC provider is selected for
+production.
 
 The broader M02 trial lock also caused a `cjpgdk/bech32` nullable-parameter
 deprecation to be printed during PHP 8.4 autoloading. That incidental codec
@@ -104,12 +102,60 @@ independent Q06/Q07 evidence; it does not verify CKDpub or all M03 cases.
 
 The binding is new and pre-1.0, even though its underlying
 [libsecp256k1](https://github.com/bitcoin-core/secp256k1) is separately
-maintained. M03 must still compare exact CKDpub outputs and invalid cases with
-the unchanged PHP consumers, and challenge extension absence, false returns,
-mutation and vendor faults. M05 must separately weigh deployment footprint
+maintained. The CKDpub comparison below challenges it against unchanged PHP
+consumers for sourced paths and forced invalid cases; extension absence, false
+returns, mutation and vendor faults still need broader qualification. M05 must
+separately weigh deployment footprint
 and maintenance before any production selection. The older
 [BitWasp binding](https://github.com/Bit-Wasp/secp256k1-php) remains historical
 reference only; its latest tag is `v0.2.2` from 2019.
+
+## Unchanged CKDpub consumer across three ECC adapters
+
+The [research composition](ckdpub-composition-probe.php) consumes the same
+public-node fixtures and owns one exact-index CKDpub path loop. Only its
+public-point adapter changes: Paragonie, Simplito or the pinned native binding.
+PHP runtime `hash_hmac`, `hash`, `pack` and `unpack` provide the delegated
+HMAC, HASH160 and fixed-width operations. The research composition does not
+decode Base58Check or implement curve arithmetic. It is not a selected public
+PHP API, production package or general extended-key admission implementation.
+
+The [public-only fixture file](ckdpub-public-fixtures.json) contains BIP32
+vectors 1 and 2: `m/0H -> 1`, `m/0H/1/2H -> 2 -> 1000000000`, and `m -> 0`.
+The textual xpubs appear in the pinned [BIP32 snapshot](../M00/reviews/bitwasp-public-derivation/bip-0032.mediawiki).
+The 78-byte public payloads were taken from BitWasp bitcoin-php v1.1.0's
+`tests/Data/bip32testvectors.json`; all seven participating public payloads
+were separately Base58Check-encoded with the Tuupola trial codec and matched
+their published xpub strings. No private fixture field is copied. The exact
+expected child payload checks compressed public key, chain code, depth,
+immediate-parent fingerprint and child number at once. The two-step fixture
+also checks that the intermediate child is used as the next parent.
+
+The [comparison record](ckdpub-comparison.json) captures six executions:
+three unchanged-provider runs on PHP 8.3.35 and the same three on PHP 8.4.26.
+All six agreed exactly on the three published vector payloads and the forced
+case record. Injected HMAC left halves at group order failed at first,
+intermediate and last requested positions, with exactly one HMAC call for each
+attempted level and no later request or index advance. Zero preserved the
+point while updating chain code and metadata; `G + (n-1)G` failed as infinity;
+order-plus-one failed before ECC; and the last public index remained exact.
+The probe rejected empty, hardened, negative and wrong-type paths, depth
+exhaustion, malformed payload length, wrong point prefix and invalid/out-of-field
+points. It checked HMAC key/message order and normalized injected short HMAC,
+HMAC exception, ECC exception, malformed ECC output, admission exception and
+changed point on admission as provider failures.
+
+This closes the unchanged-consumer comparison for these sourced paths and
+forced cases. It does **not** close M03: the point corpus and scalar/domain
+extremes remain bounded; long-key/empty/binary hash and conversion Q08 cases,
+missing runtime facilities, native `false` fault-versus-infinity classification,
+native mutation/failure behavior, and broader provider-fault containment still
+need qualification. The PHP adapters' parser exceptions are still treated as
+malformed points for known bad fixtures; unexpected faults inside those parsers
+are not independently distinguishable here. The native binding's tweak-add
+`false` is treated as infinity only after scalar and point pre-admission in this
+research consumer, but a native internal failure with the same return remains
+ambiguous. M05 must not select an adapter based on this subset alone.
 
 ## Reproduction
 
@@ -183,3 +229,20 @@ The probe exits nonzero if its bounded expectations change. Compare the JSON
 output with the file for the corresponding PHP runtime. The native extension
 and build dependencies are research-only and are not in Primitives' Composer
 manifest.
+
+For the CKDpub composition run, mount the same focused PHP Composer install at
+`/research` and this M03 directory at `/probe`. For each PHP runtime, run:
+
+```sh
+php /probe/ckdpub-composition-probe.php paragonie
+php /probe/ckdpub-composition-probe.php simplito
+LD_LIBRARY_PATH=/native/build/secp256k1/lib \
+    php -d extension=/native/modules/secp256k1.so \
+    /probe/ckdpub-composition-probe.php native
+```
+
+The native run additionally mounts the matching source-pinned compiled checkout
+at `/native`. Each command exits nonzero if a sourced vector or forced semantic
+case changes. Excluding only `php` and `provider`, the six output objects must
+match one another and the `common_result` in the comparison record. The
+matrix entries record the observed patch versions and provider identity.

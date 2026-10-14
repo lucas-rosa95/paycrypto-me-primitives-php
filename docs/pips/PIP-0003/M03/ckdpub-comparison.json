@@ -1,0 +1,99 @@
+{
+  "matrix": {
+    "83": {
+      "paragonie": {
+        "php": "8.3.35",
+        "provider": "paragonie/ecc",
+        "matches_common_result": true
+      },
+      "simplito": {
+        "php": "8.3.35",
+        "provider": "simplito/elliptic-php",
+        "matches_common_result": true
+      },
+      "native": {
+        "php": "8.3.35",
+        "provider": "uma/secp256k1-php+libsecp256k1",
+        "matches_common_result": true
+      }
+    },
+    "84": {
+      "paragonie": {
+        "php": "8.4.26",
+        "provider": "paragonie/ecc",
+        "matches_common_result": true
+      },
+      "simplito": {
+        "php": "8.4.26",
+        "provider": "simplito/elliptic-php",
+        "matches_common_result": true
+      },
+      "native": {
+        "php": "8.4.26",
+        "provider": "uma/secp256k1-php+libsecp256k1",
+        "matches_common_result": true
+      }
+    }
+  },
+  "common_result": {
+    "official_vectors": {
+      "vector_1_hardened_parent_to_1": {
+        "path": [
+          1
+        ],
+        "node": "0488b21e025c1bd648000000012a7857631386ba23dacac34180dd1983734e444fdbf774041578e9b6adb37c1903501e454bf00751f24b1b489aa925215d66af2234e3891c3b21a52bedb3cd711c"
+      },
+      "vector_1_hardened_parent_to_2_to_1000000000": {
+        "path": [
+          2,
+          1000000000
+        ],
+        "node": "0488b21e05d880d7d83b9aca00c783e67b921d2beb8f6b389cc646d7263b4145701dadd2161548a8b078e65e9e022a471424da5e657499d1ff51cb43c47481a03b1e77f951fe64cec9f5a48f7011"
+      },
+      "vector_2_root_to_0": {
+        "path": [
+          0
+        ],
+        "node": "0488b21e01bd16bee500000000f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea"
+      }
+    },
+    "forced_cases": {
+      "hmac_arguments": "exact_parent_chain_code_point_and_index",
+      "admission_short_payload": "rejected",
+      "admission_long_payload": "rejected",
+      "admission_bad_prefix": "rejected",
+      "admission_x_zero": "rejected",
+      "admission_x_at_field_prime": "rejected",
+      "admission_x_over_field": "rejected",
+      "invalid_first": {
+        "category": "invalid_child",
+        "attempts": 1
+      },
+      "invalid_intermediate": {
+        "category": "invalid_child",
+        "attempts": 2
+      },
+      "invalid_last": {
+        "category": "invalid_child",
+        "attempts": 3
+      },
+      "zero_tweak": "0488b21e01bd16bee500000000555555555555555555555555555555555555555555555555555555555555555503cbcaa9c98c877a26977d00825c956a238e8dddfbd322cce4f74b0b5bd6ace4a7",
+      "infinity": "invalid_child",
+      "last_public_index": 2147483647,
+      "order_plus_one": "invalid_child",
+      "path_empty": "path_bounds",
+      "path_hardened": "path_bounds",
+      "path_negative": "path_bounds",
+      "path_string": "path_bounds",
+      "depth": "path_bounds",
+      "provider_faults": [
+        "short_hmac",
+        "hmac_exception",
+        "ecc_exception",
+        "ecc_malformed_output",
+        "ecc_admission_exception",
+        "ecc_mutating_admission"
+      ]
+    }
+  }
+}
