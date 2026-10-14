@@ -49,6 +49,26 @@ The broader M02 trial lock also caused a `cjpgdk/bech32` nullable-parameter
 deprecation to be printed during PHP 8.4 autoloading. That incidental codec
 finding belongs to M04; the focused ECC lock avoids this unrelated diagnostic.
 
+## BitWasp v1.1.0 and phpecc lineage check
+
+The user-suggested [`phpecc/phpecc`](https://github.com/phpecc/phpecc) lead was
+checked against BitWasp bitcoin-php's [v1.1.0 release](https://github.com/Bit-Wasp/bitcoin-php/releases/tag/v1.1.0),
+whose commit is `527b1ee7d2cd958b5ce011c7918801ffbfb53f97`. BitWasp describes
+this as a security release that replaced `phpecc` / `mdanter/ecc` with
+`paragonie/ecc`; its [tagged Composer manifest](https://github.com/Bit-Wasp/bitcoin-php/blob/v1.1.0/composer.json)
+requires `paragonie/ecc:^2.1.0`. The `1.0` branch pointed at the same commit
+when checked on 2026-10-14; the release tag is the stable reference here.
+
+The `phpecc/phpecc` repository publishes the [`mdanter/ecc` package](https://packagist.org/packages/mdanter/ecc).
+Packagist marks that package abandoned and directs users to `paragonie/ecc`.
+The [GitHub security advisory](https://github.com/advisories/GHSA-3494-cfwf-56hw)
+identifies an unpatched point-addition timing issue in `mdanter/ecc` and states
+that Paragonie hard-forked this code and patched its fork in 2.0.1. The M03
+trial uses Paragonie 2.6.0. Because these packages share implementation lineage,
+the older package cannot supply M03's independent ECC reference. BitWasp's
+release remains useful historical integration evidence; no additional M03
+provider or production dependency is selected by this check.
+
 ## Reproduction
 
 The local runs used research images
