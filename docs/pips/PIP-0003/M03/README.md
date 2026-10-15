@@ -354,18 +354,26 @@ serialization and unserialization do not produce an opaque key object on
 either tested PHP runtime. This is bounded evidence for the PHP-facing object
 boundary, not a claim about arbitrary native memory corruption. Under the pinned
 implementation's contract, infinity is the remaining expected `false`.
+The research classifier treats a native parse rejection as invalid point
+material, but a successful parse that serializes to different bytes as a
+provider failure; these are distinct observable events.
 
 The [research-only classifier](native-false-classifier.php) goes further: after
 `false`, it verifies that the PHP key stayed unchanged, then confirms infinity
 through separate native point operations. For a nonzero public BIP32 tweak,
-it compares the point `tweak × G` with the negated parent; equality means the
-sum is infinity. A `false` for zero, a changed object, a failed confirmation,
-or an exception is a provider failure. This calls the binding's
+it compares the point `tweak × G` with the negated parent through both native
+point comparison and compressed serialization; agreement means the sum is
+infinity. It also rejects a no-op negation. A `false` for zero, a changed
+object, a failed confirmation, or an exception is a provider failure. This
+calls the binding's
 `ec_pubkey_create` with **publicly derived HMAC material** as a point-multiply
 facility; no wallet private key, seed, signing or private derivation enters the
 research composition. M05 must review whether that API route is acceptable
 inside a selected public-only adapter or require an equivalent delegated
 confirmation. The classifier is a qualification spike, not a frozen API.
+The [pinned binding stub](https://github.com/1ma/secp256k1-php/blob/3ee95fa4299c108877e0527e8bd1efc4f57982ba/secp256k1.stub.php)
+declares `ec_pubkey_negate` as `void`; there is no ignored boolean failure
+return at that call site.
 
 The [focused probe](native-false-classification-probe.php) and
 [comparison record](native-false-comparison.json) cover both PHP 8.3.35 and
@@ -381,6 +389,23 @@ classifier also reports `provider_unavailable` when the extension is absent.
 The unchanged CKDpub consumer still matched its prior outputs on both runtimes
 after using the classifier.
 
+The same pinned binding and libsecp256k1 commits were rebuilt for a further
+confirmation-path challenge on PHP 8.3.35 and 8.4.26. Its expanded
+[comparison record](native-false-comparison.json) includes injected
+confirmation `false`, exception and non-boolean return for a real infinity:
+each becomes `provider_failure`. Injected native comparator false-positive and
+false-negative results conflict with serialized equality and become
+`provider_failure`. It also deliberately makes a finite tweak
+return `false` **and** makes the same-library confirmation lie `true`; the
+classifier then reports infinity. An injected `true` without any tweak returns
+the unchanged but valid-looking parent point. These last two are controlled
+counterexamples to any claim that local serialization, type checks or a second
+call into the same library can prove arbitrary provider correctness. They are
+not observed behavior of the real binding. The separate `G + G = 2G` control
+and two PHP ECC paths expose these *tested* wrong outcomes; sourced BIP32
+complete-node checks protect the exercised derivations. None makes the native
+confirmation independent at runtime.
+
 The [independent PHP adapter cross-check](native-false-crosscheck-probe.php)
 ran the same three infinity sums plus the zero and one finite controls through
 both Paragonie and Simplito on PHP 8.3/8.4. Their point and infinity outcomes
@@ -389,10 +414,9 @@ file. This checks the mathematics through distinct PHP implementations; it
 does not make the two native confirmation calls independent at runtime.
 
 This resolves the observed **multi-meaning `false`** for the pinned, admitted
-inputs and tested faults. It does not prove that every possible native defect
-can be diagnosed by another operation in the same library. A common-mode ECC
-fault could fool both operations; broader independent qualification and M05's
-selection gate remain necessary. If the public-only adapter boundary cannot
+inputs and tested ordinary faults. A common-mode ECC fault can fool both
+operations, as the injected false-positive demonstrates; M05's independent
+selection gate remains necessary. If the public-only adapter boundary cannot
 admit this confirmation route, the native binding must remain an independent
 reference or be rejected for production until an equivalent qualified route
 exists. No false result is silently treated as a successful child.

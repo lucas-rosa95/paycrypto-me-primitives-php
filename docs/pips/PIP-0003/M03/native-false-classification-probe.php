@@ -82,12 +82,39 @@ $forced = [
         static fn (): never => throw new RuntimeException('injected'))),
     'vendor_invalid_argument_exception' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), $one,
         static fn (): never => throw new InvalidArgumentException('vendor detail'))),
+    'confirmation_false_on_infinity' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), hex2bin(N_MINUS_ONE),
+        static fn (): bool => false, static fn (): bool => false)),
+    'confirmation_exception_on_infinity' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), hex2bin(N_MINUS_ONE),
+        static fn (): bool => false, static fn (): never => throw new RuntimeException('injected confirmation fault'))),
+    'confirmation_nonboolean_on_infinity' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), hex2bin(N_MINUS_ONE),
+        static fn (): bool => false, static fn (): int => 1)),
+    'comparator_false_positive_on_finite' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), $one,
+        static fn (): bool => false,
+        static fn (string $parent, string $scalar): bool => nativeInfinityConfirmed($parent, $scalar, static fn (): int => 0))),
+    'comparator_false_negative_on_infinity' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), hex2bin(N_MINUS_ONE),
+        static fn (): bool => false,
+        static fn (string $parent, string $scalar): bool => nativeInfinityConfirmed($parent, $scalar, static fn (): int => 1))),
+    // If both the tweak route and its same-library confirmation lie, this
+    // helper has no independent mathematical witness for the exact index.
+    'confirmation_false_positive_on_finite' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), $one,
+        static fn (): bool => false, static fn (): bool => true)),
+    // Likewise, a type-correct but wrong successful provider result cannot be
+    // proved correct merely by serializing a valid-looking public point.
+    'success_without_tweak' => classified(static fn () => qualifiedNativeTweak(hex2bin(G), $one,
+        static fn (): bool => true)),
 ];
 $expectedForced = [
     'false_on_finite' => 'provider_failure', 'false_on_zero' => 'provider_failure',
     'false_on_infinity' => 'infinity', 'false_after_mutation' => 'provider_failure',
     'nonboolean_return' => 'provider_failure', 'exception' => 'provider_failure',
     'vendor_invalid_argument_exception' => 'provider_failure',
+    'confirmation_false_on_infinity' => 'provider_failure',
+    'confirmation_exception_on_infinity' => 'provider_failure',
+    'confirmation_nonboolean_on_infinity' => 'provider_failure',
+    'comparator_false_positive_on_finite' => 'provider_failure',
+    'comparator_false_negative_on_infinity' => 'provider_failure',
+    'confirmation_false_positive_on_finite' => 'infinity',
+    'success_without_tweak' => G,
 ];
 if ($forced !== $expectedForced) {
     throw new RuntimeException('Injected native failure classification changed');

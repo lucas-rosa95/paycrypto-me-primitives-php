@@ -68,7 +68,14 @@
       "false_after_mutation": "provider_failure",
       "nonboolean_return": "provider_failure",
       "exception": "provider_failure",
-      "vendor_invalid_argument_exception": "provider_failure"
+      "vendor_invalid_argument_exception": "provider_failure",
+      "confirmation_false_on_infinity": "provider_failure",
+      "confirmation_exception_on_infinity": "provider_failure",
+      "confirmation_nonboolean_on_infinity": "provider_failure",
+      "comparator_false_positive_on_finite": "provider_failure",
+      "comparator_false_negative_on_infinity": "provider_failure",
+      "confirmation_false_positive_on_finite": "infinity",
+      "success_without_tweak": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
     },
     "same_object_usable_after_false": true,
     "opaque_object_attempts": {
