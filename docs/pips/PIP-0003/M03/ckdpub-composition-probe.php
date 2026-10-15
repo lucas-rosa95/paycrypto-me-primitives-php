@@ -13,6 +13,7 @@ interface PublicPointTrial
 {
     public function name(): string;
     public function admit(string $point): string;
+    /** Return a compressed point, or null only for provider-confirmed infinity; throw on any other failure. */
     public function tweak(string $point, string $scalar): ?string;
 }
 
@@ -450,8 +451,9 @@ $mutatingAdmission = new class implements PublicPointTrial {
 requireFailure('ecc_mutating_admission', 'provider_failure', fn () => parsePublicNode($payload, $mutatingAdmission));
 $report['forced_cases']['provider_faults'] = ['short_hmac', 'hmac_exception', 'ecc_exception', 'ecc_malformed_output', 'ecc_admission_exception', 'ecc_mutating_admission'];
 
-// Q12 open challenge: the official vector proves this sum is finite, but the
-// current consumer cannot tell a fabricated adapter null from real infinity.
+// Q12 adapter-contract challenge: the official vector proves this sum is
+// finite. This synthetic adapter deliberately violates the documented meaning
+// of null, showing the consumer trusts its selected adapter's classification.
 $unconfirmedInfinity = new class($provider) implements PublicPointTrial {
     public function __construct(private PublicPointTrial $real) {}
     public function name(): string { return 'fabricated infinity injection'; }
@@ -459,6 +461,6 @@ $unconfirmedInfinity = new class($provider) implements PublicPointTrial {
     public function tweak(string $point, string $scalar): ?string { return null; }
 };
 requireFailure('unconfirmed_infinity', 'invalid_child', fn () => deriveExact($base, [0], $unconfirmedInfinity));
-$report['forced_cases']['unconfirmed_infinity_gap'] = 'fabricated_null_on_official_finite_child_is_misclassified_as_invalid_child';
+$report['forced_cases']['adapter_contract_violation'] = 'fabricated_null_on_official_finite_child_is_accepted_as_claimed_infinity';
 
 echo json_encode($report, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";

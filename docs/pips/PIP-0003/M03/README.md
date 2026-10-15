@@ -228,17 +228,32 @@ arbitrary future adapter internals contain every provider fault.
 
 Q08's M03 runtime/conversion subset now has sourced known answers and tested
 boundaries; M04 still has its own codec and end-to-end composition qualification.
-Q12 remains open. In particular, a PHP ECC adapter's unexpected null/tweak
-outcome can look like claimed infinity to the current research consumer: a
-synthetic adapter returned null on an [officially finite vector 2 child](ckdpub-comparison.json),
-and all six unchanged-consumer runs classified it as `invalid_child`. No real
-provider did this; the injection exposes the adapter trust boundary. The
-selected adapter must establish infinity from its actual provider's documented
-result, normalize other returns as provider failure, and be reviewed against
-faults at that lower boundary. An unexpected parser exception can also look
-like a known malformed point under the current research adapter. Native
-`false` is challenged separately below, but M03 still needs a broader fault
-distinction and common-mode challenge before its final gate can pass.
+Q12 remains open for lower-level provider faults and parser-error distinction.
+The earlier [synthetic adapter](ckdpub-comparison.json) returned `null` on an
+officially finite vector 2 child; all six unchanged-consumer runs interpreted
+that as `invalid_child`. The follow-up [raw-result probe](php-ecc-result-origin-probe.php)
+ran against the pinned Paragonie 2.6.0 and Simplito 1.0.12 packages on
+[PHP 8.3](php-ecc-result-origin-php83.json) and
+[PHP 8.4](php-ecc-result-origin-php84.json). Both raw additions returned point
+objects, `isInfinity() === false` and the BIP32-published finite child bytes.
+For `G + (n−1)G`, both returned point objects with `isInfinity() === true`.
+Pinned [Paragonie point addition](https://github.com/paragonie/phpecc/blob/1a49380410b8ce826bc7fd3de6324053e049205c/src/Primitives/Point.php)
+declares a `PointInterface` result; pinned
+[Simplito point addition](https://github.com/simplito/elliptic-php/blob/be321666781be2be2c89c79c43ffcac834bc8868/lib/Curve/ShortCurve/Point.php)
+returns a point object on the inspected branches. Neither raw API uses `null`
+as its infinity signal in these runs.
+
+`null` is a **research adapter outcome**, with the documented meaning
+"provider-confirmed infinity." The injected adapter deliberately broke that
+contract. CKDpub cannot distinguish a lying adapter from a truthful one using
+only that outcome; this is an adapter trust boundary, not an observed provider
+bug or a reason to change the consumer's `null → invalid_child` rule. The
+selected adapter must map only an actual provider-confirmed infinity to `null`,
+normalize other raw returns or exceptions as provider failure, and undergo
+lower-boundary fault qualification. Unexpected parser exceptions can still look
+like malformed points under the current research adapters. Native `false` is
+challenged separately below; broader fault and common-mode checks remain for
+M03's final gate.
 
 ## Native `false`: source path and bounded resolution
 
@@ -436,3 +451,15 @@ installed GMP extension. Only the PHP patch-version header may differ on a
 later image. The missing-native check in the first command assumes the native
 extension is not loaded in the GMP image; run the ECC/native probes separately
 with the source-pinned extension when testing the native adapter.
+
+To reproduce the PHP ECC raw-result origin check, install the focused M03
+Composer lock at `/research`, mount M03 at `/probe`, and run on both runtimes:
+
+```sh
+php /probe/php-ecc-result-origin-probe.php
+```
+
+The result must match `php-ecc-result-origin-php83.json` or
+`php-ecc-result-origin-php84.json` except for the PHP patch version. This
+checks two real raw addition paths; it does not certify arbitrary future
+provider faults or a production adapter.

@@ -134,7 +134,7 @@
         "ecc_admission_exception",
         "ecc_mutating_admission"
       ],
-      "unconfirmed_infinity_gap": "fabricated_null_on_official_finite_child_is_misclassified_as_invalid_child"
+      "adapter_contract_violation": "fabricated_null_on_official_finite_child_is_accepted_as_claimed_infinity"
     }
   }
 }
