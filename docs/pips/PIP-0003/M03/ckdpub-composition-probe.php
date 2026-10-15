@@ -38,7 +38,7 @@ final class ParagoniePointTrial implements PublicPointTrial
     private Mdanter\Ecc\Primitives\GeneratorPoint $generator;
     private Mdanter\Ecc\Serializer\Point\CompressedPointSerializer $serializer;
 
-    public function __construct()
+    public function __construct(private ?Closure $parseOverride = null)
     {
         $math = new Mdanter\Ecc\Math\GmpMath();
         $this->generator = (new Mdanter\Ecc\Curves\SecgCurve($math))->generator256k1(null, false);
@@ -51,13 +51,26 @@ final class ParagoniePointTrial implements PublicPointTrial
         pointShape($point);
         // The raw parser may accept x >= p; pointShape rejects that first.
         try {
-            $parsed = $this->serializer->unserialize($this->generator->getCurve(), bin2hex($point));
-            $canonical = hex2bin($this->serializer->serialize($parsed));
-        } catch (Throwable $error) {
-            throw new TrialFailure('malformed_point', $error);
-        }
-        if ($canonical !== $point) {
+            $parsed = $this->parseOverride === null
+                ? $this->serializer->unserialize($this->generator->getCurve(), bin2hex($point))
+                : ($this->parseOverride)($point);
+        } catch (Mdanter\Ecc\Exception\PointRecoveryException) {
+            // Pinned parser uses this exception for a valid-shape off-curve x.
             throw new TrialFailure('malformed_point');
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
+        }
+        try {
+            $serialized = $this->serializer->serialize($parsed);
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
+        }
+        if (!is_string($serialized) || strlen($serialized) !== 66 || !ctype_xdigit($serialized)) {
+            throw new TrialFailure('provider_failure');
+        }
+        $canonical = hex2bin($serialized);
+        if ($canonical !== $point) {
+            throw new TrialFailure('provider_failure');
         }
         return $canonical;
     }
@@ -72,23 +85,53 @@ final class ParagoniePointTrial implements PublicPointTrial
 final class SimplitoPointTrial implements PublicPointTrial
 {
     private Elliptic\EC $curve;
+    private ?Closure $parseOverride;
 
-    public function __construct() { $this->curve = new Elliptic\EC('secp256k1'); }
+    public function __construct(?Closure $parseOverride = null)
+    {
+        $this->curve = new Elliptic\EC('secp256k1');
+        $this->parseOverride = $parseOverride;
+    }
     public function name(): string { return 'simplito/elliptic-php'; }
     public function admit(string $point): string
     {
         pointShape($point);
         try {
-            $key = $this->curve->keyFromPublic(bin2hex($point), 'hex');
-            if ($key->validate()['result'] !== true) {
+            $key = $this->parseOverride === null
+                ? $this->curve->keyFromPublic(bin2hex($point), 'hex')
+                : ($this->parseOverride)($point);
+        } catch (Exception $error) {
+            if ($error::class === Exception::class && $error->getMessage() === 'Invalid point') {
+                // Exact pinned pointFromX failure, after our shape admission.
                 throw new TrialFailure('malformed_point');
             }
-            $canonical = hex2bin($key->getPublic(true, 'hex'));
-        } catch (Throwable $error) {
-            throw new TrialFailure('malformed_point', $error);
+            throw new TrialFailure('provider_failure');
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
         }
-        if ($canonical !== $point) {
+        try {
+            $validation = $key->validate();
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
+        }
+        if (!is_array($validation) || !array_key_exists('result', $validation)
+            || !is_bool($validation['result'])) {
+            throw new TrialFailure('provider_failure');
+        }
+        if ($validation['result'] === false) {
             throw new TrialFailure('malformed_point');
+        }
+        try {
+            $serialized = $key->getPublic(true, 'hex');
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
+        }
+        if (!is_string($serialized) || strlen($serialized) !== 66 || !ctype_xdigit($serialized)) {
+            throw new TrialFailure('provider_failure');
+        }
+        $canonical = hex2bin($serialized);
+        if ($canonical !== $point) {
+            throw new TrialFailure('provider_failure');
         }
         return $canonical;
     }
@@ -240,6 +283,44 @@ if ($selected === 'native' && !extension_loaded('secp256k1')) {
     throw new RuntimeException('Native extension unavailable');
 }
 $fixtures = json_decode(file_get_contents(__DIR__ . '/ckdpub-public-fixtures.json'), true, 512, JSON_THROW_ON_ERROR);
+if (($argv[2] ?? '') === '--parser-faults') {
+    if ($selected === 'native') {
+        throw new InvalidArgumentException('PHP parser-fault mode requires paragonie or simplito');
+    }
+    $payload = hex2bin($fixtures['official_vectors']['vector_2_root_to_0']['parent']);
+    $officialInvalid = json_decode(file_get_contents(__DIR__ . '/ecc-official-invalid-points.json'), true, 512, JSON_THROW_ON_ERROR);
+    $offCurve = substr_replace($payload, hex2bin($officialInvalid['bip32_vector_5_off_curve_02']['point']), 45, 33);
+    parsePublicNode($payload, $provider);
+    requireFailure('published_off_curve', 'malformed_point', fn () => parsePublicNode($offCurve, $provider));
+
+    $withParser = static fn (Closure $parse): PublicPointTrial => match ($selected) {
+        'paragonie' => new ParagoniePointTrial($parse),
+        'simplito' => new SimplitoPointTrial($parse),
+    };
+    requireFailure('unexpected_parser_exception', 'provider_failure', fn () => parsePublicNode($payload,
+        $withParser(static fn (): never => throw new RuntimeException('synthetic unexpected parser fault'))));
+    requireFailure('malformed_parser_result', 'provider_failure', fn () => parsePublicNode($payload,
+        $withParser(static fn (): bool => false)));
+    requireFailure('wrong_parser_exception', 'provider_failure', fn () => parsePublicNode($payload,
+        $withParser(static fn (): never => throw new Exception('Unknown point format'))));
+
+    // An unexpected fault that copies the provider's documented invalid-point
+    // signal exactly is indistinguishable from malformed input at this boundary.
+    $mimic = $selected === 'paragonie'
+        ? static fn (): never => throw new Mdanter\Ecc\Exception\PointRecoveryException('synthetic mimic')
+        : static fn (): never => throw new Exception('Invalid point');
+    requireFailure('mimicked_invalid_signal', 'malformed_point', fn () => parsePublicNode($payload, $withParser($mimic)));
+    echo json_encode([
+        'php' => PHP_VERSION,
+        'provider' => $provider->name(),
+        'published_off_curve' => 'malformed_point',
+        'unexpected_parser_exception' => 'provider_failure',
+        'malformed_parser_result' => 'provider_failure',
+        'wrong_parser_exception' => 'provider_failure',
+        'mimicked_invalid_signal_on_valid_point' => 'malformed_point',
+    ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+    exit;
+}
 $report = ['php' => PHP_VERSION, 'provider' => $provider->name(), 'official_vectors' => [], 'forced_cases' => []];
 foreach ($fixtures['official_vectors'] as $label => $fixture) {
     $parent = parsePublicNode(hex2bin($fixture['parent']), $provider);

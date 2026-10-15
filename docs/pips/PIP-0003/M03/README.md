@@ -175,11 +175,12 @@ path/depth cases. It does **not** close M03: a concrete receiving API and
 provisioned account-key mapping remain later implementation/qualification work;
 the point corpus and scalar/domain extremes remain bounded; the remaining
 M04 end-to-end Q08 integration and broader Q12 provider-fault containment
-still need qualification. The PHP adapters' parser exceptions are still treated as
-malformed points for known bad fixtures; unexpected faults inside those parsers
-are not independently distinguishable here. The native false classification
-below is bounded to the pinned source and tested API operations. M05 must not
-select an adapter based on this subset alone.
+still need qualification. The PHP parser-fault challenge below distinguishes
+the pinned malformed-point signals from different unexpected exceptions and
+malformed parser returns. An internal fault that reproduces an identical
+malformed-point signal remains indistinguishable at this boundary. The native
+false classification below is bounded to the pinned source and tested API
+operations. M05 must not select an adapter based on this subset alone.
 
 ## Q08 runtime hash/conversion and Q12 facility challenge
 
@@ -228,7 +229,8 @@ arbitrary future adapter internals contain every provider fault.
 
 Q08's M03 runtime/conversion subset now has sourced known answers and tested
 boundaries; M04 still has its own codec and end-to-end composition qualification.
-Q12 remains open for lower-level provider faults and parser-error distinction.
+Q12 remains open for broader lower-level provider faults and common-mode
+challenge. The bounded PHP parser-error distinction is recorded below.
 The earlier [synthetic adapter](ckdpub-comparison.json) returned `null` on an
 officially finite vector 2 child; all six unchanged-consumer runs interpreted
 that as `invalid_child`. The follow-up [raw-result probe](php-ecc-result-origin-probe.php)
@@ -251,9 +253,47 @@ bug or a reason to change the consumer's `null → invalid_child` rule. The
 selected adapter must map only an actual provider-confirmed infinity to `null`,
 normalize other raw returns or exceptions as provider failure, and undergo
 lower-boundary fault qualification. Unexpected parser exceptions can still look
-like malformed points under the current research adapters. Native `false` is
+like malformed points only if they reproduce the pinned invalid-point signal
+exactly; the focused challenge below documents this limit. Native `false` is
 challenged separately below; broader fault and common-mode checks remain for
 M03's final gate.
+
+## PHP parser faults: bounded Q12 distinction
+
+The original CKDpub PHP research adapters mapped every raw parser exception to
+`malformed_point`. This also mislabeled unexpected internal exceptions raised
+while parsing an otherwise valid BIP32 public point. The
+[updated composition probe](ckdpub-composition-probe.php) now checks the
+33-byte compressed point shape first, then maps only the source-pinned parser's
+off-curve signal to `malformed_point`. Other parser exceptions, non-point
+returns, and malformed serializer outputs become `provider_failure`.
+
+The [pinned Paragonie parser](https://github.com/paragonie/phpecc/blob/1a49380410b8ce826bc7fd3de6324053e049205c/src/Primitives/CurveFp.php)
+raises `PointRecoveryException` when compressed x-coordinate recovery fails.
+The [pinned Simplito parser](https://github.com/simplito/elliptic-php/blob/be321666781be2be2c89c79c43ffcac834bc8868/lib/Curve/ShortCurve.php)
+raises a generic `Exception("Invalid point")` on that path. The latter
+classification depends on an exact message and must be requalified for any
+provider version change. Both are trusted provider signals; they do not prove
+what actually happened inside a faulty parser.
+
+The [four-run record](php-parser-fault-comparison.json) covers both providers
+on PHP 8.3 and 8.4. The published off-curve point from BIP32 vector 5 stays
+`malformed_point`; an injected unrelated exception, an incorrect parser return,
+and an unrelated parser exception become `provider_failure`. Deliberately
+injecting the exact invalid-point signal while parsing a published valid point
+still gives `malformed_point`. A boundary that sees only that signal cannot
+distinguish its true cause without independent evidence. The ordinary CKDpub
+comparison still matches the existing six-run result on both PHP runtimes and
+both PHP adapters. This is a research-adapter correction, not production
+provider qualification or closure of Q12.
+
+To reproduce the focused challenge with the M03 Composer lock at `/research`
+and this directory mounted at `/probe`, run each command on PHP 8.3 and 8.4:
+
+```sh
+php /probe/ckdpub-composition-probe.php paragonie --parser-faults
+php /probe/ckdpub-composition-probe.php simplito --parser-faults
+```
 
 ## Native `false`: source path and bounded resolution
 

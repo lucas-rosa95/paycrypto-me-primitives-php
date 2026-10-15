@@ -1,0 +1,50 @@
+{
+  "scope": "Source-pinned PHP ECC research-adapter parser-fault distinction; not a production contract",
+  "fixtures": {
+    "valid_point": "BIP32 vector 2 root public node",
+    "invalid_point": "BIP32 vector 5 compressed off-curve x=7",
+    "faults": "Injected at parser entry after shared point-shape admission"
+  },
+  "runs": {
+    "php83": {
+      "paragonie": {
+        "php": "8.3.35",
+        "provider": "paragonie/ecc",
+        "published_off_curve": "malformed_point",
+        "unexpected_parser_exception": "provider_failure",
+        "malformed_parser_result": "provider_failure",
+        "wrong_parser_exception": "provider_failure",
+        "mimicked_invalid_signal_on_valid_point": "malformed_point"
+      },
+      "simplito": {
+        "php": "8.3.35",
+        "provider": "simplito/elliptic-php",
+        "published_off_curve": "malformed_point",
+        "unexpected_parser_exception": "provider_failure",
+        "malformed_parser_result": "provider_failure",
+        "wrong_parser_exception": "provider_failure",
+        "mimicked_invalid_signal_on_valid_point": "malformed_point"
+      }
+    },
+    "php84": {
+      "paragonie": {
+        "php": "8.4.26",
+        "provider": "paragonie/ecc",
+        "published_off_curve": "malformed_point",
+        "unexpected_parser_exception": "provider_failure",
+        "malformed_parser_result": "provider_failure",
+        "wrong_parser_exception": "provider_failure",
+        "mimicked_invalid_signal_on_valid_point": "malformed_point"
+      },
+      "simplito": {
+        "php": "8.4.26",
+        "provider": "simplito/elliptic-php",
+        "published_off_curve": "malformed_point",
+        "unexpected_parser_exception": "provider_failure",
+        "malformed_parser_result": "provider_failure",
+        "wrong_parser_exception": "provider_failure",
+        "mimicked_invalid_signal_on_valid_point": "malformed_point"
+      }
+    }
+  }
+}
