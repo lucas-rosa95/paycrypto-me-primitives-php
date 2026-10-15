@@ -6,6 +6,8 @@ It does not add a production provider. The M03-specific research evidence is
 ready for maintainer review; the draft PR is not merged. The
 [execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
 and later Q04–Q08/Q12 obligations.
+For an independent review of the evidence and its limits, start with the
+[reviewer notes](REVIEWER-NOTES.md).
 
 ## Bounded result on 2026-10-14
 
