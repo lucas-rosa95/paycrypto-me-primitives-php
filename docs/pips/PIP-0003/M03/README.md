@@ -295,6 +295,48 @@ php /probe/ckdpub-composition-probe.php paragonie --parser-faults
 php /probe/ckdpub-composition-probe.php simplito --parser-faults
 ```
 
+## Shared-code negative control and ECC lineage
+
+The three ECC paths are not three independent end-to-end BIP32 implementations.
+The two PHP adapters call distinct point implementations: Paragonie's
+[point operations](https://github.com/paragonie/phpecc/blob/1a49380410b8ce826bc7fd3de6324053e049205c/src/Primitives/Point.php)
+retain the `Mdanter\Ecc` lineage, while Simplito's
+[point operations](https://github.com/simplito/elliptic-php/blob/be321666781be2be2c89c79c43ffcac834bc8868/lib/Curve/ShortCurve/Point.php)
+use its `Elliptic` and `simplito/bn-php` graph. Their locked package graphs do
+not depend on each other, although both PHP paths use GMP. The native binding
+delegates point arithmetic to source-pinned
+[Bitcoin Core libsecp256k1](https://github.com/bitcoin-core/secp256k1/blob/6e2c8bc4ecdc6e71dbe7a368f360d8d453ce435d/src/eckey_impl.h).
+The older `mdanter/ecc` package is a known Paragonie ancestor, not another
+independent oracle. This is a code/dependency-lineage assessment, not proof
+against every shared mathematical defect or runtime failure.
+
+All three adapters nevertheless share the **same research CKDpub consumer**,
+PHP HMAC call, public-node parser, scalar/point guards and test harness. Their
+agreement alone therefore cannot validate those shared parts. The
+[common-mode challenge](common-mode-comparison.json) deliberately exchanges
+the HMAC key and message for BIP32 vector 2 root-to-0. Both PHP adapters then
+produce the same *wrong* complete child node on PHP 8.3 and 8.4. A second
+injection changes only one bit of the derived chain code; both adapters again
+agree, and their public point still matches the published point. In both
+cases comparison with the **full published BIP32 node**, including chain code,
+detects the fault. The expected node is pinned in
+[the sourced fixture](ckdpub-public-fixtures.json), independently recovered
+from its published xpub by the [xpub provenance probe](bip32-official-xpub-probe.php).
+These are synthetic shared-consumer faults, not observed defects in either ECC
+package. They show why ECC adapter agreement and point-only checks cannot
+replace official complete-node counter-proofs. The native extension was not
+rerun for these two injections; it shares this consumer and cannot provide an
+independent HMAC/metadata calculation by itself. A common-mode defect in the
+native `false` confirmation's own libsecp256k1 calls also remains possible.
+
+With the focused Composer lock at `/research` and M03 mounted at `/probe`,
+reproduce the PHP negative controls on both runtimes:
+
+```sh
+php /probe/ckdpub-composition-probe.php paragonie --common-mode
+php /probe/ckdpub-composition-probe.php simplito --common-mode
+```
+
 ## Native `false`: source path and bounded resolution
 
 The pinned [PHP binding's tweak-add wrapper](https://github.com/1ma/secp256k1-php/blob/3ee95fa4299c108877e0527e8bd1efc4f57982ba/ext_secp256k1.c#L231-L257)

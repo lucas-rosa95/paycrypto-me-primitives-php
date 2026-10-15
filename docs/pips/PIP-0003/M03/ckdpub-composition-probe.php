@@ -321,6 +321,42 @@ if (($argv[2] ?? '') === '--parser-faults') {
     ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
     exit;
 }
+if (($argv[2] ?? '') === '--common-mode') {
+    $fixture = $fixtures['official_vectors']['vector_2_root_to_0'];
+    $parent = parsePublicNode(hex2bin($fixture['parent']), $provider);
+    $published = $fixture['expected'];
+    $normal = bin2hex(publicPayload(deriveExact($parent, $fixture['path'], $provider)));
+    if ($normal !== $published) {
+        throw new RuntimeException('Published BIP32 node mismatch before fault injection');
+    }
+    // Shared-consumer negative control: both ECC adapters receive the same
+    // wrong HMAC when its key and message are exchanged.
+    $swapped = bin2hex(publicPayload(deriveExact($parent, $fixture['path'], $provider,
+        static fn (string $key, string $message): string => hash_hmac('sha512', $key, $message, true))));
+    // A second control corrupts only the returned chain-code half. The
+    // derived point still agrees, so ECC-only comparison cannot catch it.
+    $chainOnly = bin2hex(publicPayload(deriveExact($parent, $fixture['path'], $provider,
+        static function (string $key, string $message): string {
+            $digest = hash_hmac('sha512', $message, $key, true);
+            return substr_replace($digest, chr(ord($digest[32]) ^ 1), 32, 1);
+        })));
+    if ($swapped === $published || $chainOnly === $published
+        || substr($chainOnly, 90, 66) !== substr($published, 90, 66)
+        || substr($chainOnly, 26, 64) === substr($published, 26, 64)) {
+        throw new RuntimeException('Shared-fault negative control did not change the expected node');
+    }
+    echo json_encode([
+        'php' => PHP_VERSION,
+        'provider' => $provider->name(),
+        'fixture' => 'BIP32 vector 2 root to 0',
+        'published_node' => $published,
+        'swapped_hmac_node' => $swapped,
+        'chain_code_only_fault_node' => $chainOnly,
+        'chain_code_only_fault_preserves_point' => true,
+        'both_faults_detected_by_full_node_comparison' => true,
+    ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+    exit;
+}
 $report = ['php' => PHP_VERSION, 'provider' => $provider->name(), 'official_vectors' => [], 'forced_cases' => []];
 foreach ($fixtures['official_vectors'] as $label => $fixture) {
     $parent = parsePublicNode(hex2bin($fixture['parent']), $provider);
