@@ -427,6 +427,27 @@ $attempt = 0;
 $hmac = $forced(1, hex2bin('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140'), $attempt);
 requireFailure('infinity', 'invalid_child', fn () => deriveExact($generatorParent, [0], $provider, $hmac));
 $report['forced_cases']['infinity'] = 'invalid_child';
+foreach (['intermediate' => 2, 'last' => 3] as $label => $badAt) {
+    $attempt = 0;
+    $infinityHmac = static function () use (&$attempt, $badAt, $right): string {
+        ++$attempt;
+        if ($attempt > $badAt) {
+            throw new RuntimeException('advanced after infinity child');
+        }
+        // Earlier zero tweaks keep the point at G while changing chain code
+        // and depth. The selected level then forces G + (n-1)G = infinity.
+        $left = $attempt === $badAt
+            ? hex2bin('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140')
+            : str_repeat("\0", 32);
+        return $left . $right;
+    };
+    requireFailure("infinity_$label", 'invalid_child',
+        fn () => deriveExact($generatorParent, [0, 1, 2], $provider, $infinityHmac));
+    if ($attempt !== $badAt) {
+        throw new RuntimeException("infinity_$label: unexpected HMAC call count");
+    }
+    $report['forced_cases']["infinity_$label"] = ['category' => 'invalid_child', 'attempts' => $attempt];
+}
 
 $attempt = 0;
 $lastPublic = deriveExact($base, [2147483647], $provider, $forced(1, str_repeat("\0", 32), $attempt));

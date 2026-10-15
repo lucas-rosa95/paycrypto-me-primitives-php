@@ -3,7 +3,7 @@
 This is the current HOW, ORDER, and EXECUTION reference for
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
 
-## Current state — checked 2026-10-14
+## Current state — checked 2026-10-15
 
 **Goal:** provide a locally usable, public-only operation that derives Bitcoin
 P2PKH, P2SH-P2WPKH and P2WPKH addresses from an extended public key, a bounded
@@ -20,15 +20,15 @@ read as a working library feature.
 | M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
 | M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
 | M02 — merged | [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01–O06 protocol and boundary decisions, the O07 candidate/qualification map, and the PHP 8.3 minimum decision while retaining the generic relative-path contract. It includes historical PHP 8.1 Composer and bounded probe evidence. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10). M03/M04 must qualify accepted behavior and candidates on PHP 8.3/8.4. No provider is selected or concrete PHP type frozen. |
-| M03 — research in progress | The [ECC, unchanged CKDpub, native-false and runtime-hash probes](M03/README.md) exercise two Composer-installed PHP adapters, a pinned native libsecp256k1 reference and PHP facilities on PHP 8.3/8.4. Six sourced public-path payloads and forced exact-index, path/depth, metadata and fault cases agree across all six composition runs. Pinned BIP32 xpub text counter-checks those payloads and three published invalid public points through two Base58 decoders; all three ECC implementations agree on the expanded 13-point/nine-scalar/two-cross-point boundary corpus. A focused classifier distinguishes confirmed infinity from forced native `false` on finite sums; injected comparator and confirmation faults expose its same-library trust limit. Q08 runtime answers match NIST, RIPEMD-160 author, RFC 4231 and BIP32 sources; controlled missing-facility, malformed-result, PHP parser-fault and shared-consumer negative controls add bounded Q12 evidence. | Q04/Q05 research path/depth and sourced-public-edge comparison is expanded; Q06/Q07 point/scalar boundaries have published BIP32 counter-proofs where available. Q08 runtime/conversion subset passes. Broader Q12 provider-fault qualification and native common-mode risk remain open. No provider is selected. |
+| M03 — research evidence ready for review | The [ECC, unchanged CKDpub, native-false and runtime-hash probes](M03/README.md) exercise two Composer-installed PHP adapters, a pinned native libsecp256k1 reference and PHP facilities on PHP 8.3/8.4. Six sourced public-path payloads and forced exact-index, path/depth, metadata and fault cases agree across all six composition runs. Pinned BIP32 xpub text counter-checks those payloads and three published invalid public points through two Base58 decoders; all three ECC implementations agree on the expanded 13-point/nine-scalar/two-cross-point boundary corpus. A focused classifier distinguishes confirmed infinity from forced native `false` on finite sums; injected comparator and confirmation faults expose its same-library trust limit. Q08 runtime answers match NIST, RIPEMD-160 author, RFC 4231 and BIP32 sources; controlled missing-facility, malformed-result, PHP parser-fault and shared-consumer negative controls add bounded Q12 evidence. | Q04/Q05 research path/depth and sourced-public-edge comparison is expanded; Q06/Q07 point/scalar boundaries have published BIP32 counter-proofs where available. Q08 runtime/conversion subset passes. The M03-specific research gate has bounded evidence, including controlled native/common-mode counterexamples; maintainer review and merge are pending. Provider selection and assembled qualification remain downstream. No provider is selected. |
 | M04–M09 — pending | Codec qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
 **Next reviewable step:** M02's accepted decisions are on `main` through PR #9.
 [Draft PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12)
 begins M03's bounded ECC adapter, native-reference and unchanged CKDpub
 composition probes; a focused native-false classification spike now adds
-failure evidence. The next gate is the remaining point/failure corpus
-and independent fault challenge. M04 can
+failure evidence. The next gate is maintainer review of the M03 evidence and bounded trust
+limits. M04 can
 proceed from settled M02 decisions, with no provider selected yet. O03 retains
 the approved generic `relativePath` contract. Its separately approved [PIP00010 receiving entry
 point at `badb9cd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md)
@@ -75,7 +75,7 @@ engineering observation, not a new PIP decision state.
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
 | M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
 | M02 — merged in PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record accepted O01–O06 behavior and boundaries without replacing the generic contract; accept the O07 focused-provider/runtime candidate and qualification map by required operation, runtime, license, security, footprint and dependency path. | PIP00010 governs the additional receiving entry point. Qualify the accepted generic capability in M03/M04, with missing suitable providers explicit. Candidate eligibility is not selection. |
-| M03 — research in progress | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. The bounded ECC/CKDpub, native-false and confirmation-fault, PHP parser-fault, shared-consumer negative-control and hash/conversion probes and six-package ECC Composer graph are recorded under [M03](M03/README.md). Research spike only. | Q04/Q05 has six sourced public cases and path/depth boundaries, including full depth capacity and no HMAC on rejected paths. Q06/Q07 adds three BIP32 invalid-public-key examples and controlled field/order/infinity cases across two PHP adapters and native libsecp256k1. Q08 runtime/conversion subset passes sourced known answers, binary/empty/long-key cases and unsigned extremes on both runtimes. Q12 has bounded missing-extension/algorithm, malformed-result, parser-error and shared-consumer challenges plus an ECC lineage assessment; complete provider-fault qualification and native common-mode risk review remain. The current probes do not close this gate. |
+| M03 — research evidence ready for review | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. The bounded ECC/CKDpub, native-false and confirmation-fault, PHP parser-fault, shared-consumer negative-control and hash/conversion probes and six-package ECC Composer graph are recorded under [M03](M03/README.md). Research spike only. | Q04/Q05 has six sourced public cases and path/depth boundaries, including full depth capacity and no HMAC on rejected paths. Q06/Q07 adds three BIP32 invalid-public-key examples and controlled field/order/infinity cases across two PHP adapters and native libsecp256k1. Q08 runtime/conversion subset passes sourced known answers, binary/empty/long-key cases and unsigned extremes on both runtimes. Q12 has bounded missing-extension/algorithm, malformed-result, parser-error and shared-consumer challenges plus an ECC lineage assessment; controlled provider-fault and native common-mode challenges are recorded with explicit trust limits. Maintainer review of the M03 research gate is pending; these probes do not select a provider or qualify an assembled capability. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Counter-prove future Signet profile extension with shared address bytes and a distinct context identifier in test-only fixtures; do not expose it as initially supported. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
 | M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.3/8.4; no vendor or higher-domain leakage. Record unsupported policies. |
@@ -378,16 +378,18 @@ requires them.
 
 - Maintainers accepted PR #9's exact-path derivation behavior and strict
   six-version/policy allowlist, including initial rejection of legacy BIP49
-  xpub/tpub nested-SegWit requests. M03/M04 must verify these through qualified
-  adapters and independent evidence. Qualify generic empty-path rejection;
-  review the testnet label and concrete public exception types before M05 freezes
+  xpub/tpub nested-SegWit requests. M03 has checked exact CKDpub behavior,
+  including empty-path rejection, against its bounded sourced and controlled
+  corpus; M04 still needs version/policy and codec admission evidence. Review
+  the testnet label and concrete public exception types before M05 freezes
   a contract. Any
   material departure from the approved proposal/Canonical needs the current
   Materiality Gate.
 - Second checked-Base58Check and SegWit candidates have bounded probes, but
-  neither boundary has two qualified semantic adapters. An independent ECC
-  oracle, PHP 8.3/8.4 Composer graphs, complete license/security/maintenance review
-  and real replacement exercise remain open. The PHP 8.1 trial lock records
+  neither boundary has two qualified semantic adapters. A bounded independent ECC
+  reference, PHP 8.3/8.4 focused Composer graph and real PHP ECC replacement
+  exercise now exist in M03. Complete joint license/security/maintenance
+  assessment and production replacement qualification remain for M05. The PHP 8.1 trial lock records
   candidate dependencies, not a production selection. If two suitable
   libraries cannot qualify, document the affected plan-level gate and an
   explicit tradeoff; do not claim an unexercised alternative passed.

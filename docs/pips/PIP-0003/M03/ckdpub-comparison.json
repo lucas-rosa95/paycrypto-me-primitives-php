@@ -97,6 +97,14 @@
       },
       "zero_tweak": "0488b21e01bd16bee500000000555555555555555555555555555555555555555555555555555555555555555503cbcaa9c98c877a26977d00825c956a238e8dddfbd322cce4f74b0b5bd6ace4a7",
       "infinity": "invalid_child",
+      "infinity_intermediate": {
+        "category": "invalid_child",
+        "attempts": 2
+      },
+      "infinity_last": {
+        "category": "invalid_child",
+        "attempts": 3
+      },
       "last_public_index": 2147483647,
       "last_public_invalid": {
         "category": "invalid_child",

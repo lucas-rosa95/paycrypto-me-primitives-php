@@ -1,10 +1,11 @@
-# M03 — ECC qualification research in progress
+# M03 — ECC qualification research ready for review
 
 This research branch follows the accepted M02 record merged into `main` by
 [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
-It does not add a production provider or claim that M03 has passed. The
-[execution plan](../EXECUTION-PLAN.md) remains
-the source of M03's complete Q04–Q08/Q12 gate.
+It does not add a production provider. The M03-specific research evidence is
+ready for maintainer review; the draft PR is not merged. The
+[execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
+and later Q04–Q08/Q12 obligations.
 
 ## Bounded result on 2026-10-14
 
@@ -73,7 +74,7 @@ provider or production dependency is selected by this check.
 
 ## Native libsecp256k1 reference candidate
 
-For the next M03 gate, Paragonie remains the provisional PHP adapter lead and
+For M03 qualification, Paragonie remains the provisional PHP adapter lead and
 Simplito the comparison adapter. The newer
 [`1ma/secp256k1-php` v0.1.2](https://github.com/1ma/secp256k1-php/tree/v0.1.2)
 (Composer package `uma/secp256k1-php`, tag commit
@@ -155,8 +156,10 @@ three unchanged-provider runs on PHP 8.3.35 and the same three on PHP 8.4.26.
 All six agreed exactly on the six published vector payloads and the forced
 case record. Injected HMAC left halves at group order failed at first,
 intermediate and last requested positions, with exactly one HMAC call for each
-attempted level and no later request or index advance. Zero preserved the
-point while updating chain code and metadata; `G + (n-1)G` failed as infinity;
+attempted level and no later request or index advance. Controlled
+`G + (n-1)G` infinity failures now do the same at first, intermediate and last
+requested positions, with preceding zero tweaks retaining `G`. Zero preserved
+the point while updating chain code and metadata;
 order-plus-one failed before ECC; and the last public index remained exact,
 including an invalid child there without retry. The probe rejected empty,
 hardened, negative, fractional, wrong-type, non-list and overlong paths before
@@ -171,7 +174,7 @@ injected short HMAC, HMAC exception, ECC exception, malformed ECC output,
 admission exception and changed point on admission as provider failures.
 
 This closes the Q04/Q05 research comparison for these sourced public edges and
-path/depth cases. It does **not** close M03: a concrete receiving API and
+path/depth cases. On its own it did not close M03: a concrete receiving API and
 provisioned account-key mapping remain later implementation/qualification work;
 the point corpus and scalar/domain extremes remain bounded; the remaining
 M04 end-to-end Q08 integration and broader Q12 provider-fault containment
@@ -255,8 +258,8 @@ normalize other raw returns or exceptions as provider failure, and undergo
 lower-boundary fault qualification. Unexpected parser exceptions can still look
 like malformed points only if they reproduce the pinned invalid-point signal
 exactly; the focused challenge below documents this limit. Native `false` is
-challenged separately below; broader fault and common-mode checks remain for
-M03's final gate.
+challenged separately below. Broader provider trust remains for M05 selection
+and later assembled/independent qualification.
 
 ## PHP parser faults: bounded Q12 distinction
 
@@ -420,6 +423,27 @@ selection gate remains necessary. If the public-only adapter boundary cannot
 admit this confirmation route, the native binding must remain an independent
 reference or be rejected for production until an equivalent qualified route
 exists. No false result is silently treated as a successful child.
+
+## M03 research gate assessment — 2026-10-15
+
+The M03-specific research checks in the [execution plan](../EXECUTION-PLAN.md)
+have the following bounded evidence. This is ready for maintainer review in
+draft PR #12; it is not a production-provider selection or a completed public
+capability.
+
+| M03 check | Evidence and disposition |
+|---|---|
+| Q04/Q05 exact CKDpub | Six published BIP32 public derivations match their complete nodes across two PHP adapters and native libsecp256k1 on PHP 8.3/8.4. Empty/hardened/wrong-type paths and depth overflow fail before HMAC. Zero, order-sized and confirmed-infinity child cases preserve exact-index atomicity; the two invalid-child kinds were forced at first, intermediate and last positions without retry. Last public index and full depth capacity were exercised. |
+| Q06/Q07 ECC boundaries | The 13-point/nine-scalar/two-cross-point corpus agrees across the three ECC implementations; BIP32 vector 5 supplies three published malformed-point bytes. Finite and infinity raw provider results, strict adapter admission, round trips and the PHP parser-fault distinction were checked. The native library is an independent ECC implementation, while the two PHP paths share GMP and the common CKDpub consumer. |
+| Q08 runtime subset | SHA-256, RIPEMD-160, HMAC-SHA512, HASH160 and fixed-width conversion matched independently sourced known answers and boundary cases on both runtimes. M04 still owns codec and complete address integration. |
+| Q12 controlled failures | Missing facilities, malformed HMAC/ECC results, provider exceptions, PHP parser errors, native multi-meaning `false`, comparator/confirmation faults and shared-consumer negative controls were exercised. Ordinary failures normalize without a fallback or partial child. Exact mimicked provider signals, coordinated same-library faults and plausible but wrong successful outputs remain inherent trust limits; M05 provider selection and later assembled/independent gates must assess them. |
+
+The focused Composer graph and source identities are pinned. Paragonie is a
+provisional PHP lead, Simplito is a real replacement exercise, and the native
+binding is a separately implemented reference candidate. No backend is
+selected. The remaining work before this draft PR can be treated as the M03
+milestone handoff is maintainer review of these bounds and the normal merge
+decision; M04/M05 and M09 own the downstream obligations described above.
 
 ## Reproduction
 
