@@ -145,17 +145,30 @@ final class SimplitoPointTrial implements PublicPointTrial
 
 final class NativePointTrial implements PublicPointTrial
 {
+    public function __construct(private ?Closure $serializeOverride = null) {}
     public function name(): string { return 'uma/secp256k1-php+libsecp256k1'; }
     public function admit(string $point): string
     {
         pointShape($point);
-        $parsed = secp256k1_ec_pubkey_parse($point);
+        try {
+            $parsed = secp256k1_ec_pubkey_parse($point);
+        } catch (Throwable $error) {
+            throw new TrialFailure('provider_failure', $error);
+        }
         if ($parsed === false) {
             throw new TrialFailure('malformed_point');
         }
-        $canonical = secp256k1_ec_pubkey_serialize($parsed);
-        if ($canonical !== $point) {
-            throw new TrialFailure('malformed_point');
+        try {
+            $canonical = $this->serializeOverride === null
+                ? secp256k1_ec_pubkey_serialize($parsed)
+                : ($this->serializeOverride)($parsed);
+        } catch (Throwable $error) {
+            throw new TrialFailure('provider_failure', $error);
+        }
+        if (!is_string($canonical) || strlen($canonical) !== 33 || $canonical !== $point) {
+            // Parsing succeeded. A different or malformed serialization is a
+            // provider-output fault, not evidence that the input was malformed.
+            throw new TrialFailure('provider_failure');
         }
         return $canonical;
     }
@@ -283,6 +296,44 @@ if ($selected === 'native' && !extension_loaded('secp256k1')) {
     throw new RuntimeException('Native extension unavailable');
 }
 $fixtures = json_decode(file_get_contents(__DIR__ . '/ckdpub-public-fixtures.json'), true, 512, JSON_THROW_ON_ERROR);
+if (($argv[2] ?? '') === '--native-admission-faults') {
+    if ($selected !== 'native') {
+        throw new InvalidArgumentException('Native admission-fault mode requires native');
+    }
+    $payload = hex2bin($fixtures['official_vectors']['vector_2_root_to_0']['parent']);
+    $point = substr($payload, 45, 33);
+    parsePublicNode($payload, $provider);
+    $officialInvalid = json_decode(file_get_contents(__DIR__ . '/ecc-official-invalid-points.json'), true, 512, JSON_THROW_ON_ERROR);
+    $offCurve = substr_replace($payload, hex2bin($officialInvalid['bip32_vector_5_off_curve_02']['point']), 45, 33);
+    $neverSerialize = static fn (): never => throw new RuntimeException('serializer reached after parse rejection');
+    requireFailure('published_off_curve', 'malformed_point',
+        fn () => parsePublicNode($offCurve, new NativePointTrial($neverSerialize)));
+
+    $generator = hex2bin('0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798');
+    if ($point === $generator) {
+        throw new RuntimeException('Wrong-finite-point injection must differ from the published parent');
+    }
+    foreach ([
+        'wrong_finite_point' => static fn (): string => $generator,
+        'short_serialization' => static fn (): string => str_repeat("\0", 32),
+        'non_string_serialization' => static fn (): bool => false,
+        'serialization_exception' => static fn (): never => throw new RuntimeException('synthetic serializer fault'),
+    ] as $label => $serialize) {
+        requireFailure($label, 'provider_failure',
+            fn () => parsePublicNode($payload, new NativePointTrial($serialize)));
+    }
+    echo json_encode([
+        'php' => PHP_VERSION,
+        'provider' => $provider->name(),
+        'published_parent' => 'admitted',
+        'published_off_curve' => 'malformed_point',
+        'wrong_finite_point' => 'provider_failure',
+        'short_serialization' => 'provider_failure',
+        'non_string_serialization' => 'provider_failure',
+        'serialization_exception' => 'provider_failure',
+    ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+    exit;
+}
 if (($argv[2] ?? '') === '--parser-faults') {
     if ($selected === 'native') {
         throw new InvalidArgumentException('PHP parser-fault mode requires paragonie or simplito');

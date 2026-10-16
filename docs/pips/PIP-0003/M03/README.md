@@ -1,9 +1,10 @@
-# M03 — ECC qualification research ready for review
+# M03 — ECC qualification research awaiting re-review
 
 This research branch follows the accepted M02 record merged into `main` by
 [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
-It does not add a production provider. The M03-specific research evidence is
-ready for maintainer review; the draft PR is not merged. The
+It does not add a production provider. The M03-specific research evidence was
+corrected after an independent review; focused re-review and the draft PR's
+merge decision remain pending. The
 [execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
 and later Q04–Q08/Q12 obligations.
 For an independent review of the evidence and its limits, start with the
@@ -429,9 +430,10 @@ exists. No false result is silently treated as a successful child.
 ## M03 research gate assessment — 2026-10-15
 
 The M03-specific research checks in the [execution plan](../EXECUTION-PLAN.md)
-have the following bounded evidence. This is ready for maintainer review in
-draft PR #12; it is not a production-provider selection or a completed public
-capability.
+have the following bounded evidence. The [independent review](cp-reviewer-2026-10-15-204006.md)
+returned the earlier revision to execution for R1; the correction below awaits
+focused re-review. This is not a production-provider selection or a completed
+public capability.
 
 | M03 check | Evidence and disposition |
 |---|---|
@@ -443,9 +445,54 @@ capability.
 The focused Composer graph and source identities are pinned. Paragonie is a
 provisional PHP lead, Simplito is a real replacement exercise, and the native
 binding is a separately implemented reference candidate. No backend is
-selected. The remaining work before this draft PR can be treated as the M03
-milestone handoff is maintainer review of these bounds and the normal merge
-decision; M04/M05 and M09 own the downstream obligations described above.
+selected. The remaining M03 handoff step is independent re-review of the R1
+correction and then the maintainer's review and merge decision; M04/M05 and M09
+own the downstream obligations described above.
+
+## Independent review findings and executor response — 2026-10-16
+
+The preserved [independent report](cp-reviewer-2026-10-15-204006.md) reviewed
+commit `f3afccb76b8a345eb386c54e0e2a3df419ef768e` and returned M03 to
+execution. Its CP-07 and CP-10 failures apply to that reviewed revision;
+changing the executor branch does not rewrite the issued verdict.
+
+- **R1, required:** `NativePointTrial::admit()` previously reported
+  `malformed_point` when a successful native parse serialized to different
+  bytes. It now reserves that category for an actual native parse rejection and
+  classifies a changed finite point, short/non-string serialization or
+  serializer exception as `provider_failure`. The
+  [focused fault record](native-admission-fault-comparison.json) exercises the
+  real native parse with controlled serializer faults on PHP 8.3/8.4. The
+  published BIP32 vector 5 off-curve point still fails as `malformed_point`
+  before the serializer is called. Normal native CKDpub results were rerun on
+  both runtimes and still equal the saved [complete-node comparison](ckdpub-comparison.json).
+- **R2, downstream:** the CKDpub research helper's internal `TrialFailure` can
+  retain a raw throwable in `getPrevious()`. No public address exception is
+  exposed by M03. M05/M06 must define and test one public sanitization boundary
+  so neither the message, context nor exception chain exposes vendor diagnostics
+  or sensitive material. The isolated hash/conversion wrapper's containment
+  test does not establish that property for CKDpub.
+- **R3, nonblocking:** the HASH160 negative control now deliberately reverses
+  the two delegated hashes and checks that the resulting four-byte fingerprint
+  (`13ce5fe1`) fails the same published BIP32 fingerprint assertion that the
+  correct order passes (`bd16bee5`). The updated [PHP 8.3](hash-conversion-php83.json)
+  and [PHP 8.4](hash-conversion-php84.json) records differ from the earlier
+  records only by this negative-control result. A sourced full 20-byte HASH160
+  answer and address integration remain M04 work.
+
+To repeat R1 after the focused Composer install at `/research` and the pinned
+native extension at `/native`, run this mode on each PHP runtime with M03 mounted
+at `/probe`, as in the [reproduction](#reproduction) instructions:
+
+```sh
+LD_LIBRARY_PATH=/native/build/secp256k1/lib \
+    php -d extension=/native/modules/secp256k1.so \
+    /probe/ckdpub-composition-probe.php native --native-admission-faults
+```
+
+These are executor corrections and self-checks. The independent reviewer must
+reassess R1 and CP-07/CP-10 on the new revision; no independent approval or
+M03 handoff is claimed here.
 
 ## Reproduction
 

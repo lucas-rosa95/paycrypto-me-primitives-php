@@ -52,7 +52,9 @@
             "parent_key_bytes": 33,
             "digest_bytes": 20,
             "published_child_fingerprint": "bd16bee5",
-            "actual_fingerprint": "bd16bee5"
+            "actual_fingerprint": "bd16bee5",
+            "reversed_composition_fingerprint": "13ce5fe1",
+            "reversed_rejected_by_published_fingerprint": true
         }
     },
     "uint32": {

@@ -147,10 +147,20 @@ $parentKey = substr($root, 45, 33);
 $sha = hash('sha256', $parentKey, true);
 $hash160 = hash('ripemd160', $sha, true);
 check(strlen($parentKey) === 33 && strlen($sha) === 32 && strlen($hash160) === 20, 'HASH160 binary widths');
-check(substr($hash160, 0, 4) === substr($child, 5, 4), 'BIP32 vector 2 parent fingerprint');
-check(hash('sha256', hash('ripemd160', $parentKey, true), true) !== $sha, 'HASH160 order');
+$publishedFingerprint = substr($child, 5, 4);
+check(substr($hash160, 0, 4) === $publishedFingerprint, 'BIP32 vector 2 parent fingerprint');
+$reversed = hash('sha256', hash('ripemd160', $parentKey, true), true);
+check(substr($reversed, 0, 4) !== $publishedFingerprint,
+    'BIP32 fingerprint rejects reversed HASH160 composition');
 check(hash('ripemd160', hash('sha256', bin2hex($parentKey), true), true) !== $hash160, 'HASH160 hashes point bytes');
-$report['hash160']['bip32_vector2_parent'] = ['parent_key_bytes' => 33, 'digest_bytes' => 20, 'published_child_fingerprint' => bin2hex(substr($child, 5, 4)), 'actual_fingerprint' => bin2hex(substr($hash160, 0, 4))];
+$report['hash160']['bip32_vector2_parent'] = [
+    'parent_key_bytes' => 33,
+    'digest_bytes' => 20,
+    'published_child_fingerprint' => bin2hex($publishedFingerprint),
+    'actual_fingerprint' => bin2hex(substr($hash160, 0, 4)),
+    'reversed_composition_fingerprint' => bin2hex(substr($reversed, 0, 4)),
+    'reversed_rejected_by_published_fingerprint' => true,
+];
 
 foreach ([
     'zero' => [0, '00000000'],
