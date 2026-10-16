@@ -1,10 +1,10 @@
-# M03 — ECC qualification research awaiting re-review
+# M03 — ECC qualification research independently reviewed
 
 This research branch follows the accepted M02 record merged into `main` by
 [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
-It does not add a production provider. The M03-specific research evidence was
-corrected after an independent review; focused re-review and the draft PR's
-merge decision remain pending. The
+It does not add a production provider. The M03-specific correction passed
+[independent follow-up review](cp-reviewer-2026-10-16-074200.md) at `2aa0194`;
+the maintainer's merge decision remains pending. The
 [execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
 and later Q04–Q08/Q12 obligations.
 For an independent review of the evidence and its limits, start with the
@@ -431,9 +431,10 @@ exists. No false result is silently treated as a successful child.
 
 The M03-specific research checks in the [execution plan](../EXECUTION-PLAN.md)
 have the following bounded evidence. The [independent review](cp-reviewer-2026-10-15-204006.md)
-returned the earlier revision to execution for R1; the correction below awaits
-focused re-review. This is not a production-provider selection or a completed
-public capability.
+returned the earlier revision to execution for R1. The
+[follow-up review](cp-reviewer-2026-10-16-074200.md) passed CP-07/CP-10 at
+`2aa0194`. This is not a production-provider selection or a completed public
+capability.
 
 | M03 check | Evidence and disposition |
 |---|---|
@@ -445,9 +446,8 @@ public capability.
 The focused Composer graph and source identities are pinned. Paragonie is a
 provisional PHP lead, Simplito is a real replacement exercise, and the native
 binding is a separately implemented reference candidate. No backend is
-selected. The remaining M03 handoff step is independent re-review of the R1
-correction and then the maintainer's review and merge decision; M04/M05 and M09
-own the downstream obligations described above.
+selected. The remaining M03 handoff step is the maintainer's manual merge
+decision; M04/M05 and M09 own the downstream obligations described above.
 
 ## Independent review findings and executor response — 2026-10-16
 
@@ -490,9 +490,10 @@ LD_LIBRARY_PATH=/native/build/secp256k1/lib \
     /probe/ckdpub-composition-probe.php native --native-admission-faults
 ```
 
-These are executor corrections and self-checks. The independent reviewer must
-reassess R1 and CP-07/CP-10 on the new revision; no independent approval or
-M03 handoff is claimed here.
+The [independent follow-up review](cp-reviewer-2026-10-16-074200.md) reran the
+corrected evidence at `2aa0194`, closed R1 and R3, and passed CP-07/CP-10.
+It retained R2 for M05/M06. The issued first review remains unchanged for its
+earlier revision.
 
 ## Reproduction
 
