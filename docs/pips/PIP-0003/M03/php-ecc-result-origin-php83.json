@@ -1,0 +1,19 @@
+{
+    "php": "8.3.35",
+    "official_vector": "BIP32 vector 2 m -> 0",
+    "published_child_point": "02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+    "paragonie": {
+        "finite_raw_type": "Mdanter\\Ecc\\Primitives\\Point",
+        "finite_is_infinity": false,
+        "finite_matches_published_point": true,
+        "infinity_raw_type": "Mdanter\\Ecc\\Primitives\\Point",
+        "infinity_is_infinity": true
+    },
+    "simplito": {
+        "finite_raw_type": "Elliptic\\Curve\\ShortCurve\\Point",
+        "finite_is_infinity": false,
+        "finite_matches_published_point": true,
+        "infinity_raw_type": "Elliptic\\Curve\\ShortCurve\\Point",
+        "infinity_is_infinity": true
+    }
+}

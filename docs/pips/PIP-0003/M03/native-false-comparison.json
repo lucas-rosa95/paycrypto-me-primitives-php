@@ -1,0 +1,125 @@
+{
+  "matrix": {
+    "83": {
+      "php": "8.3.35",
+      "matches_common_result": true
+    },
+    "84": {
+      "php": "8.4.26",
+      "matches_common_result": true
+    }
+  },
+  "common_result": {
+    "binding": "0.1.2",
+    "raw_and_classified": {
+      "G_zero": {
+        "raw": "true",
+        "classification": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+        "preserved": true,
+        "alias_same": true
+      },
+      "G_one": {
+        "raw": "true",
+        "classification": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5",
+        "preserved": false,
+        "alias_same": true
+      },
+      "G_n_minus_one": {
+        "raw": "false",
+        "classification": "infinity",
+        "preserved": true,
+        "alias_same": true
+      },
+      "two_G_n_minus_two": {
+        "raw": "false",
+        "classification": "infinity",
+        "preserved": true,
+        "alias_same": true
+      },
+      "negative_G_one": {
+        "raw": "false",
+        "classification": "infinity",
+        "preserved": true,
+        "alias_same": true
+      },
+      "G_n": {
+        "raw": "false",
+        "classification": "invalid_scalar",
+        "preserved": true,
+        "alias_same": true
+      },
+      "G_n_plus_one": {
+        "raw": "false",
+        "classification": "invalid_scalar",
+        "preserved": true,
+        "alias_same": true
+      },
+      "G_short": {
+        "raw": "ValueError",
+        "classification": "invalid_scalar",
+        "preserved": true,
+        "alias_same": true
+      }
+    },
+    "forced_faults": {
+      "false_on_finite": "provider_failure",
+      "false_on_zero": "provider_failure",
+      "false_on_infinity": "infinity",
+      "false_after_mutation": "provider_failure",
+      "nonboolean_return": "provider_failure",
+      "exception": "provider_failure",
+      "vendor_invalid_argument_exception": "provider_failure",
+      "confirmation_false_on_infinity": "provider_failure",
+      "confirmation_exception_on_infinity": "provider_failure",
+      "confirmation_nonboolean_on_infinity": "provider_failure",
+      "comparator_false_positive_on_finite": "provider_failure",
+      "comparator_false_negative_on_infinity": "provider_failure",
+      "confirmation_false_positive_on_finite": "infinity",
+      "success_without_tweak": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+    },
+    "same_object_usable_after_false": true,
+    "opaque_object_attempts": {
+      "direct_new": "Error",
+      "reflection_without_constructor": "ReflectionException",
+      "clone": "Error",
+      "serialize": "Exception",
+      "unserialize": "Exception"
+    }
+  },
+  "missing_extension": {
+    "83": "provider_unavailable",
+    "84": "provider_unavailable"
+  },
+  "php_adapter_crosscheck": {
+    "runtimes": [
+      "8.3.35",
+      "8.4.26"
+    ],
+    "providers": [
+      "paragonie/ecc",
+      "simplito/elliptic-php"
+    ],
+    "agreed_results": {
+      "G_n_minus_one": {
+        "infinity": true,
+        "point": null
+      },
+      "two_G_n_minus_two": {
+        "infinity": true,
+        "point": null
+      },
+      "negative_G_one": {
+        "infinity": true,
+        "point": null
+      },
+      "G_zero": {
+        "infinity": false,
+        "point": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+      },
+      "G_one": {
+        "infinity": false,
+        "point": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+      }
+    }
+  }
+}

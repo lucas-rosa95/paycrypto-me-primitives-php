@@ -1,0 +1,98 @@
+{
+    "php": "8.3.35",
+    "binding": "0.1.2",
+    "points": {
+        "generator": {
+            "kind": "point",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "negative_generator": {
+            "kind": "point",
+            "value": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "double_generator": {
+            "kind": "point",
+            "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+        },
+        "short": {
+            "kind": "invalid"
+        },
+        "long": {
+            "kind": "invalid"
+        },
+        "bad_prefix": {
+            "kind": "invalid"
+        },
+        "x_zero": {
+            "kind": "invalid"
+        },
+        "x_over_field": {
+            "kind": "invalid"
+        },
+        "x_at_field_prime": {
+            "kind": "invalid"
+        },
+        "x_field_prime_minus_one": {
+            "kind": "invalid"
+        },
+        "bip32_vector_5_prefix_04": {
+            "kind": "invalid"
+        },
+        "bip32_vector_5_prefix_01": {
+            "kind": "invalid"
+        },
+        "bip32_vector_5_off_curve_02": {
+            "kind": "invalid"
+        }
+    },
+    "tweaks": {
+        "zero": {
+            "kind": "point",
+            "value": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "one": {
+            "kind": "point",
+            "value": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+        },
+        "order_minus_one": {
+            "kind": "false",
+            "before": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "order_minus_two": {
+            "kind": "point",
+            "value": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "order": {
+            "kind": "false",
+            "before": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "order_plus_one": {
+            "kind": "false",
+            "before": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "max_256_bit": {
+            "kind": "false",
+            "before": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        },
+        "short": {
+            "kind": "exception",
+            "type": "ValueError",
+            "message": "secp256k1_ec_pubkey_tweak_add(): Argument #2 ($tweak32) must be exactly 32 bytes"
+        },
+        "long": {
+            "kind": "exception",
+            "type": "ValueError",
+            "message": "secp256k1_ec_pubkey_tweak_add(): Argument #2 ($tweak32) must be exactly 32 bytes"
+        }
+    },
+    "cross_tweaks": {
+        "double_generator_plus_order_minus_two": {
+            "kind": "false",
+            "before": "02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5"
+        },
+        "negative_generator_plus_one": {
+            "kind": "false",
+            "before": "0379be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+        }
+    }
+}

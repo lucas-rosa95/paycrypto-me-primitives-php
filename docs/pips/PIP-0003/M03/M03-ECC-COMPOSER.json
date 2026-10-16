@@ -1,0 +1,14 @@
+{
+  "name": "paycrypto-me/pip3-m03-ecc-research",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "php": "^8.3",
+    "ext-gmp": "*",
+    "paragonie/ecc": "^2.6.0",
+    "simplito/elliptic-php": "^1.0.12"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

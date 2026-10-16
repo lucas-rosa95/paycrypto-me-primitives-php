@@ -1,0 +1,54 @@
+{
+  "scope": "Research-only shared CKDpub fault injection through two PHP ECC adapters; native reference not rerun in this challenge",
+  "fixture_source": "BIP32 vector 2 root to 0, pinned in ckdpub-public-fixtures.json",
+  "faults": {
+    "swapped_hmac": "Exchange HMAC key and message in the unchanged CKDpub consumer",
+    "chain_code_only": "Flip one bit in the HMAC right half after the runtime hash returns"
+  },
+  "runs": {
+    "php83": {
+      "paragonie": {
+        "php": "8.3.35",
+        "provider": "paragonie/ecc",
+        "fixture": "BIP32 vector 2 root to 0",
+        "published_node": "0488b21e01bd16bee500000000f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "swapped_hmac_node": "0488b21e01bd16bee500000000a1f50c129288e15816f9671a2f5adc5dd44484786ee910720b6caf1a13b55c7e025fcbeafe0686d7fc0be239f443fbf65b66f9806da699daa077844454feda2027",
+        "chain_code_only_fault_node": "0488b21e01bd16bee500000000f1909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "chain_code_only_fault_preserves_point": true,
+        "both_faults_detected_by_full_node_comparison": true
+      },
+      "simplito": {
+        "php": "8.3.35",
+        "provider": "simplito/elliptic-php",
+        "fixture": "BIP32 vector 2 root to 0",
+        "published_node": "0488b21e01bd16bee500000000f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "swapped_hmac_node": "0488b21e01bd16bee500000000a1f50c129288e15816f9671a2f5adc5dd44484786ee910720b6caf1a13b55c7e025fcbeafe0686d7fc0be239f443fbf65b66f9806da699daa077844454feda2027",
+        "chain_code_only_fault_node": "0488b21e01bd16bee500000000f1909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "chain_code_only_fault_preserves_point": true,
+        "both_faults_detected_by_full_node_comparison": true
+      }
+    },
+    "php84": {
+      "paragonie": {
+        "php": "8.4.26",
+        "provider": "paragonie/ecc",
+        "fixture": "BIP32 vector 2 root to 0",
+        "published_node": "0488b21e01bd16bee500000000f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "swapped_hmac_node": "0488b21e01bd16bee500000000a1f50c129288e15816f9671a2f5adc5dd44484786ee910720b6caf1a13b55c7e025fcbeafe0686d7fc0be239f443fbf65b66f9806da699daa077844454feda2027",
+        "chain_code_only_fault_node": "0488b21e01bd16bee500000000f1909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "chain_code_only_fault_preserves_point": true,
+        "both_faults_detected_by_full_node_comparison": true
+      },
+      "simplito": {
+        "php": "8.4.26",
+        "provider": "simplito/elliptic-php",
+        "fixture": "BIP32 vector 2 root to 0",
+        "published_node": "0488b21e01bd16bee500000000f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "swapped_hmac_node": "0488b21e01bd16bee500000000a1f50c129288e15816f9671a2f5adc5dd44484786ee910720b6caf1a13b55c7e025fcbeafe0686d7fc0be239f443fbf65b66f9806da699daa077844454feda2027",
+        "chain_code_only_fault_node": "0488b21e01bd16bee500000000f1909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea",
+        "chain_code_only_fault_preserves_point": true,
+        "both_faults_detected_by_full_node_comparison": true
+      }
+    }
+  }
+}

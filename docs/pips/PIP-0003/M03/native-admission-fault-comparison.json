@@ -1,0 +1,39 @@
+{
+  "scope": "Native research-adapter admission fault distinction after successful point parsing; not a production contract",
+  "fixtures": {
+    "valid_parent": "BIP32 vector 2 root public node",
+    "invalid_point": "BIP32 vector 5 compressed off-curve x=7",
+    "faults": "Injected serialization outputs or exception after genuine native parsing"
+  },
+  "runs": {
+    "php83": {
+      "php": "8.3.35",
+      "provider": "uma/secp256k1-php+libsecp256k1",
+      "published_parent": "admitted",
+      "published_off_curve": "malformed_point",
+      "wrong_finite_point": "provider_failure",
+      "short_serialization": "provider_failure",
+      "non_string_serialization": "provider_failure",
+      "serialization_exception": "provider_failure"
+    },
+    "php84": {
+      "php": "8.4.26",
+      "provider": "uma/secp256k1-php+libsecp256k1",
+      "published_parent": "admitted",
+      "published_off_curve": "malformed_point",
+      "wrong_finite_point": "provider_failure",
+      "short_serialization": "provider_failure",
+      "non_string_serialization": "provider_failure",
+      "serialization_exception": "provider_failure"
+    }
+  },
+  "common_result": {
+    "provider": "uma/secp256k1-php+libsecp256k1",
+    "published_parent": "admitted",
+    "published_off_curve": "malformed_point",
+    "wrong_finite_point": "provider_failure",
+    "short_serialization": "provider_failure",
+    "non_string_serialization": "provider_failure",
+    "serialization_exception": "provider_failure"
+  }
+}
