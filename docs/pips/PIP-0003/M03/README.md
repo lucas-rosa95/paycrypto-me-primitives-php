@@ -1,14 +1,17 @@
 # M03 — ECC qualification research independently reviewed
 
-This research branch follows the accepted M02 record merged into `main` by
+This research record follows the accepted M02 record merged into `main` by
 [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
 It does not add a production provider. The M03-specific correction passed
 [independent follow-up review](cp-reviewer-2026-10-16-074200.md) at `2aa0194`;
-the maintainer's merge decision remains pending. The
+[PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12)
+merged the bounded research handoff at
+[`7ecfce4`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7ecfce42e16e98819122d2ccc28ed2aa6a4bf959). The
 [execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
 and later Q04–Q08/Q12 obligations.
-For an independent review of the evidence and its limits, start with the
-[reviewer notes](REVIEWER-NOTES.md).
+For the original review handoff and its then-current risks, see the dated
+[reviewer notes](REVIEWER-NOTES.md); the follow-up report records the final
+bounded M03 review verdict.
 
 ## Bounded result on 2026-10-14
 
@@ -446,8 +449,9 @@ capability.
 The focused Composer graph and source identities are pinned. Paragonie is a
 provisional PHP lead, Simplito is a real replacement exercise, and the native
 binding is a separately implemented reference candidate. No backend is
-selected. The remaining M03 handoff step is the maintainer's manual merge
-decision; M04/M05 and M09 own the downstream obligations described above.
+selected. At this 2026-10-15 assessment, the remaining M03 handoff step was
+the maintainer's manual merge decision. PR #12 subsequently merged the handoff;
+M04/M05 and M09 own the downstream obligations described above.
 
 ## Independent review findings and executor response — 2026-10-16
 

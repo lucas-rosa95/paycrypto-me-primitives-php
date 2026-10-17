@@ -3,44 +3,38 @@
 This is the current HOW, ORDER, and EXECUTION reference for
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
 
-## Current state — checked 2026-10-16
+## Current state — checked 2026-10-17
 
 **Goal:** provide a locally usable, public-only operation that derives Bitcoin
 P2PKH, P2SH-P2WPKH and P2WPKH addresses from an extended public key, a bounded
 relative path, an explicit network and an address policy.
 
 **Product status:** no capability implementation or behavioral verification
-exists on `main`. At checked revision `6e5c5be`, `src/` contains only `.gitkeep`,
+exists on `main`. At checked revision `9d04519`, `src/` contains only `.gitkeep`,
 `composer.json` has no production provider, and `tests/SetupTest.php` verifies
 autoload registration only. Documentation and research progress must not be
 read as a working library feature.
 
 | Stage | What has actually been delivered | Verification and remaining gate |
 |---|---|---|
-| M00 — recorded | Early scope, planning, provider research and reference probes. | Planning and feasibility evidence only; no implementation qualification. |
-| M01 — draft delivered | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md). | [Executor assessment](M01/cp-executor-2026-10-06-210959.md) leaves replaceability, protocol correctness and independent evidence unresolved (CP-07/10/11); independent draft review is pending. |
-| M02 — merged | [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01–O06 protocol and boundary decisions, the O07 candidate/qualification map, and the PHP 8.3 minimum decision while retaining the generic relative-path contract. It includes historical PHP 8.1 Composer and bounded probe evidence. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10). M03/M04 must qualify accepted behavior and candidates on PHP 8.3/8.4. No provider is selected or concrete PHP type frozen. |
-| M03 — independently reviewed, pending merge | The [ECC, unchanged CKDpub, native-false and runtime-hash probes](M03/README.md) exercise two Composer-installed PHP adapters, a pinned native libsecp256k1 reference and PHP facilities on PHP 8.3/8.4. Six sourced public-path payloads and forced exact-index, path/depth, metadata and fault cases agree across all six composition runs. Pinned BIP32 xpub text counter-checks those payloads and three published invalid public points through two Base58 decoders; all three ECC implementations agree on the expanded 13-point/nine-scalar/two-cross-point boundary corpus. A focused classifier distinguishes confirmed infinity from forced native `false` on finite sums; injected comparator and confirmation faults expose its same-library trust limit. Q08 runtime answers match NIST, RIPEMD-160 author, RFC 4231 and BIP32 sources; controlled missing-facility, malformed-result, PHP parser-fault and shared-consumer negative controls add bounded Q12 evidence. | Q04/Q05 research path/depth and sourced-public-edge comparison is expanded; Q06/Q07 point/scalar boundaries have published BIP32 counter-proofs where available. Q08 runtime/conversion subset passes. The independent review returned the prior revision to execution for R1 (CP-07/CP-10). The native admission correction and R3 negative-control improvement passed the independent follow-up at `2aa0194`; maintainer merge remains pending. Provider selection and assembled qualification remain downstream. No provider is selected. |
+| M00 — recorded | Early scope, planning, provider research and reference probes. | The [second review](M00/cp-reviewer-2026-10-17-141300.md) confirms the planning baseline; the [Issue #17 reproduction](M00/issue-17-runtime-reproduction-2026-10-17.md) confirms the historical provider outputs byte for byte and BitWasp's behavioral results with documented generated-file differences. Feasibility evidence only; no implementation qualification. |
+| M01 — delivered and independently reviewed | [Contract and qualification draft](M01/M01-CONTRACTS.md), seven open questions and [diagrams](M01/diagrams/README.md); [review merged in PR #13](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/13) at [`9d04519`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/9d04519d809a5f6a7cff7544cd411850dee76814). | The [first review](M01/cp-reviewer-2026-10-17-135005.md) accepted the bounded draft without rework; the [second review](M01/cp-reviewer-2026-10-17-141301.md) and [Issue #15 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/15#issuecomment-6237800690) clarify CP states for that scope. Executed provider replaceability, protocol correctness and independent behavioral evidence remain obligations for later milestones, not defects in the accepted M01 draft. |
+| M02 — merged | [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9) records accepted O01–O06 protocol and boundary decisions, the O07 candidate/qualification map, and the PHP 8.3 minimum decision while retaining the generic relative-path contract. It includes historical PHP 8.1 Composer and bounded probe evidence. | The additional entry point is approved separately in [PIP00010](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10). M03 completed bounded PHP 8.3/8.4 research qualification; M04 must qualify codecs, admission and definitions on both runtimes. No provider is selected or concrete PHP type frozen. |
+| M03 — merged and independently reviewed | The [ECC, unchanged CKDpub, native-false and runtime-hash probes](M03/README.md) exercise two Composer-installed PHP adapters, a pinned native libsecp256k1 reference and PHP facilities on PHP 8.3/8.4. Six sourced public-path payloads and forced exact-index, path/depth, metadata and fault cases agree across all six composition runs. Pinned BIP32 xpub text counter-checks those payloads and three published invalid public points through two Base58 decoders; all three ECC implementations agree on the expanded 13-point/nine-scalar/two-cross-point boundary corpus. A focused classifier distinguishes confirmed infinity from forced native `false` on finite sums; injected comparator and confirmation faults expose its same-library trust limit. Q08 runtime answers match NIST, RIPEMD-160 author, RFC 4231 and BIP32 sources; controlled missing-facility, malformed-result, PHP parser-fault and shared-consumer negative controls add bounded Q12 evidence. [PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12) merged this bounded research handoff at [`7ecfce4`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7ecfce42e16e98819122d2ccc28ed2aa6a4bf959). | Q04/Q05 research path/depth and sourced-public-edge comparison is expanded; Q06/Q07 point/scalar boundaries have published BIP32 counter-proofs where available. Q08 runtime/conversion subset passes. The independent review returned the prior revision to execution for R1 (CP-07/CP-10); the [follow-up review](M03/cp-reviewer-2026-10-16-074200.md) passed the corrected research handoff at `2aa0194`. Provider selection and assembled qualification remain downstream. No provider is selected. |
 | M04–M09 — pending | Codec qualification, joint selection, implementation and assembled/independent verification. | No production behavior has passed these gates. See the roadmap for order and exit criteria. |
 
-**Next reviewable step:** M02's accepted decisions are on `main` through PR #9.
-[PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12)
-begins M03's bounded ECC adapter, native-reference and unchanged CKDpub
-composition probes; a focused native-false classification spike now adds
-failure evidence. The [independent report](M03/cp-reviewer-2026-10-15-204006.md)
-returned revision `f3afccb` to execution for native admission finding R1. The
-[executor response](M03/README.md#independent-review-findings-and-executor-response--2026-10-16)
-records the correction and R3 verification improvement. The
-[follow-up review](M03/cp-reviewer-2026-10-16-074200.md) passes CP-07/CP-10
-at `2aa0194`; the maintainer's manual merge decision remains. M04 can
-proceed from settled M02 decisions, with no provider selected yet. O03 retains
+**Next reviewable step:** M04 qualifies codecs, strict extended-public-key
+admission and validated data-only definitions using the accepted M02 decisions
+and bounded M03 research. M05 then jointly selects providers and freezes public
+contracts from executed M03/M04 evidence; M06–M09 implement and verify the
+assembled capability. No production provider or address API exists yet. O03 retains
 the approved generic `relativePath` contract. Its separately approved [PIP00010 receiving entry
 point at `badb9cd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/badb9cd4a5f4579174c8c7121558e9b38d566349/docs/pips/PIP00010/PIP00010.md)
 takes separate integer `account` and `index` fields, selects the account-level
 key from an explicit immutable source, and supplies `[0, index]` to the generic
 operation. Implementation and qualification remain. Generic qualification may
 proceed under PIP-0003. Before M05 freezes contracts, review the testnet label
-and concrete public exception types. M01's independent review is still open.
+and concrete public exception types, including the M03 R2 diagnostics finding.
 When evidence changes, update this status and the roadmap together with its
 exact PR, commit or test reference.
 
@@ -50,7 +44,7 @@ exact PR, commit or test reference.
 |---|---|---|
 | What is happening and what follows? | This section, then the [Execution roadmap](#execution-roadmap). | The only current execution-status and ordering reference. |
 | What was approved? | The [approved proposal revision at `72c4fa1`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md) and [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555). | Proposal defines WHAT, WHY and BOUNDARIES; the Issue records approval and coordination. |
-| What is under review now? | [Draft PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12), [M03 research](M03/README.md), then [M02 protocol record](M02/M02-PROTOCOL.md). | Bounded ECC evidence and the accepted protocol/qualification inputs; no production selection. |
+| What follows the completed M01–M03 handoffs? | [M04 roadmap row](#execution-roadmap), [M03 research](M03/README.md), then [M02 protocol record](M02/M02-PROTOCOL.md). | Codec/admission qualification uses accepted decisions and bounded ECC evidence; M05 selection and later implementation remain open. |
 | Which contracts and evidence support execution? | [M01 draft](M01/M01-CONTRACTS.md) and the [technical guidance below](#technical-decisions-and-detailed-execution-guidance); consult [M00 research](M00/research/public-address-provider-research.md) or [reviews](M00/reviews/plan-first-capability-canonical-alignment.md) for a specific historical claim. | Detailed inputs and provenance; M00/M01 files do not carry current progress status. |
 
 New work follows the [PIP Specification v1.0](../../specifications/paycrypto-pip-specification-v1.0.md),
@@ -77,9 +71,9 @@ engineering observation, not a new PIP decision state.
 | Work / status | Dependencies, objective, scope and deliverables | Acceptance and verification |
 |---|---|---|
 | M00 — recorded | Establish PIP identity, scope, research and planning baseline. | Historical plan and plan-alignment review are recoverable; neither verifies implementation. |
-| M01 — delivered draft, not independently verified | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | Assessed contract hash and executor report exist; CP-07/10/11 remain unresolved. |
+| M01 — delivered and independently reviewed in PR #13 | Define R01–R12, Q01–Q12, O01–O07, D01–D11 mapping and diagrams. | The [first review](M01/cp-reviewer-2026-10-17-135005.md) accepted the bounded draft; the [second review](M01/cp-reviewer-2026-10-17-141301.md) and [Issue #15 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/15#issuecomment-6237800690) distinguish its scoped CP states from later operational obligations. No provider or behavioral capability was verified by M01. |
 | M02 — merged in PR #9 | From M01, pin versioned BIP32, SLIP-132, network and codec sources; record accepted O01–O06 behavior and boundaries without replacing the generic contract; accept the O07 focused-provider/runtime candidate and qualification map by required operation, runtime, license, security, footprint and dependency path. | PIP00010 governs the additional receiving entry point. Qualify the accepted generic capability in M03/M04, with missing suitable providers explicit. Candidate eligibility is not selection. |
-| M03 — independently reviewed, pending merge | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. The bounded ECC/CKDpub, native-false and confirmation-fault, PHP parser-fault, shared-consumer negative-control and hash/conversion probes and six-package ECC Composer graph are recorded under [M03](M03/README.md). Research spike only. | Q04/Q05 has six sourced public cases and path/depth boundaries, including full depth capacity and no HMAC on rejected paths. Q06/Q07 adds three BIP32 invalid-public-key examples and controlled field/order/infinity cases across two PHP adapters and native libsecp256k1. Q08 runtime/conversion subset passes sourced known answers, binary/empty/long-key cases and unsigned extremes on both runtimes. Q12 has bounded missing-extension/algorithm, malformed-result, parser-error and shared-consumer challenges plus an ECC lineage assessment; controlled provider-fault and native common-mode challenges are recorded with explicit trust limits. The first independent report failed CP-07/CP-10 for R1; the follow-up review passes both at corrected revision `2aa0194`. R2 public exception sanitization remains required before M05/M06 public exposure. These probes do not select a provider or qualify an assembled capability. |
+| M03 — merged and independently reviewed in PR #12 | After relevant M02 decisions, exercise two real ECC semantic adapters and one unchanged CKDpub consumer; establish independently implemented ECC reference and PHP 8.3/8.4 evidence. The bounded ECC/CKDpub, native-false and confirmation-fault, PHP parser-fault, shared-consumer negative-control and hash/conversion probes and six-package ECC Composer graph are recorded under [M03](M03/README.md). Research spike only. | Q04/Q05 has six sourced public cases and path/depth boundaries, including full depth capacity and no HMAC on rejected paths. Q06/Q07 adds three BIP32 invalid-public-key examples and controlled field/order/infinity cases across two PHP adapters and native libsecp256k1. Q08 runtime/conversion subset passes sourced known answers, binary/empty/long-key cases and unsigned extremes on both runtimes. Q12 has bounded missing-extension/algorithm, malformed-result, parser-error and shared-consumer challenges plus an ECC lineage assessment; controlled provider-fault and native common-mode challenges are recorded with explicit trust limits. The [follow-up review](M03/cp-reviewer-2026-10-16-074200.md) passes the corrected research handoff at `2aa0194`; [PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12) merged at [`7ecfce4`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7ecfce42e16e98819122d2ccc28ed2aa6a4bf959). R2 public exception sanitization remains required before M05/M06 public exposure. These probes do not select a provider or qualify an assembled capability. |
 | M04 — pending | After relevant M02 decisions, qualify hashing, conversion, Base58Check, SegWit codecs, strict key admission and immutable data-only definitions. Key validity closure also needs M03. | Run Q02–Q03/Q08–Q12 on both runtimes: all public versions, exact length/trailing/checksum, codec negatives, incompatible intent, two real adapters per suitable library-backed boundary and unchanged consumers. Counter-prove future Signet profile extension with shared address bytes and a distinct context identifier in test-only fixtures; do not expose it as initially supported. Disclose any missing alternative. |
 | M05 — pending | After M03/M04, jointly record selected versions, rejected alternatives, runtime/Composer graph, semantic contracts, errors, wiring and first branch. | Selection cites executed evidence; requalify changed contract, provider or dependency. Preliminary probes do not count. |
 | M06 — pending | After M05, implement one complete public request-to-address path on both networks, with admission, derivation, adapters, validated definitions and local example. | Independently justified outputs and negative cases pass on PHP 8.3/8.4; no vendor or higher-domain leakage. Record unsupported policies. |
@@ -251,9 +245,9 @@ definition/composition choices still need consuming-use and adapter review.
 PR #9 recorded the O01–O07 M02 dispositions; it did not make
 Q tests pass or select a provider.
 The assessed M01 Q05 draft contains advancing-path cases, and its Q04 leaves
-the empty-path disposition open. M03/M04 must execute the revised O01 and O04
-cases in the M02 record rather than treating old expectations as accepted
-behavior.
+the empty-path disposition open. M03 exercised bounded exact-index and
+empty-path cases under the revised O01/O04 decisions in the M02 record; M04 and
+assembled qualification must use those accepted expectations.
 
 **O07 accepted investigation map (2026-10-14; dated research, no production selection):**
 
@@ -374,9 +368,11 @@ requires them.
 |---|---|
 | [Early first-capability plan at `83ccd55`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md), [embedded PIP plan at `247f1f1`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/247f1f11c484675bcc8f56aeb0a20c68edde4337/docs/pips/PIP-0003/PIP-0003.md), [package commit `95e8384`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/95e83842ed9f4a577998e49851449230f56f56b2) | Historical scope, sequence and delivery gates; no current approval or implementation was established by those records. |
 | [Independent plan-alignment review](M00/reviews/plan-first-capability-canonical-alignment.md), [2026-10-03](M00/cp-executor-2026-10-03-171445.md) and [2026-10-04](M00/cp-executor-2026-10-04-011735.md) executor reports | Plan/research and package-document assessment at stated revisions, not provider or capability review. |
-| [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [issued M01 report](M01/cp-executor-2026-10-06-210959.md) | R/Q/O map and draft boundary self-challenge. The report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. CP-07/10/11 remain unresolved; no runtime or independent verdict. |
+| [Second M00 review](M00/cp-reviewer-2026-10-17-141300.md) and [Issue #17 runtime reproduction](M00/issue-17-runtime-reproduction-2026-10-17.md) | M00 remains a recorded planning baseline. Both historical provider outputs reproduced byte for byte; BitWasp's behavior matched under the recovered lock and source manifests, while five generated Composer-file inventory entries differed. Original BitWasp checkout and container identities were unavailable. No production provider or capability was qualified. |
+| [M01 draft](M01/M01-CONTRACTS.md), [diagrams](M01/diagrams/README.md), [executor report](M01/cp-executor-2026-10-06-210959.md), [first](M01/cp-reviewer-2026-10-17-135005.md) and [second](M01/cp-reviewer-2026-10-17-141301.md) independent reviews, [Issue #15 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/15#issuecomment-6237800690), [merged PR #13](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/13) at [`9d04519`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/9d04519d809a5f6a7cff7544cd411850dee76814) | R/Q/O map and bounded draft accepted without rework. The executor report's SHA-256 `0224c493f2b507408f35207d6d0b5577e7206611be76644cfde17794414e5d41` identifies [the pre-relocation draft at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01-CONTRACTS.md), not the current file after link repair. The first review's CP-07/10/11 `FAIL` rows address hypothetical full-capability claims; the second review and Issue #15 clarify the bounded M01 states. Operational CP-07/10/11 obligations remain for later milestones; M01 supplies no runtime verdict. |
 | [Merged PR #5](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/5), [merged PR #6](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/6), [Issue decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555) | Proposal/plan separation, removal of obsolete top-level navigation, and present-day approval of pinned proposal revision. No runtime verification. |
 | [Merged PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9), with [M02 protocol record](M02/M02-PROTOCOL.md) | Accepted O01 exact-path, O02 strict admission, O03 account/index consumer use case, O04 bounded nonempty generic path, O05 data-only validated definitions and O06 public exception/failure rules, while retaining the generic relative-path contract; O07 candidate/qualification map, PHP 8.1 Composer graph and bounded probes. The additional receiving entry point is approved in PIP00010 but unimplemented. No adapter qualification, final selection or production tests. |
+| [M03 research](M03/README.md), [independent follow-up review](M03/cp-reviewer-2026-10-16-074200.md), [merged PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12) at [`7ecfce4`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7ecfce42e16e98819122d2ccc28ed2aa6a4bf959) | Bounded PHP 8.3/8.4 ECC, unchanged CKDpub and runtime/conversion qualification passed the corrected research handoff. R2 public exception sanitization remains for M05/M06; no production provider, address API or assembled verification follows from these probes. |
 
 ## Risks, gaps and decisions requiring judgment
 
@@ -397,9 +393,15 @@ requires them.
   candidate dependencies, not a production selection. If two suitable
   libraries cannot qualify, document the affected plan-level gate and an
   explicit tradeoff; do not claim an unexercised alternative passed.
-- M01 CP-07/10/11 remain unresolved. PR #9's source interpretation has not
-  passed the full Q corpus or independent implementation review. Forced rare
-  outcomes need labels distinct from observed behavior.
+- The bounded M01 draft was independently accepted; its first review's
+  CP-07/10/11 `FAIL` rows concern hypothetical assembled-capability claims,
+  as clarified by the [second review](M01/cp-reviewer-2026-10-17-141301.md)
+  and [Issue #15 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/15#issuecomment-6237800690).
+  Executed provider containment, complete protocol correctness and independent
+  behavioral verification remain open for the assembled capability. PR #9's
+  source interpretation has not passed the full Q corpus or independent
+  implementation review. Forced rare outcomes need labels distinct from
+  observed behavior.
 - The frozen approved proposal says no decision was recorded at its revision;
   the later Issue comment records approval. Older execution context cites
   v0.1/v0.2 governance and older Canonical/Counter-Proof revisions. The current
