@@ -18,6 +18,7 @@
             "testnet",
             "signet"
         ],
+        "reordered_equivalent": true,
         "negative": {
             "missing": "invalid_definition",
             "extra": "invalid_definition",
@@ -158,7 +159,8 @@
                 "wrong_version": "provider_failure",
                 "wrong_hrp": "provider_failure",
                 "wrong_program": "provider_failure",
-                "vendor_exception": "provider_failure"
+                "vendor_exception": "provider_failure",
+                "native_vendor_exception": "provider_failure"
             },
             "bip173_generic_valid_count": 7,
             "bip173_generic_invalid_count": 12,

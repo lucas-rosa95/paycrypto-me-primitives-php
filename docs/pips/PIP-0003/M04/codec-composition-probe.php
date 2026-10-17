@@ -212,7 +212,13 @@ function definition(array $source, bool $testSignet = false): TrialDefinition
             $versions[$hex] = $policy;
         }
     }
-    if ($source['versions'] !== $versions) {
+    // Version mappings are semantic maps; source insertion order is irrelevant.
+    // Sort copies before strict comparison so values and keys still match exactly.
+    $providedVersions = $source['versions'];
+    ksort($providedVersions, SORT_STRING);
+    $expectedVersions = $versions;
+    ksort($expectedVersions, SORT_STRING);
+    if ($providedVersions !== $expectedVersions) {
         throw new DomainException('invalid_definition');
     }
     return new TrialDefinition($id, hex2bin($source['p2pkh']), hex2bin($source['p2sh']), $source['hrp'], $versions);
@@ -375,6 +381,12 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
     } catch (DomainException $error) {
         throw $error;
     } catch (\BitWasp\Bech32\Exception\Bech32Exception $error) {
+        // A fault injected at this provider boundary has known provenance.
+        // Without that provenance, this vendor type alone cannot distinguish
+        // malformed input from a provider malfunction; see the M04 handoff.
+        if ($decodeOverride !== null) {
+            throw new RuntimeException('provider_failure');
+        }
         throw new DomainException('invalid_witness');
     } catch (Throwable) {
         throw new RuntimeException('provider_failure');
@@ -399,6 +411,10 @@ $testSource = definitionSource('testnet');
 $publicDefinitions = definitionRows([$mainSource, $testSource]);
 $copy = json_decode(json_encode($testSource, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
 check(definition($copy) == $publicDefinitions['testnet'], 'equivalent independent definition');
+$reordered = $testSource;
+$reordered['versions'] = array_reverse($testSource['versions'], true);
+check($reordered['versions'] !== $testSource['versions'], 'reordered definition fixture');
+check(definition($reordered) == $publicDefinitions['testnet'], 'equivalent reordered definition');
 $copy['hrp'] = 'other';
 check($publicDefinitions['testnet']->hrp === 'tb', 'source mutation cannot affect view');
 $signetSource = definitionSource('signet');
@@ -557,6 +573,12 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
         check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
         $decodeFaults[$mode] = $actual;
     }
+    if ($adapter === 'bitwasp') {
+        $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address,
+            static fn (): array => throw new \BitWasp\Bech32\Exception\Bech32Exception('vendor diagnostic with key material')));
+        check($actual === 'provider_failure', "{$adapter} decode native_vendor_exception: {$actual}");
+        $decodeFaults['native_vendor_exception'] = $actual;
+    }
     $bip173 = file_get_contents(__DIR__ . '/../M00/research/provider-refresh-2026-10-02/bip-0173.mediawiki');
     check(is_string($bip173), 'pinned BIP173 source');
     check(preg_match('/The following strings are valid Bech32:(.*?)The following string are not valid Bech32/s', $bip173, $genericValidSection) === 1
@@ -615,7 +637,7 @@ echo json_encode([
     'php' => PHP_VERSION,
     'extensions' => ['gmp' => extension_loaded('gmp'), 'bcmath' => extension_loaded('bcmath')],
     'bip49' => ['key_hash' => bin2hex($bip49KeyHash), 'redeem_script' => bin2hex($redeem), 'script_hash' => bin2hex($bip49ScriptHash)],
-    'definitions' => ['public' => array_keys($publicDefinitions), 'expanded_test' => array_keys($testDefinitions), 'negative' => $definitionNegatives],
+    'definitions' => ['public' => array_keys($publicDefinitions), 'expanded_test' => array_keys($testDefinitions), 'reordered_equivalent' => true, 'negative' => $definitionNegatives],
     'base58check' => $base58,
     'base58check_faults' => $codecFaults,
     'segwit' => $bech32,
