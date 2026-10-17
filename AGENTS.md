@@ -58,7 +58,10 @@ independent reviewer checks it against the branch and PR, and resolves stale
 current-state text before a favorable conclusion. A review or merge changes
 status even if the probe or production code did not change. Distinguish
 research reviewed, PR open, PR merged, provider selected, and capability
-verified. Keep approved PIP proposals and issued historical reports intact;
+verified. Link the PR for its live open/merge state instead of committing
+transient phrases such as "merge pending" into status documents; record the
+stable merge reference when the milestone state is next updated. Keep approved
+PIP proposals and issued historical reports intact;
 link to their exact revisions instead of rewriting them. Do not create a new
 status, handoff, or review artifact solely to repeat information already held
 by the Plan, milestone README, PR, Issue, or CI.

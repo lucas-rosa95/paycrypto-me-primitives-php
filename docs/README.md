@@ -24,7 +24,7 @@ docs/
 │   │   ├── M01/                     # contract draft, report and diagrams
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
-│   │   └── M04/                     # independently reviewed codec/admission research; merge pending
+│   │   └── M04/                     # merged, independently reviewed codec/admission research
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
 
@@ -60,7 +60,7 @@ The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
 and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
 within its bounded research scope. [M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
-within its stated limits; PR #21 remains open for merge. BitWasp's uninstrumented
+within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). BitWasp's uninstrumented
 native-exception ambiguity remains a provider-selection gate for M05, and
 production implementation remains open. The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
