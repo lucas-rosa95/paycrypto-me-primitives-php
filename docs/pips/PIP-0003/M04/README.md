@@ -48,6 +48,19 @@ The [independent review of `7b1dee5`](https://github.com/paycrypto-me/paycrypto-
 
 These changes await a follow-up independent review; a passing local probe is not the reviewer's acceptance.
 
+## Provisional codec candidate disposition for M05
+
+This is the executor's evidence-based triage of the four pinned codec candidates, not a production selection or a claim that M04 review is complete. Passing published vectors keeps a candidate under consideration; it does not override a required failure-meaning or deployment constraint. M05 must reassess the selected release and complete graph, security, maintenance, license, runtime diagnostics and public failure contract together. If neither candidate can satisfy a boundary, expand the search rather than selecting the less problematic one by default.
+
+| Boundary / candidate | Provisional standing | Evidence and selection gate |
+|---|---|---|
+| Base58Check — Tuupola 2.2.0 | **Stronger current lead; conditional.** | All six four-byte public versions, published addresses and bounded negative/fault cases pass on PHP 8.3/8.4 with no extra extension in the focused lock. Its checked API handles only one version byte, so the [research adapter](codec-composition-probe.php) combines raw and checked operations; the same-library round-trip trust limit and concrete public failure rules still need M05 review. |
+| Base58Check — Muvon 0.1 | **Deprioritize; reject unless a concrete advantage justifies remediation.** | It passes the same bounded vectors but calls undeclared BCMath and returns empty text for some invalid checked inputs. The [missing-extension results](missing-bcmath-php84.json) and [M02 raw probe](../M02/M02-PROTOCOL.md#second-checked-base58-candidate-probe) make the deployment and failure-meaning costs concrete. Selection would require an explicit BCMath dependency/guard and a defensible classification of empty results, not merely a passing round trip. |
+| SegWit — BitWasp 0.0.1 | **Blocked for selection under Q12 as tested.** | Published BIP173/BIP84 outcomes pass, but the [reviewed R2 finding](#independent-review-follow-up) shows that its native `Bech32Exception` type alone cannot prove whether an uninstrumented decode failure means bad input or provider malfunction. No normal valid-address library defect was demonstrated by the injected fault. M05 must establish a safe adapter boundary or reject this candidate; do not promote the injected-fault result to full Q12 qualification. |
+| SegWit — cjpgdk 0.1.2 | **Conditional alternative; no SegWit front-runner established.** | Its semantic wrapper contains the [raw HRP, v0-length and checksum admissions](../M02/M02-PROTOCOL.md#second-segwit-codec-boundary-probe), and the bounded vectors/fault injections pass. The [PHP 8.4 deprecations](codec-php84-diagnostics.txt) and suitability of its boolean/nullable decoder failure surface still need assessment. Do not select it solely because BitWasp has an unresolved Q12 limit; reject or expand the search if a safe boundary cannot be justified. |
+
+The observed problems are not interchangeable: Muvon's undeclared runtime requirement is a package/deployment defect; cjpgdk's raw SegWit admissions are contained only by explicit domain checks; BitWasp's injected exception exposed an adapter classification limit, not proof that its normal decoder rejects a valid address. This ranking can change only with cited new evidence, and M05 must record why each alternative is selected or rejected.
+
 ## Review and handoff limits
 
 - Review the version/field and provider-fault precedence against the accepted M02 ordering. Unknown, private and multisignature version bytes use checked, synthetic public payloads; private key material is outside this public-only research. The named mixed-invalid fixtures establish bounded ordering, not every possible pair of faults.
