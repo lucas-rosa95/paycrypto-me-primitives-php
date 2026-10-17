@@ -42,16 +42,24 @@
             "published_account_keys": 2,
             "negative": {
                 "checksum": "malformed_key",
+                "checksum_and_wrong_network": "malformed_key",
                 "alphabet": "malformed_key",
                 "empty": "malformed_key",
                 "short_payload": "malformed_key",
                 "trailing_payload": "malformed_key",
                 "unknown_version": "unsupported_version",
+                "unknown_version_and_wrong_policy": "unsupported_version",
+                "unknown_version_and_bad_point": "unsupported_version",
                 "private_version": "unsupported_version",
+                "private_version_and_bad_point": "unsupported_version",
+                "multisig_version": "unsupported_version",
                 "opposite_network": "incompatible_intent",
                 "wrong_policy": "incompatible_intent",
                 "bad_root_metadata": "malformed_key",
-                "bad_point_prefix": "malformed_key"
+                "bad_root_and_wrong_network": "malformed_key",
+                "bad_point_prefix": "malformed_key",
+                "bad_point_and_wrong_policy": "malformed_key",
+                "unsupported_policy": "unsupported_policy"
             },
             "bip49_address": true,
             "p2pkh_address": true,
@@ -74,16 +82,24 @@
             "published_account_keys": 2,
             "negative": {
                 "checksum": "malformed_key",
+                "checksum_and_wrong_network": "malformed_key",
                 "alphabet": "malformed_key",
                 "empty": "malformed_key",
                 "short_payload": "malformed_key",
                 "trailing_payload": "malformed_key",
                 "unknown_version": "unsupported_version",
+                "unknown_version_and_wrong_policy": "unsupported_version",
+                "unknown_version_and_bad_point": "unsupported_version",
                 "private_version": "unsupported_version",
+                "private_version_and_bad_point": "unsupported_version",
+                "multisig_version": "unsupported_version",
                 "opposite_network": "incompatible_intent",
                 "wrong_policy": "incompatible_intent",
                 "bad_root_metadata": "malformed_key",
-                "bad_point_prefix": "malformed_key"
+                "bad_root_and_wrong_network": "malformed_key",
+                "bad_point_prefix": "malformed_key",
+                "bad_point_and_wrong_policy": "malformed_key",
+                "unsupported_policy": "unsupported_policy"
             },
             "bip49_address": true,
             "p2pkh_address": true,
@@ -95,6 +111,30 @@
             "historical_hardened_ancestry": true
         }
     },
+    "base58check_faults": {
+        "tuupola": {
+            "empty_success": "provider_failure",
+            "false_success": "provider_failure",
+            "malformed_success": "provider_failure",
+            "wrong_success": "provider_failure",
+            "vendor_exception": "provider_failure",
+            "encode_empty": "provider_failure",
+            "encode_false": "provider_failure",
+            "encode_wrong": "provider_failure",
+            "encode_throw": "provider_failure"
+        },
+        "muvon": {
+            "empty_success": "provider_failure",
+            "false_success": "provider_failure",
+            "malformed_success": "provider_failure",
+            "wrong_success": "provider_failure",
+            "vendor_exception": "provider_failure",
+            "encode_empty": "provider_failure",
+            "encode_false": "provider_failure",
+            "encode_wrong": "provider_failure",
+            "encode_throw": "provider_failure"
+        }
+    },
     "segwit": {
         "bitwasp": {
             "bip84_address": true,
@@ -104,6 +144,21 @@
                 "mixed_case": "invalid_witness",
                 "short_program": "invalid_witness",
                 "long_program": "invalid_witness"
+            },
+            "encode_faults": {
+                "empty_success": "provider_failure",
+                "malformed_success": "provider_failure",
+                "wrong_program": "provider_failure",
+                "uppercase_success": "provider_failure",
+                "vendor_exception": "provider_failure"
+            },
+            "decode_faults": {
+                "false_success": "provider_failure",
+                "short_result": "provider_failure",
+                "wrong_version": "provider_failure",
+                "wrong_hrp": "provider_failure",
+                "wrong_program": "provider_failure",
+                "vendor_exception": "provider_failure"
             },
             "bip173_generic_valid_count": 7,
             "bip173_generic_invalid_count": 12,
@@ -125,6 +180,21 @@
                 "mixed_case": "invalid_witness",
                 "short_program": "invalid_witness",
                 "long_program": "invalid_witness"
+            },
+            "encode_faults": {
+                "empty_success": "provider_failure",
+                "malformed_success": "provider_failure",
+                "wrong_program": "provider_failure",
+                "uppercase_success": "provider_failure",
+                "vendor_exception": "provider_failure"
+            },
+            "decode_faults": {
+                "false_success": "provider_failure",
+                "short_result": "provider_failure",
+                "wrong_version": "provider_failure",
+                "wrong_hrp": "provider_failure",
+                "wrong_program": "provider_failure",
+                "vendor_exception": "provider_failure"
             },
             "bip173_generic_valid_count": 7,
             "bip173_generic_invalid_count": 12,

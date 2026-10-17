@@ -37,75 +37,122 @@ function hash160(string $bytes): string
     return $ripe;
 }
 
-function decodeChecked(string $adapter, string $text): string
+function decodeChecked(string $adapter, string $text, ?Closure $checkedOverride = null): string
 {
     if (strlen($text) > 160 || $text === '') {
         throw new DomainException('malformed_key');
     }
-    try {
-        if ($adapter === 'tuupola') {
-            // The checked API accepts one version byte. Its own raw decoder supplies
-            // that byte for the checked call, which then verifies the checksum.
+    if ($adapter === 'tuupola') {
+        // The checked API accepts one version byte. The same library's raw
+        // decoder supplies it; the checked API owns checksum validation.
+        try {
             $raw = (new PhpEncoder(['characters' => Base58::BITCOIN]))->decode($text);
-            if (strlen($raw) < 5) {
-                throw new DomainException('malformed_key');
-            }
-            $first = ord($raw[0]);
-            $checked = new PhpEncoder(['characters' => Base58::BITCOIN, 'check' => true, 'version' => $first]);
-            $body = $checked->decode($text);
-            $result = chr($first) . $body;
-            if ($result !== substr($raw, 0, -4)) {
-                throw new RuntimeException('Codec disagreement');
-            }
-            return $result;
+        } catch (InvalidArgumentException) {
+            throw new DomainException('malformed_key');
+        } catch (Throwable) {
+            throw new RuntimeException('provider_failure');
         }
-        if ($adapter === 'muvon') {
+        if (!is_string($raw) || strlen($raw) < 5) {
+            throw new DomainException('malformed_key');
+        }
+        $first = ord($raw[0]);
+        $checked = new PhpEncoder(['characters' => Base58::BITCOIN, 'check' => true, 'version' => $first]);
+        $payload = substr($raw, 0, -4);
+        try {
+            $body = $checkedOverride === null ? $checked->decode($text) : $checkedOverride();
+        } catch (RuntimeException) {
+            // Re-encoding through the candidate distinguishes a bad checked
+            // input from a decoder fault on self-consistent text. This does
+            // not establish independence from a common-mode provider defect.
+            try {
+                $reencoded = $checked->encode(substr($payload, 1));
+            } catch (Throwable) {
+                throw new RuntimeException('provider_failure');
+            }
+            throw $reencoded === $text
+                ? new RuntimeException('provider_failure')
+                : new DomainException('malformed_key');
+        } catch (Throwable) {
+            throw new RuntimeException('provider_failure');
+        }
+        if (!is_string($body) || chr($first) . $body !== $payload) {
+            throw new RuntimeException('provider_failure');
+        }
+        return $payload;
+    }
+    if ($adapter === 'muvon') {
+        if (!extension_loaded('bcmath')) {
+            throw new RuntimeException('provider_failure');
+        }
+        try {
+            $hex = $checkedOverride === null ? Base58Codec::checkDecode($text) : $checkedOverride();
+        } catch (Throwable) {
+            throw new RuntimeException('provider_failure');
+        }
+        if ($hex === '' || $hex === false) {
+            try {
+                $raw = Base58Codec::decode($text);
+                if (!is_string($raw) || strlen($raw) < 5) {
+                    throw new DomainException('malformed_key');
+                }
+                $reencoded = Base58Codec::checkEncode(bin2hex(substr($raw, 0, -4)));
+            } catch (DomainException $error) {
+                throw $error;
+            } catch (Throwable) {
+                throw new RuntimeException('provider_failure');
+            }
+            throw $reencoded === $text
+                ? new RuntimeException('provider_failure')
+                : new DomainException('malformed_key');
+        }
+        if (!is_string($hex) || strlen($hex) % 2 !== 0 || !ctype_xdigit($hex)) {
+            throw new RuntimeException('provider_failure');
+        }
+        try {
+            if (Base58Codec::checkEncode($hex) !== $text) {
+                throw new RuntimeException('provider_failure');
+            }
+        } catch (Throwable) {
+            throw new RuntimeException('provider_failure');
+        }
+        $bytes = hex2bin($hex);
+        if ($bytes === false) {
+            throw new RuntimeException('provider_failure');
+        }
+        return $bytes;
+    }
+    throw new LogicException('Unknown research adapter');
+}
+
+function encodeChecked(string $adapter, string $payload, ?Closure $encodeOverride = null): string
+{
+    if ($payload === '') {
+        throw new DomainException('malformed_key');
+    }
+    try {
+        if ($encodeOverride !== null) {
+            $text = $encodeOverride();
+        } elseif ($adapter === 'tuupola') {
+            $text = (new PhpEncoder([
+                'characters' => Base58::BITCOIN,
+                'check' => true,
+                'version' => ord($payload[0]),
+            ]))->encode(substr($payload, 1));
+        } elseif ($adapter === 'muvon') {
             if (!extension_loaded('bcmath')) {
                 throw new RuntimeException('BCMath missing');
             }
-            $hex = Base58Codec::checkDecode($text);
-            if (!is_string($hex) || $hex === '' || strlen($hex) % 2 !== 0 || !ctype_xdigit($hex)) {
-                throw new DomainException('malformed_key');
-            }
-            $bytes = hex2bin($hex);
-            if ($bytes === false) {
-                throw new RuntimeException('Invalid codec result');
-            }
-            return $bytes;
+            $text = Base58Codec::checkEncode(bin2hex($payload));
+        } else {
+            throw new LogicException('Unknown research adapter');
         }
-        throw new LogicException('Unknown research adapter');
-    } catch (DomainException $error) {
-        throw $error;
-    } catch (InvalidArgumentException $error) {
-        throw new DomainException('malformed_key');
-    } catch (RuntimeException $error) {
-        // Candidate exceptions can denote either bad input or a provider fault.
-        // The raw alphabet/checksum path is classified by the checked codec.
-        if ($adapter === 'tuupola' && str_contains($error->getMessage(), 'Checksum')) {
-            throw new DomainException('malformed_key');
+        if (!is_string($text) || $text === '' || decodeChecked($adapter, $text) !== $payload) {
+            throw new RuntimeException('Malformed codec output');
         }
-        if ($adapter === 'tuupola' && str_contains($error->getMessage(), 'Invalid character')) {
-            throw new DomainException('malformed_key');
-        }
-        throw $error;
+        return $text;
+    } catch (Throwable) {
+        throw new RuntimeException('provider_failure');
     }
-}
-
-function encodeChecked(string $adapter, string $payload): string
-{
-    check($payload !== '', 'nonempty checked payload');
-    if ($adapter === 'tuupola') {
-        return (new PhpEncoder([
-            'characters' => Base58::BITCOIN,
-            'check' => true,
-            'version' => ord($payload[0]),
-        ]))->encode(substr($payload, 1));
-    }
-    if ($adapter === 'muvon') {
-        check(extension_loaded('bcmath'), 'BCMath present');
-        return Base58Codec::checkEncode(bin2hex($payload));
-    }
-    throw new LogicException('Unknown research adapter');
 }
 
 if (getenv('M04_CHECK_MISSING_BCMATH') === '1') {
@@ -197,41 +244,64 @@ function definitionRows(array $rows, bool $testSignet = false): array
     return $result;
 }
 
-function admit(string $adapter, string $text, string $network, string $policy): array
+function admitStructure(string $adapter, string $text): array
 {
-    // Structural/version admission only. M03's ECC adapters qualify actual
-    // curve-point validity; that boundary is not duplicated in this probe.
+    // This focused probe checks structure; the combined M04 probe adds ECC.
     $bytes = decodeChecked($adapter, $text);
     if (strlen($bytes) !== 78) {
         throw new DomainException('malformed_key');
-    }
-    $version = bin2hex(substr($bytes, 0, 4));
-    if (!isset(VERSIONS[$version])) {
-        throw new DomainException('unsupported_version');
-    }
-    [$expectedNetwork, $expectedPolicy] = VERSIONS[$version];
-    if ($network !== $expectedNetwork || $policy !== $expectedPolicy) {
-        throw new DomainException('incompatible_intent');
     }
     $depth = ord($bytes[4]);
     if ($depth === 0 && (substr($bytes, 5, 4) !== "\0\0\0\0" || substr($bytes, 9, 4) !== "\0\0\0\0")) {
         throw new DomainException('malformed_key');
     }
+    $version = bin2hex(substr($bytes, 0, 4));
+    if (!isset(VERSIONS[$version])) {
+        // Reject private/unknown versions before interpreting key material.
+        throw new DomainException('unsupported_version');
+    }
     $point = substr($bytes, 45, 33);
     if (strlen($point) !== 33 || !in_array(ord($point[0]), [2, 3], true)) {
         throw new DomainException('malformed_key');
     }
-    // Full curve validity belongs to the M03 ECC adapter, not this codec probe.
-    return ['version' => $version, 'depth' => $depth, 'point' => bin2hex($point)];
+    return [
+        'version' => $version,
+        'depth' => $depth,
+        'point' => bin2hex($point),
+        'chain_code' => substr($bytes, 13, 32),
+    ];
 }
 
-function segwitEncode(string $adapter, string $hrp, string $program): string
+function enforceIntent(array $admitted, string $network, string $policy): void
+{
+    if (!in_array($policy, ['p2pkh', 'p2sh-p2wpkh', 'p2wpkh'], true)) {
+        throw new DomainException('unsupported_policy');
+    }
+    if (!isset(VERSIONS[$admitted['version']])) {
+        throw new DomainException('unsupported_version');
+    }
+    [$expectedNetwork, $expectedPolicy] = VERSIONS[$admitted['version']];
+    if ($network !== $expectedNetwork || $policy !== $expectedPolicy) {
+        throw new DomainException('incompatible_intent');
+    }
+}
+
+function admit(string $adapter, string $text, string $network, string $policy): array
+{
+    $admitted = admitStructure($adapter, $text);
+    enforceIntent($admitted, $network, $policy);
+    return $admitted;
+}
+
+function segwitEncode(string $adapter, string $hrp, string $program, ?Closure $encodeOverride = null): string
 {
     if (!in_array($hrp, ['bc', 'tb'], true) || strlen($program) !== 20) {
         throw new DomainException('invalid_witness');
     }
     try {
-        if ($adapter === 'bitwasp') {
+        if ($encodeOverride !== null) {
+            $address = $encodeOverride();
+        } elseif ($adapter === 'bitwasp') {
             $address = \BitWasp\Bech32\encodeSegwit($hrp, 0, $program);
         } elseif ($adapter === 'cjpgdk') {
             $address = null;
@@ -241,25 +311,31 @@ function segwitEncode(string $adapter, string $hrp, string $program): string
         } else {
             throw new LogicException('Unknown research adapter');
         }
-        if (!is_string($address) || $address === '') {
+        if (!is_string($address) || $address === '' || $address !== strtolower($address)
+            || segwitDecode($adapter, $hrp, $address) !== $program) {
             throw new RuntimeException('Malformed codec output');
         }
         return $address;
-    } catch (DomainException $error) {
-        throw $error;
     } catch (Throwable $error) {
         throw new RuntimeException('SegWit provider failure', 0, $error);
     }
 }
 
-function segwitDecode(string $adapter, string $hrp, string $address): string
+function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $decodeOverride = null): string
 {
     if (!in_array($hrp, ['bc', 'tb'], true) || strlen($address) > 90 || $address === '') {
         throw new DomainException('invalid_witness');
     }
     try {
-        if ($adapter === 'bitwasp') {
+        if ($decodeOverride !== null) {
+            $returned = $decodeOverride();
+            if (!is_array($returned) || count($returned) !== 3) {
+                throw new RuntimeException('provider_failure');
+            }
+            [$version, $program, $actualHrp] = $returned;
+        } elseif ($adapter === 'bitwasp') {
             [$version, $program] = \BitWasp\Bech32\decodeSegwit($hrp, $address);
+            $actualHrp = $hrp;
         } elseif ($adapter === 'cjpgdk') {
             $program = null;
             $version = -1;
@@ -273,15 +349,40 @@ function segwitDecode(string $adapter, string $hrp, string $address): string
         } else {
             throw new LogicException('Unknown research adapter');
         }
-        if ($version !== 0 || !is_string($program) || strlen($program) !== 20) {
-            throw new DomainException('invalid_witness');
+        if ($version !== 0 || !is_string($program) || strlen($program) !== 20 || $actualHrp !== $hrp) {
+            throw $decodeOverride === null
+                ? new DomainException('invalid_witness')
+                : new RuntimeException('provider_failure');
+        }
+        try {
+            if ($adapter === 'bitwasp') {
+                $reencoded = \BitWasp\Bech32\encodeSegwit($hrp, 0, $program);
+            } else {
+                $reencoded = null;
+                if (!Bech32::encodeSegWit($program, $hrp, 0, $reencoded)) {
+                    throw new RuntimeException('provider_failure');
+                }
+            }
+        } catch (Throwable) {
+            throw new RuntimeException('provider_failure');
+        }
+        if (!is_string($reencoded) || $reencoded !== strtolower($address)) {
+            throw $decodeOverride === null
+                ? new DomainException('invalid_witness')
+                : new RuntimeException('provider_failure');
         }
         return $program;
     } catch (DomainException $error) {
         throw $error;
     } catch (\BitWasp\Bech32\Exception\Bech32Exception $error) {
         throw new DomainException('invalid_witness');
+    } catch (Throwable) {
+        throw new RuntimeException('provider_failure');
     }
+}
+
+if (getenv('M04_LIBRARY_ONLY') === '1') {
+    return;
 }
 
 $bip49Point = hex2bin('03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f');
@@ -346,20 +447,30 @@ foreach (['tuupola', 'muvon'] as $adapter) {
     $corrupt = substr($xpub, 0, -1) . ($xpub[-1] === '1' ? '2' : '1');
     $negative = [
         'checksum' => category(fn () => admit($adapter, $corrupt, 'mainnet', 'p2pkh')),
+        'checksum_and_wrong_network' => category(fn () => admit($adapter, $corrupt, 'testnet', 'p2pkh')),
         'alphabet' => category(fn () => admit($adapter, '0OIl', 'mainnet', 'p2pkh')),
         'empty' => category(fn () => admit($adapter, '', 'mainnet', 'p2pkh')),
         'short_payload' => category(fn () => admit($adapter, encodeChecked($adapter, substr($base, 0, -1)), 'mainnet', 'p2pkh')),
         'trailing_payload' => category(fn () => admit($adapter, encodeChecked($adapter, $base . "\0"), 'mainnet', 'p2pkh')),
         'unknown_version' => category(fn () => admit($adapter, encodeChecked($adapter, hex2bin('04ffffff') . substr($base, 4)), 'mainnet', 'p2pkh')),
+        'unknown_version_and_wrong_policy' => category(fn () => admit($adapter, encodeChecked($adapter, hex2bin('04ffffff') . substr($base, 4)), 'mainnet', 'p2wpkh')),
+        'unknown_version_and_bad_point' => category(fn () => admit($adapter, encodeChecked($adapter, hex2bin('04ffffff') . substr_replace(substr($base, 4), "\x00", 41, 1)), 'mainnet', 'p2pkh')),
         'private_version' => category(fn () => admit($adapter, encodeChecked($adapter, hex2bin('0488ade4') . substr($base, 4)), 'mainnet', 'p2pkh')),
+        'private_version_and_bad_point' => category(fn () => admit($adapter, encodeChecked($adapter, hex2bin('0488ade4') . substr_replace(substr($base, 4), "\x00", 41, 1)), 'mainnet', 'p2pkh')),
+        'multisig_version' => category(fn () => admit($adapter, encodeChecked($adapter, hex2bin('0295b43f') . substr($base, 4)), 'mainnet', 'p2pkh')),
         'opposite_network' => category(fn () => admit($adapter, $cases['0488b21e'], 'testnet', 'p2pkh')),
         'wrong_policy' => category(fn () => admit($adapter, $cases['0488b21e'], 'mainnet', 'p2wpkh')),
         'bad_root_metadata' => category(fn () => admit($adapter, encodeChecked($adapter, substr_replace($base, "\x01", 5, 1)), 'mainnet', 'p2pkh')),
+        'bad_root_and_wrong_network' => category(fn () => admit($adapter, encodeChecked($adapter, substr_replace($base, "\x01", 5, 1)), 'testnet', 'p2pkh')),
         'bad_point_prefix' => category(fn () => admit($adapter, encodeChecked($adapter, substr_replace($base, "\x04", 45, 1)), 'mainnet', 'p2pkh')),
+        'bad_point_and_wrong_policy' => category(fn () => admit($adapter, encodeChecked($adapter, substr_replace($base, "\x04", 45, 1)), 'mainnet', 'p2wpkh')),
+        'unsupported_policy' => category(fn () => admit($adapter, $xpub, 'mainnet', 'p2tr')),
     ];
     foreach ($negative as $name => $actual) {
-        $expected = in_array($name, ['unknown_version', 'private_version'], true) ? 'unsupported_version'
-            : (in_array($name, ['opposite_network', 'wrong_policy'], true) ? 'incompatible_intent' : 'malformed_key');
+        $expected = $name === 'unsupported_policy' ? 'unsupported_policy'
+            : (in_array($name, ['unknown_version', 'unknown_version_and_wrong_policy', 'unknown_version_and_bad_point', 'private_version', 'private_version_and_bad_point', 'multisig_version'], true)
+                ? 'unsupported_version'
+                : (in_array($name, ['opposite_network', 'wrong_policy'], true) ? 'incompatible_intent' : 'malformed_key'));
         check($actual === $expected, "{$adapter} {$name}: {$actual}");
     }
     check(encodeChecked($adapter, "\xc4" . $bip49ScriptHash) === '2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2', "{$adapter} BIP49 address");
@@ -380,6 +491,30 @@ foreach (['tuupola', 'muvon'] as $adapter) {
     $base58[$adapter] = ['six_versions' => $cases, 'published_account_keys' => count($publishedExtendedKeys), 'negative' => $negative, 'bip49_address' => true, 'p2pkh_address' => true, 'bip32_invalid_point_bytes' => $invalidPoints, 'historical_hardened_ancestry' => true];
 }
 check($base58['tuupola']['six_versions'] === $base58['muvon']['six_versions'], 'Base58 adapter parity');
+$codecFaults = [];
+foreach (['tuupola', 'muvon'] as $adapter) {
+    foreach ([
+        'empty_success' => static fn (): string => '',
+        'false_success' => static fn (): bool => false,
+        'malformed_success' => static fn (): string => 'gg',
+        'wrong_success' => static fn (): string => '00',
+        'vendor_exception' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
+    ] as $mode => $override) {
+        $actual = category(fn () => decodeChecked($adapter, $xpub, $override));
+        check($actual === 'provider_failure', "{$adapter} {$mode}: {$actual}");
+        $codecFaults[$adapter][$mode] = $actual;
+    }
+    foreach ([
+        'encode_empty' => static fn (): string => '',
+        'encode_false' => static fn (): bool => false,
+        'encode_wrong' => static fn (): string => '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM',
+        'encode_throw' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
+    ] as $mode => $override) {
+        $actual = category(fn () => encodeChecked($adapter, decodeChecked($adapter, $xpub), $override));
+        check($actual === 'provider_failure', "{$adapter} {$mode}: {$actual}");
+        $codecFaults[$adapter][$mode] = $actual;
+    }
+}
 
 $bip84Program = hash160(hex2bin('0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c'));
 $bip84Address = 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu';
@@ -396,6 +531,31 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
     ];
     foreach ($negative as $name => $actual) {
         check($actual === 'invalid_witness', "{$adapter} {$name}: {$actual}");
+    }
+    $encodeFaults = [];
+    foreach ([
+        'empty_success' => static fn (): string => '',
+        'malformed_success' => static fn (): string => 'bc1notvalid',
+        'wrong_program' => static fn (): string => 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
+        'uppercase_success' => static fn (): string => 'BC1QCR8TE4KR609GCAWUTMRZA0J4XV80JY8Z306FYU',
+        'vendor_exception' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
+    ] as $mode => $override) {
+        $actual = category(fn () => segwitEncode($adapter, 'bc', $bip84Program, $override));
+        check($actual === 'provider_failure', "{$adapter} encode {$mode}: {$actual}");
+        $encodeFaults[$mode] = $actual;
+    }
+    $decodeFaults = [];
+    foreach ([
+        'false_success' => static fn (): bool => false,
+        'short_result' => static fn (): array => [0, str_repeat("\0", 19), 'bc'],
+        'wrong_version' => static fn (): array => [1, $bip84Program, 'bc'],
+        'wrong_hrp' => static fn (): array => [0, $bip84Program, 'tb'],
+        'wrong_program' => static fn (): array => [0, str_repeat("\0", 20), 'bc'],
+        'vendor_exception' => static fn (): array => throw new RuntimeException('vendor diagnostic with key material'),
+    ] as $mode => $override) {
+        $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, $override));
+        check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
+        $decodeFaults[$mode] = $actual;
     }
     $bip173 = file_get_contents(__DIR__ . '/../M00/research/provider-refresh-2026-10-02/bip-0173.mediawiki');
     check(is_string($bip173), 'pinned BIP173 source');
@@ -448,7 +608,7 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
     }
     check(segwitEncode($adapter, $testDefinitions['signet']->hrp, $bip84Program)
         === segwitEncode($adapter, $testDefinitions['testnet']->hrp, $bip84Program), "{$adapter} Signet SegWit reuse");
-    $bech32[$adapter] = ['bip84_address' => true, 'negative' => $negative, 'bip173_generic_valid_count' => count($genericValid[1]), 'bip173_generic_invalid_count' => count($genericInvalid), 'bip173_valid' => $valid, 'bip173_invalid_count' => count($invalidCases[1])];
+    $bech32[$adapter] = ['bip84_address' => true, 'negative' => $negative, 'encode_faults' => $encodeFaults, 'decode_faults' => $decodeFaults, 'bip173_generic_valid_count' => count($genericValid[1]), 'bip173_generic_invalid_count' => count($genericInvalid), 'bip173_valid' => $valid, 'bip173_invalid_count' => count($invalidCases[1])];
 }
 
 echo json_encode([
@@ -457,5 +617,6 @@ echo json_encode([
     'bip49' => ['key_hash' => bin2hex($bip49KeyHash), 'redeem_script' => bin2hex($redeem), 'script_hash' => bin2hex($bip49ScriptHash)],
     'definitions' => ['public' => array_keys($publicDefinitions), 'expanded_test' => array_keys($testDefinitions), 'negative' => $definitionNegatives],
     'base58check' => $base58,
+    'base58check_faults' => $codecFaults,
     'segwit' => $bech32,
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR), "\n";
