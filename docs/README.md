@@ -22,7 +22,9 @@ docs/
 │   │   ├── EXECUTION-PLAN.md        # current execution reference
 │   │   ├── M00/                     # early research, reviews and planning evidence
 │   │   ├── M01/                     # contract draft, report and diagrams
-│   │   └── M02/                     # protocol proposals and provider research
+│   │   ├── M02/                     # accepted protocol record and provider research
+│   │   └── M03/                     # completed, independently reviewed research handoff
+│   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
 
 archives/                              # ignored, local to the archiving checkout
@@ -49,10 +51,35 @@ is its retrospective coordination anchor. A
 [present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
 approved the exact proposal revision on 2026-10-10; the old package and M01
 draft did not establish that approval or verify the capability.
-The [M02 protocol record](pips/PIP-0003/M02/M02-PROTOCOL.md) tracks current
-proposed protocol rules and the provider qualification handoff.
+The [M02 protocol record](pips/PIP-0003/M02/M02-PROTOCOL.md) contains accepted
+protocol decisions and a conditional provider qualification handoff; it was
+merged in [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
+The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
+[PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12),
+and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
+within its bounded research scope. M04 qualification and production implementation
+remain pending. The separately approved [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
+originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
+its implementation and verification are assigned in the Execution Plan under
+[Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
 The [independent plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
+
+## Frozen PIP-0003 link relocation
+
+The [approved PIP-0003 revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
+preserves historical relative links that no longer resolve in the current tree.
+Use this map when reading that proposal; the proposal and issued reports retain
+their approved or assessed text.
+
+| Historical target in PIP-0003 | Current location or pinned historical revision |
+|---|---|
+| `milestones/M01-CONTRACTS.md`, `milestones/diagrams/README.md` | [M01 contract draft](pips/PIP-0003/M01/M01-CONTRACTS.md), [M01 diagrams](pips/PIP-0003/M01/diagrams/README.md) |
+| `milestones/M01.md` | [M01 milestone at `96707dd`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/96707dd/docs/pips/PIP-0003/milestones/M01.md) |
+| `../../research/public-address-provider-research.md`, `../../research/delegation-inventory.md`, `../../research/provider-refresh-2026-10-02/README.md`, `../../research/public-address-candidate-worksheet.md`, `../../research/public-address-composition-proposal.md` | [Provider research](pips/PIP-0003/M00/research/public-address-provider-research.md), [delegation inventory](pips/PIP-0003/M00/research/delegation-inventory.md), [probe pack](pips/PIP-0003/M00/research/provider-refresh-2026-10-02/README.md), [candidate worksheet](pips/PIP-0003/M00/research/public-address-candidate-worksheet.md), [composition proposal](pips/PIP-0003/M00/research/public-address-composition-proposal.md) |
+| `../../reviews/bitwasp-public-derivation/README.md`, `../../reviews/plan-first-capability-canonical-alignment.md` | [BitWasp investigation](pips/PIP-0003/M00/reviews/bitwasp-public-derivation/README.md), [plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md) |
+| `cp-executor-2026-10-03-171445.md`, `cp-executor-2026-10-04-011735.md`, `cp-executor-2026-10-06-210959.md` | [First M00 report](pips/PIP-0003/M00/cp-executor-2026-10-03-171445.md), [second M00 report](pips/PIP-0003/M00/cp-executor-2026-10-04-011735.md), [M01 report](pips/PIP-0003/M01/cp-executor-2026-10-06-210959.md) |
+| `EXECUTION-CONTEXT.md`, `COUNTER-PROOF-TEMPLATES.md`, `MILESTONE-HANDOFF-TEMPLATE.md`, `snapshots/README.md` | [Execution context](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/95e83842ed9f4a577998e49851449230f56f56b2/docs/pips/PIP-0003/EXECUTION-CONTEXT.md), [report templates](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/95e83842ed9f4a577998e49851449230f56f56b2/docs/pips/PIP-0003/COUNTER-PROOF-TEMPLATES.md), [handoff template](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/95e83842ed9f4a577998e49851449230f56f56b2/docs/pips/PIP-0003/MILESTONE-HANDOFF-TEMPLATE.md), [snapshot index](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/95e83842ed9f4a577998e49851449230f56f56b2/docs/pips/PIP-0003/snapshots/README.md) |
 
 - `README.md` is the public entry point for the Primitives repository.
 - `docs/canonicals/primitives/` contains the current authoritative Primitives
