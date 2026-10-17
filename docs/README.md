@@ -24,7 +24,7 @@ docs/
 │   │   ├── M01/                     # contract draft, report and diagrams
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
-│   │   └── M04/                     # codec, admission and definition qualification in progress
+│   │   └── M04/                     # independently reviewed codec/admission research; merge pending
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
 
@@ -58,10 +58,12 @@ merged in [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pu
 The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
 [PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12),
 and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
-within its bounded research scope. [M04 qualification](pips/PIP-0003/M04/README.md)
-has begun with bounded codec, admission and definition research; version/field
-admission and codec-fault gates remain open, as does production implementation. The
-separately approved [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
+within its bounded research scope. [M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
+has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
+within its stated limits; PR #21 remains open for merge. BitWasp's uninstrumented
+native-exception ambiguity remains a provider-selection gate for M05, and
+production implementation remains open. The separately approved
+[PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
 its implementation and verification are assigned in the Execution Plan under
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
