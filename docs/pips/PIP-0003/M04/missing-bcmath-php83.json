@@ -1,0 +1,5 @@
+{
+    "php": "8.3.35",
+    "bcmath": false,
+    "muvon_checked_decode": "provider_failure"
+}

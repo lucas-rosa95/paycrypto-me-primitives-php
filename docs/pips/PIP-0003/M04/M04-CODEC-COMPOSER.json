@@ -1,0 +1,15 @@
+{
+  "name": "paycrypto-me/pip3-m04-codec-research",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "php": "^8.3",
+    "tuupola/base58": "2.2.0",
+    "muvon/base58-codec": "0.1",
+    "bitwasp/bech32": "0.0.1",
+    "cjpgdk/bech32": "0.1.2"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

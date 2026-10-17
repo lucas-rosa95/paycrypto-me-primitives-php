@@ -1,0 +1,230 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "697d3f7cd1d4bb7c098ca136f97f1b0a",
+    "packages": [
+        {
+            "name": "bitwasp/bech32",
+            "version": "v0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bit-Wasp/bech32.git",
+                "reference": "e1ea58c848a4ec59d81b697b3dfe9cc99968d0e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bit-Wasp/bech32/zipball/e1ea58c848a4ec59d81b697b3dfe9cc99968d0e7",
+                "reference": "e1ea58c848a4ec59d81b697b3dfe9cc99968d0e7",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.4.0",
+                "squizlabs/php_codesniffer": "^2.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/bech32.php"
+                ],
+                "psr-4": {
+                    "BitWasp\\Bech32\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Unlicense"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Kerin",
+                    "homepage": "https://thomaskerin.io",
+                    "role": "Author"
+                }
+            ],
+            "description": "Pure (no dependencies) implementation of bech32",
+            "homepage": "https://github.com/bit-wasp/bech32",
+            "support": {
+                "issues": "https://github.com/Bit-Wasp/bech32/issues",
+                "source": "https://github.com/Bit-Wasp/bech32/tree/more-tests"
+            },
+            "time": "2018-02-05T22:23:47+00:00"
+        },
+        {
+            "name": "cjpgdk/bech32",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cjpgdk/bech32.git",
+                "reference": "179e48a87d7824cda335636443fdd2ebc4f96255"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cjpgdk/bech32/zipball/179e48a87d7824cda335636443fdd2ebc4f96255",
+                "reference": "179e48a87d7824cda335636443fdd2ebc4f96255",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "code-lts/doctum": "^5.5",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Bech32\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian M. Jensen",
+                    "email": "cmj@cjpg.dk",
+                    "homepage": "https://cjpg.dk"
+                }
+            ],
+            "description": "bech32 encode / decode",
+            "homepage": "https://github.com/cjpgdk/bech32",
+            "keywords": [
+                "bech32",
+                "decode",
+                "encode"
+            ],
+            "support": {
+                "issues": "https://github.com/cjpgdk/bech32/issues",
+                "source": "https://github.com/cjpgdk/bech32/tree/v0.1.2"
+            },
+            "time": "2022-03-23T10:10:10+00:00"
+        },
+        {
+            "name": "muvon/base58-codec",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Muvon/php-kiss-base58-codec.git",
+                "reference": "753aeb34bbcb5d2bf902b8644efbca6052932b00"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Muvon/php-kiss-base58-codec/zipball/753aeb34bbcb5d2bf902b8644efbca6052932b00",
+                "reference": "753aeb34bbcb5d2bf902b8644efbca6052932b00",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Muvon\\KISS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muvon Co. Ltd",
+                    "email": "contact@muvon.io"
+                }
+            ],
+            "description": "Base58 codec",
+            "keywords": [
+                "base58",
+                "codec",
+                "decoder",
+                "encoder",
+                "kiss",
+                "lightweight"
+            ],
+            "support": {
+                "issues": "https://github.com/Muvon/php-kiss-base58-codec/issues",
+                "source": "https://github.com/Muvon/php-kiss-base58-codec/tree/0.1"
+            },
+            "time": "2021-04-27T14:58:03+00:00"
+        },
+        {
+            "name": "tuupola/base58",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tuupola/base58.git",
+                "reference": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tuupola/base58/zipball/a2fac671f14890c8fa62ac081eeeb90f42839637",
+                "reference": "a2fac671f14890c8fa62ac081eeeb90f42839637",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "overtrue/phplint": "^1.0.0",
+                "phpbench/phpbench": "^0.13.0|1.0.0-alpha3",
+                "phpstan/phpstan": "^1.0|^2.0",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "suggest": {
+                "ext-gmp": "GMP extension provides the fastest encoding and decoding."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tuupola\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mika Tuupola",
+                    "email": "tuupola@appelsiini.net",
+                    "homepage": "https://appelsiini.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Base58 encoder and decoder for arbitrary data",
+            "homepage": "https://github.com/tuupola/base58",
+            "keywords": [
+                "base58"
+            ],
+            "support": {
+                "issues": "https://github.com/tuupola/base58/issues",
+                "source": "https://github.com/tuupola/base58/tree/2.2.0"
+            },
+            "time": "2025-12-29T07:13:44+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "^8.3"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}

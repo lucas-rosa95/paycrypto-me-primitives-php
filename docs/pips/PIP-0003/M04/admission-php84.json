@@ -1,0 +1,532 @@
+{
+    "php": "8.4.26",
+    "combinations": {
+        "tuupola": {
+            "bitwasp": {
+                "paragonie/ecc": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                },
+                "simplito/elliptic-php": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                }
+            },
+            "cjpgdk": {
+                "paragonie/ecc": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                },
+                "simplito/elliptic-php": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                }
+            }
+        },
+        "muvon": {
+            "bitwasp": {
+                "paragonie/ecc": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                },
+                "simplito/elliptic-php": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                }
+            },
+            "cjpgdk": {
+                "paragonie/ecc": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                },
+                "simplito/elliptic-php": {
+                    "bip49": {
+                        "context": "testnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f",
+                        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+                        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+                        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742",
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2"
+                    },
+                    "bip84": {
+                        "context": "mainnet",
+                        "policy": "p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+                        "key_hash": "c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+                    },
+                    "slip132_p2pkh": {
+                        "context": "mainnet",
+                        "policy": "p2pkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e",
+                        "key_hash": "d986ed01b7a22225a70edbf2ba7cfb63a15cb3aa",
+                        "redeem_script": null,
+                        "script_hash": null,
+                        "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA"
+                    },
+                    "slip132_nested": {
+                        "context": "mainnet",
+                        "policy": "p2sh-p2wpkh",
+                        "path": [
+                            0,
+                            0
+                        ],
+                        "point": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+                        "key_hash": "f990679acafe25c27615373b40bf22446d24ff44",
+                        "redeem_script": "0014f990679acafe25c27615373b40bf22446d24ff44",
+                        "script_hash": "3fb6e95812e57bb4691f9a4a628862a61a4f769b",
+                        "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf"
+                    },
+                    "signet_test_only": {
+                        "address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+                        "context": "signet"
+                    }
+                }
+            }
+        }
+    },
+    "invalid_bip32_points": {
+        "tuupola": {
+            "paragonie/ecc": {
+                "bip32_vector_5_prefix_04": "malformed_key",
+                "bip32_vector_5_prefix_01": "malformed_key",
+                "bip32_vector_5_off_curve_02": "malformed_key"
+            },
+            "simplito/elliptic-php": {
+                "bip32_vector_5_prefix_04": "malformed_key",
+                "bip32_vector_5_prefix_01": "malformed_key",
+                "bip32_vector_5_off_curve_02": "malformed_key"
+            }
+        },
+        "muvon": {
+            "paragonie/ecc": {
+                "bip32_vector_5_prefix_04": "malformed_key",
+                "bip32_vector_5_prefix_01": "malformed_key",
+                "bip32_vector_5_off_curve_02": "malformed_key"
+            },
+            "simplito/elliptic-php": {
+                "bip32_vector_5_prefix_04": "malformed_key",
+                "bip32_vector_5_prefix_01": "malformed_key",
+                "bip32_vector_5_off_curve_02": "malformed_key"
+            }
+        }
+    },
+    "faults": {
+        "admit_throw": "provider_failure",
+        "admit_changed": "provider_failure",
+        "tweak_throw": "provider_failure",
+        "tweak_short": "provider_failure",
+        "tweak_infinity": "invalid_child",
+        "hmac_throw": "provider_failure",
+        "hmac_short": "provider_failure",
+        "hmac_order": "invalid_child",
+        "invalid_point_before_hmac": {
+            "category": "malformed_key",
+            "hmac_calls": 0
+        },
+        "invalid_point_before_intent": "malformed_key",
+        "request_before_key_provider": "path_bounds",
+        "depth_before_hmac": {
+            "category": "path_bounds",
+            "hmac_calls": 0
+        },
+        "intent_before_depth": "incompatible_intent",
+        "invalid_second_child": {
+            "category": "invalid_child",
+            "hmac_calls": 2
+        }
+    }
+}

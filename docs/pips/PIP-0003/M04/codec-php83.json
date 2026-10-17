@@ -1,0 +1,214 @@
+{
+    "php": "8.3.35",
+    "extensions": {
+        "gmp": true,
+        "bcmath": true
+    },
+    "bip49": {
+        "key_hash": "38971f73930f6c141d977ac4fd4a727c854935b3",
+        "redeem_script": "001438971f73930f6c141d977ac4fd4a727c854935b3",
+        "script_hash": "336caa13e08b96080a32b5d818d59b4ab3b36742"
+    },
+    "definitions": {
+        "public": [
+            "mainnet",
+            "testnet"
+        ],
+        "expanded_test": [
+            "testnet",
+            "signet"
+        ],
+        "reordered_equivalent": true,
+        "negative": {
+            "missing": "invalid_definition",
+            "extra": "invalid_definition",
+            "wrong_byte": "invalid_definition",
+            "wrong_hrp": "invalid_definition",
+            "wrong_version": "invalid_definition",
+            "duplicate_profile": "invalid_definition",
+            "public_signet": "invalid_definition",
+            "wrong_signet": "invalid_definition"
+        }
+    },
+    "base58check": {
+        "tuupola": {
+            "six_versions": {
+                "0488b21e": "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
+                "049d7cb2": "ypub6QqdH2c5z7967BioGSfAWFHM1EHzHPBZK7wrND3ZpEWFtzmCqvsD1bgpaE6pSAPkiSKhkuWPCJV6mZTSNMd2tK8xYTcJ48585pZecmSUzWp",
+                "04b24746": "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL",
+                "043587cf": "tpubD6NzVbkrYhZ4XgiXtGrdW5XDAPFCL9h7we1vwNCpn8tGbBcgfVYjXyhWo4E1xkh56hjod1RhGjxbaTLV3X4FyWuejifB9jusQ46QzG87VKp",
+                "044a5262": "upub57Wa4MvRPNyAhzxKw1WfftuLKMiCWuDZefryEdU2JCzjgbWHqJCxXM4GVQGUSXn55srUm189Mf4uER1BVZxyhNQZ56pbiUoAzvK54VEYrWu",
+                "045f1cf6": "vpub5SLqN2bLY4WeZJ9SmNJHsyzqVKreTXD4ZnPC22MugDNcjhKX5xNX9QiQWcE4SSRzVWyHWUihpKRT7hckDGNzVc69wSX2JPcfGeNiT5c2XZy"
+            },
+            "published_account_keys": 2,
+            "negative": {
+                "checksum": "malformed_key",
+                "checksum_and_wrong_network": "malformed_key",
+                "alphabet": "malformed_key",
+                "empty": "malformed_key",
+                "short_payload": "malformed_key",
+                "trailing_payload": "malformed_key",
+                "unknown_version": "unsupported_version",
+                "unknown_version_and_wrong_policy": "unsupported_version",
+                "unknown_version_and_bad_point": "unsupported_version",
+                "private_version": "unsupported_version",
+                "private_version_and_bad_point": "unsupported_version",
+                "multisig_version": "unsupported_version",
+                "opposite_network": "incompatible_intent",
+                "wrong_policy": "incompatible_intent",
+                "bad_root_metadata": "malformed_key",
+                "bad_root_and_wrong_network": "malformed_key",
+                "bad_point_prefix": "malformed_key",
+                "bad_point_and_wrong_policy": "malformed_key",
+                "unsupported_policy": "unsupported_policy"
+            },
+            "bip49_address": true,
+            "p2pkh_address": true,
+            "bip32_invalid_point_bytes": {
+                "bip32_vector_5_prefix_04": "04000000000000000000000000000000000000000000000000000000000000000c",
+                "bip32_vector_5_prefix_01": "01000000000000000000000000000000000000000000000000000000000000000c",
+                "bip32_vector_5_off_curve_02": "020000000000000000000000000000000000000000000000000000000000000007"
+            },
+            "historical_hardened_ancestry": true
+        },
+        "muvon": {
+            "six_versions": {
+                "0488b21e": "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
+                "049d7cb2": "ypub6QqdH2c5z7967BioGSfAWFHM1EHzHPBZK7wrND3ZpEWFtzmCqvsD1bgpaE6pSAPkiSKhkuWPCJV6mZTSNMd2tK8xYTcJ48585pZecmSUzWp",
+                "04b24746": "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL",
+                "043587cf": "tpubD6NzVbkrYhZ4XgiXtGrdW5XDAPFCL9h7we1vwNCpn8tGbBcgfVYjXyhWo4E1xkh56hjod1RhGjxbaTLV3X4FyWuejifB9jusQ46QzG87VKp",
+                "044a5262": "upub57Wa4MvRPNyAhzxKw1WfftuLKMiCWuDZefryEdU2JCzjgbWHqJCxXM4GVQGUSXn55srUm189Mf4uER1BVZxyhNQZ56pbiUoAzvK54VEYrWu",
+                "045f1cf6": "vpub5SLqN2bLY4WeZJ9SmNJHsyzqVKreTXD4ZnPC22MugDNcjhKX5xNX9QiQWcE4SSRzVWyHWUihpKRT7hckDGNzVc69wSX2JPcfGeNiT5c2XZy"
+            },
+            "published_account_keys": 2,
+            "negative": {
+                "checksum": "malformed_key",
+                "checksum_and_wrong_network": "malformed_key",
+                "alphabet": "malformed_key",
+                "empty": "malformed_key",
+                "short_payload": "malformed_key",
+                "trailing_payload": "malformed_key",
+                "unknown_version": "unsupported_version",
+                "unknown_version_and_wrong_policy": "unsupported_version",
+                "unknown_version_and_bad_point": "unsupported_version",
+                "private_version": "unsupported_version",
+                "private_version_and_bad_point": "unsupported_version",
+                "multisig_version": "unsupported_version",
+                "opposite_network": "incompatible_intent",
+                "wrong_policy": "incompatible_intent",
+                "bad_root_metadata": "malformed_key",
+                "bad_root_and_wrong_network": "malformed_key",
+                "bad_point_prefix": "malformed_key",
+                "bad_point_and_wrong_policy": "malformed_key",
+                "unsupported_policy": "unsupported_policy"
+            },
+            "bip49_address": true,
+            "p2pkh_address": true,
+            "bip32_invalid_point_bytes": {
+                "bip32_vector_5_prefix_04": "04000000000000000000000000000000000000000000000000000000000000000c",
+                "bip32_vector_5_prefix_01": "01000000000000000000000000000000000000000000000000000000000000000c",
+                "bip32_vector_5_off_curve_02": "020000000000000000000000000000000000000000000000000000000000000007"
+            },
+            "historical_hardened_ancestry": true
+        }
+    },
+    "base58check_faults": {
+        "tuupola": {
+            "empty_success": "provider_failure",
+            "false_success": "provider_failure",
+            "malformed_success": "provider_failure",
+            "wrong_success": "provider_failure",
+            "vendor_exception": "provider_failure",
+            "encode_empty": "provider_failure",
+            "encode_false": "provider_failure",
+            "encode_wrong": "provider_failure",
+            "encode_throw": "provider_failure"
+        },
+        "muvon": {
+            "empty_success": "provider_failure",
+            "false_success": "provider_failure",
+            "malformed_success": "provider_failure",
+            "wrong_success": "provider_failure",
+            "vendor_exception": "provider_failure",
+            "encode_empty": "provider_failure",
+            "encode_false": "provider_failure",
+            "encode_wrong": "provider_failure",
+            "encode_throw": "provider_failure"
+        }
+    },
+    "segwit": {
+        "bitwasp": {
+            "bip84_address": true,
+            "negative": {
+                "wrong_hrp": "invalid_witness",
+                "bad_checksum": "invalid_witness",
+                "mixed_case": "invalid_witness",
+                "short_program": "invalid_witness",
+                "long_program": "invalid_witness"
+            },
+            "encode_faults": {
+                "empty_success": "provider_failure",
+                "malformed_success": "provider_failure",
+                "wrong_program": "provider_failure",
+                "uppercase_success": "provider_failure",
+                "vendor_exception": "provider_failure"
+            },
+            "decode_faults": {
+                "false_success": "provider_failure",
+                "short_result": "provider_failure",
+                "wrong_version": "provider_failure",
+                "wrong_hrp": "provider_failure",
+                "wrong_program": "provider_failure",
+                "vendor_exception": "provider_failure",
+                "native_vendor_exception": "provider_failure"
+            },
+            "bip173_generic_valid_count": 7,
+            "bip173_generic_invalid_count": 12,
+            "bip173_valid": [
+                "admitted_v0_20",
+                "outside_initial_policy",
+                "outside_initial_policy",
+                "outside_initial_policy",
+                "outside_initial_policy",
+                "outside_initial_policy"
+            ],
+            "bip173_invalid_count": 10
+        },
+        "cjpgdk": {
+            "bip84_address": true,
+            "negative": {
+                "wrong_hrp": "invalid_witness",
+                "bad_checksum": "invalid_witness",
+                "mixed_case": "invalid_witness",
+                "short_program": "invalid_witness",
+                "long_program": "invalid_witness"
+            },
+            "encode_faults": {
+                "empty_success": "provider_failure",
+                "malformed_success": "provider_failure",
+                "wrong_program": "provider_failure",
+                "uppercase_success": "provider_failure",
+                "vendor_exception": "provider_failure"
+            },
+            "decode_faults": {
+                "false_success": "provider_failure",
+                "short_result": "provider_failure",
+                "wrong_version": "provider_failure",
+                "wrong_hrp": "provider_failure",
+                "wrong_program": "provider_failure",
+                "vendor_exception": "provider_failure"
+            },
+            "bip173_generic_valid_count": 7,
+            "bip173_generic_invalid_count": 12,
+            "bip173_valid": [
+                "admitted_v0_20",
+                "outside_initial_policy",
+                "outside_initial_policy",
+                "outside_initial_policy",
+                "outside_initial_policy",
+                "outside_initial_policy"
+            ],
+            "bip173_invalid_count": 10
+        }
+    }
+}
