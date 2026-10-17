@@ -39,3 +39,26 @@ approved boundaries and may evolve within them. Keep durable traceability from
 the originating Issue through the PIP, any justified Plan, PRs and resulting
 repository changes. Create additional artifacts only for a distinct justified
 responsibility or when an applicable protocol requires them.
+
+# Execution status synchronization
+
+When work changes a milestone's evidence, review conclusion, or next gate,
+update the existing mutable status records in the same PR before declaring an
+executor handoff or a favorable independent review. Check the current Execution
+Plan's state and roadmap, the affected milestone README or handoff, the docs
+index, and the PR description. Make their stage, exact evidence or reviewed
+revision, remaining limits, and next action agree. For PIP-0003, these are
+`docs/pips/PIP-0003/EXECUTION-PLAN.md`, the relevant `Mxx/README.md`,
+`docs/README.md`, and the PR description. Update only a source whose content or
+navigation actually changed; state in the PR when no status-document edit is
+needed and why.
+
+The executor performs this reconciliation before requesting review. The
+independent reviewer checks it against the branch and PR, and resolves stale
+current-state text before a favorable conclusion. A review or merge changes
+status even if the probe or production code did not change. Distinguish
+research reviewed, PR open, PR merged, provider selected, and capability
+verified. Keep approved PIP proposals and issued historical reports intact;
+link to their exact revisions instead of rewriting them. Do not create a new
+status, handoff, or review artifact solely to repeat information already held
+by the Plan, milestone README, PR, Issue, or CI.
