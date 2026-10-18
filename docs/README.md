@@ -83,6 +83,7 @@ remain gates before M05; see the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.m
 for the current state.
 The [M00 deep review](pips/PIP-0003/M00/reviews/issue-28-deep-review.md) records
 a low-severity Bech32 observation-check and wording gap. Its focused correction
+in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
 preserves the issued probe and outputs; [Issue #28](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28)
 requires an independent check of the corrected revision before a conclusion.
 The separately approved
