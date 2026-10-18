@@ -9,6 +9,9 @@ merged the bounded research handoff at
 [`7ecfce4`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7ecfce42e16e98819122d2ccc28ed2aa6a4bf959). The
 [execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
 and later Q04–Q08/Q12 obligations.
+The separate [Issue #31 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31)
+will challenge that bounded evidence and research-code quality before M05;
+it has no conclusion yet and does not replace the review at `2aa0194`.
 For the original review handoff and its then-current risks, see the dated
 [reviewer notes](REVIEWER-NOTES.md); the follow-up report records the final
 bounded M03 review verdict.
