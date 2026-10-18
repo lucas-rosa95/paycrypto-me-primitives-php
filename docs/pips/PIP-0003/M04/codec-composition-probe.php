@@ -146,12 +146,24 @@ function encodeChecked(string $adapter, string $payload, ?Closure $encodeOverrid
         } else {
             throw new LogicException('Unknown research adapter');
         }
-        if (!is_string($text) || $text === '' || decodeChecked($adapter, $text) !== $payload) {
+        if (!is_string($text) || $text === '' || strlen($text) > 160) {
             throw new RuntimeException('Malformed codec output');
         }
         return $text;
     } catch (Throwable) {
         throw new RuntimeException('provider_failure');
+    }
+}
+
+// Qualification only. Checked extended-key decoding is required at request
+// admission, but the terminal address encoder does not decode its own output.
+function verifyCheckedEncoding(string $adapter, string $payload, string $text): bool
+{
+    $other = $adapter === 'tuupola' ? 'muvon' : 'tuupola';
+    try {
+        return decodeChecked($other, $text) === $payload;
+    } catch (Throwable) {
+        return false;
     }
 }
 
@@ -488,6 +500,7 @@ foreach (['tuupola', 'muvon'] as $adapter) {
         $payload = hex2bin($version) . substr($base, 4);
         $text = encodeChecked($adapter, $payload);
         check(decodeChecked($adapter, $text) === $payload, "{$adapter} {$version} round trip");
+        check(verifyCheckedEncoding($adapter, $payload, $text), "{$adapter} {$version} other-candidate decode");
         check(admit($adapter, $text, $network, $policy)['version'] === $version, "{$adapter} {$version} admission");
         $cases[$version] = $text;
     }
@@ -524,9 +537,14 @@ foreach (['tuupola', 'muvon'] as $adapter) {
                 : (in_array($name, ['opposite_network', 'wrong_policy'], true) ? 'incompatible_intent' : 'malformed_key'));
         check($actual === $expected, "{$adapter} {$name}: {$actual}");
     }
-    check(encodeChecked($adapter, "\xc4" . $bip49ScriptHash) === '2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2', "{$adapter} BIP49 address");
-    check(encodeChecked($adapter, hex2bin('00010966776006953d5567439e5e39f86a0d273bee'))
-        === '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM', "{$adapter} published P2PKH address");
+    $bip49Payload = "\xc4" . $bip49ScriptHash;
+    $bip49Text = encodeChecked($adapter, $bip49Payload);
+    check($bip49Text === '2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2'
+        && verifyCheckedEncoding($adapter, $bip49Payload, $bip49Text), "{$adapter} BIP49 address");
+    $p2pkhPayload = hex2bin('00010966776006953d5567439e5e39f86a0d273bee');
+    $p2pkhText = encodeChecked($adapter, $p2pkhPayload);
+    check($p2pkhText === '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM'
+        && verifyCheckedEncoding($adapter, $p2pkhPayload, $p2pkhText), "{$adapter} published P2PKH address");
     check(encodeChecked($adapter, $testDefinitions['signet']->p2sh . $bip49ScriptHash)
         === encodeChecked($adapter, $testDefinitions['testnet']->p2sh . $bip49ScriptHash), "{$adapter} Signet reuse");
     $invalidPoints = [];
@@ -544,6 +562,7 @@ foreach (['tuupola', 'muvon'] as $adapter) {
 check($base58['tuupola']['six_versions'] === $base58['muvon']['six_versions'], 'Base58 adapter parity');
 $codecFaults = [];
 foreach (['tuupola', 'muvon'] as $adapter) {
+    $payload = decodeChecked($adapter, $xpub);
     foreach ([
         'empty_success' => static fn (): string => '',
         'false_success' => static fn (): bool => false,
@@ -558,12 +577,22 @@ foreach (['tuupola', 'muvon'] as $adapter) {
     foreach ([
         'encode_empty' => static fn (): string => '',
         'encode_false' => static fn (): bool => false,
+        'encode_malformed' => static fn (): string => '00',
         'encode_wrong' => static fn (): string => '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM',
+        'encode_overlong' => static fn (): string => str_repeat('1', 161),
         'encode_throw' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
     ] as $mode => $override) {
-        $actual = category(fn () => encodeChecked($adapter, decodeChecked($adapter, $xpub), $override));
-        check($actual === 'provider_failure', "{$adapter} {$mode}: {$actual}");
-        $codecFaults[$adapter][$mode] = $actual;
+        $boundary = category(fn () => encodeChecked($adapter, $payload, $override));
+        $expected = in_array($mode, ['encode_malformed', 'encode_wrong'], true)
+            ? 'accepted' : 'provider_failure';
+        check($boundary === $expected, "{$adapter} encode boundary {$mode}: {$boundary}");
+        $qualification = null;
+        if ($boundary === 'accepted') {
+            $text = encodeChecked($adapter, $payload, $override);
+            $qualification = verifyCheckedEncoding($adapter, $payload, $text) ? 'accepted' : 'rejected';
+            check($qualification === 'rejected', "{$adapter} encode qualification {$mode}: {$qualification}");
+        }
+        $codecFaults[$adapter][$mode] = ['boundary' => $boundary, 'qualification' => $qualification];
     }
 }
 

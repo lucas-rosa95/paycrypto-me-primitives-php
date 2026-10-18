@@ -121,10 +121,30 @@
             "malformed_success": "provider_failure",
             "wrong_success": "provider_failure",
             "vendor_exception": "provider_failure",
-            "encode_empty": "provider_failure",
-            "encode_false": "provider_failure",
-            "encode_wrong": "provider_failure",
-            "encode_throw": "provider_failure"
+            "encode_empty": {
+                "boundary": "provider_failure",
+                "qualification": null
+            },
+            "encode_false": {
+                "boundary": "provider_failure",
+                "qualification": null
+            },
+            "encode_malformed": {
+                "boundary": "accepted",
+                "qualification": "rejected"
+            },
+            "encode_wrong": {
+                "boundary": "accepted",
+                "qualification": "rejected"
+            },
+            "encode_overlong": {
+                "boundary": "provider_failure",
+                "qualification": null
+            },
+            "encode_throw": {
+                "boundary": "provider_failure",
+                "qualification": null
+            }
         },
         "muvon": {
             "empty_success": "provider_failure",
@@ -132,10 +152,30 @@
             "malformed_success": "provider_failure",
             "wrong_success": "provider_failure",
             "vendor_exception": "provider_failure",
-            "encode_empty": "provider_failure",
-            "encode_false": "provider_failure",
-            "encode_wrong": "provider_failure",
-            "encode_throw": "provider_failure"
+            "encode_empty": {
+                "boundary": "provider_failure",
+                "qualification": null
+            },
+            "encode_false": {
+                "boundary": "provider_failure",
+                "qualification": null
+            },
+            "encode_malformed": {
+                "boundary": "accepted",
+                "qualification": "rejected"
+            },
+            "encode_wrong": {
+                "boundary": "accepted",
+                "qualification": "rejected"
+            },
+            "encode_overlong": {
+                "boundary": "provider_failure",
+                "qualification": null
+            },
+            "encode_throw": {
+                "boundary": "provider_failure",
+                "qualification": null
+            }
         }
     },
     "segwit": {
