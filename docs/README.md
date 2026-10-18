@@ -74,8 +74,13 @@ head `33a3294` has no recorded independent review and needs a check under
 before M05. No provider is selected and production implementation remains open.
 The [Issue #29 M01 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29#issuecomment-6254856342)
 examined the contract and diagrams at `de326cf` without confirming a draft defect;
-it did not verify provider or address behavior. Independent re-reviews of
-[M00](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28),
+it did not verify provider or address behavior. The
+[M00 deep review](pips/PIP-0003/M00/reviews/issue-28-deep-review.md) found a
+low-severity Bech32 observation-check and wording gap. Its focused correction
+in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
+preserves the issued probe and outputs. The [independent check of `0eb8cbe`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255021386)
+found no remaining defect, and the [shared Issue #28 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255212773)
+accepts a bounded favorable M00 conclusion. Independent re-reviews of
 [M02](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30) and
 [M03](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31)
 and the [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)

@@ -54,8 +54,11 @@ not additional direct production recommendations.
    selection is required; its constructor otherwise selects by the environment.
 5. **Keep BitWasp Bech32 as a focused candidate, with a disclosed maintenance gap.**
    The published release is from 2018; its README advertises older PHP versions.
-   Current-runtime probes passed the selected BIP173 corpus, which is stronger
-   evidence than assuming compatibility from its dependency-free manifest.
+   Current-runtime probes recorded acceptance/rejection of the selected BIP173
+   examples and exact address/program agreement for three v0 cases. The generic
+   success checks do not compare decoded HRP/data. This is stronger evidence
+   than compatibility inferred from a dependency-free manifest, but not full
+   codec conformance.
 6. **Do not require a full Bitcoin/BIP32 package.** Prefer investigating the
    canonical CKDpub composition over qualified HMAC/ECC capabilities. For fixed
    extended-key fields, qualify runtime binary conversion plus owned field and
@@ -78,8 +81,8 @@ mandate a separate interface or package. Exact package revisions are in §3.
 | D05 | Public scalar tweak addition | Same ECC candidates; libsecp256k1 for independent reference research | Zero/one/order/infinity probes exercised both APIs. Scalar admission and infinity-to-failure mapping belong to the contract/adapter. No complete replacement or independent ECC gate is passed. | |
 | D06 | Bitcoin-alphabet Base58 | Explicit Tuupola `PhpEncoder`; compare explicit StephenHill service | Tuupola ran without GMP on PHP 8.1. Four raw cases agreed with StephenHill/GMP on 8.3. Require wider corpus and explain shared lineage before claiming independence. | |
 | D07 | Base58Check | Tuupola checked encoder as conditional first candidate | 17 XPUB byte-split round trips and one P2PKH example passed. The one-byte option is not the four-byte BIP32 version. Enforce empty/length/full-version admission and test every admitted public version. A second qualified checked-codec provider remains open; BitWasp is comparison evidence only. | |
-| D08 | Bech32 | `bitwasp/bech32` 0.0.1, conditional | Seven valid and twelve invalid generic vectors behaved as expected on both runtimes. Maintenance/support disposition and a second distinct provider remain open. | |
-| D09 | SegWit v0 address codec | Same focused Bech32 package | Three valid v0 vectors and ten invalid SegWit vectors behaved as expected. Only P2WPKH is admitted; codec support for other witness versions must not expand the public API. | |
+| D08 | Bech32 | `bitwasp/bech32` 0.0.1, conditional | Seven valid generic examples returned arrays and twelve invalid examples threw on both runtimes; decoded generic HRP/data was not compared with independent expected values. Maintenance/support disposition and a second distinct provider remain open. | |
+| D09 | SegWit v0 address codec | Same focused Bech32 package | Three valid v0 examples matched the expected address and witness program; ten invalid SegWit examples threw. Only P2WPKH is admitted; codec support for other witness versions must not expand the public API. | |
 | D10 | Extended public-key structural decoding | Qualify runtime `unpack` for fixed fields, plus owned admission | This revises the previous first lead. Field widths/order and interpretation remain owned; conversions are delegated to runtime. BitWasp's serializer is comparison evidence only. No bespoke generic decoder or copied serializer. Full structural qualification has not run. | |
 | D11 | Fixed-width conversion | PHP `pack` / `unpack` | Unsigned 32-bit round trips at 0, 2^31−1 and 2^32−1 passed on 64-bit PHP 8.1/8.3. Document host-width requirements; no 32-bit result is established. | |
 
@@ -174,6 +177,14 @@ advisory check. No candidate receives a security certification here.
 probe source, exact inputs, package commits, image IDs, commands and JSON outputs.
 No plugin code, private key, seed or signing operation was loaded or invoked.
 
+**2026-10-18 review clarification:** [Issue #28's focused evidence check](../reviews/issue-28-deep-review.md)
+narrows the original generic Bech32 wording to the acceptance/rejection
+observations actually recorded. Its [JSON verifier](../reviews/issue-28-bech32-evidence-check.py)
+asserts the selected vector inventory and observed outcome shape without editing
+the issued probe or outputs. A generic decoder that returned the wrong HRP/data
+while still returning an array would pass M00's success check. M04's later
+qualification remains separate evidence.
+
 | Investigation | Result | Interpretation |
 |---|---|---|
 | Existing BitWasp harness, PHP 8.3.35 | New JSON is byte-for-byte identical to the preserved observations. | The known parser/zero-tweak/infinity findings remain relevant to the installed stack. No new independent oracle is established. |
@@ -181,7 +192,7 @@ No plugin code, private key, seed or signing operation was loaded or invoked.
 | Tuupola 2.2.0, explicit PHP backend | 17 BIP32 public XPUB round trips, one P2PKH example, leading-zero handling and invalid-alphabet/checksum cases behaved as recorded on both runtimes. | Four-byte version support requires representation adaptation and full admission; all admitted SLIP-132/network versions still need tests. |
 | Tuupola edge behavior | Empty checked decode returned empty; four-byte version option failed to reproduce the XPUB. | Never equate a returned value with validated extended-key input. Do not pass the whole BIP32 version into this one-byte option. |
 | StephenHill 2.1.0, explicit GMP | Four binary raw-Base58 cases matched Tuupola and invalid alphabet was rejected on PHP 8.3. | Raw-codec comparison only; no second Base58Check provider or independent-lineage claim. |
-| BitWasp Bech32 | 7 valid / 12 invalid generic vectors, 3 valid v0 SegWit vectors and 10 invalid SegWit vectors behaved as expected on both runtimes; a 21-byte v0 program was rejected. | Includes two 32-byte v0 programs to check codec behavior; this does not add P2WSH delivery. No v1+ valid address support is claimed. |
+| BitWasp Bech32 | 7 generic valid examples returned arrays and 12 generic invalid examples threw; 3 valid v0 SegWit address/program comparisons passed, 10 invalid SegWit examples threw, and a 21-byte v0 program was rejected on both runtimes. | Generic decoded HRP/data was not compared; the corpus establishes only these bounded outcomes. Two 32-byte v0 programs check codec behavior without adding P2WSH delivery. No v1+ valid address support is claimed. |
 | Paragonie 2.6.0 and Simplito 1.0.12 | Zero returned the parent; one returned matching serialized points; order-sized tweak returned the parent; `n−1` with generator parent produced infinity. | These are raw math observations. The semantic adapter must reject an out-of-range tweak and map infinity; mathematical modulo behavior is not itself a library defect. |
 | Compressed key length | Paragonie parsed and normalized the 34-byte leading-zero variant; Simplito rejected it. | Exact 33-byte admission must precede delegated point parsing. Successful parsing alone does not establish the domain invariant. |
 | Diagnostics / PHP matrix | New probes recorded no diagnostics. ECC and StephenHill/GMP were skipped on PHP 8.1 because the available image lacks GMP. | Full PHP 8.1 ECC compatibility is still untested. The old BitWasp harness still records its existing diagnostics. |
