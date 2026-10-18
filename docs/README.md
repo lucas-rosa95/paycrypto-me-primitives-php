@@ -24,7 +24,8 @@ docs/
 │   │   ├── M01/                     # contract draft, report and diagrams
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
-│   │   └── M04/                     # merged, independently reviewed codec/admission research
+│   │   ├── M04/                     # merged, independently reviewed codec/admission research
+│   │   └── reviews/                 # pre-M04 execution audit
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
 
@@ -45,8 +46,8 @@ The [approved PIP-0003 proposal](https://github.com/paycrypto-me/paycrypto-me-pr
 defines the public address capability boundary. Its
 [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
 current operational reference. Start with its Current state, Reading path and
-Execution roadmap; consult M00 and M01 for the specific research, draft contract
-or assessment evidence linked from the plan.
+Execution roadmap; consult the linked M00–M04 records for the specific research,
+decisions, draft contract and assessment evidence.
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
 is its retrospective coordination anchor. A
 [present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
@@ -69,13 +70,20 @@ its implementation and verification are assigned in the Execution Plan under
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
 The [independent plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
 assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
+The [pre-M04 audit](pips/PIP-0003/reviews/pre-m04-audit-2026-10-17.md)
+records planning and navigation findings closed through
+[PR #20](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/20);
+its forward-looking M04 criteria should be read alongside the merged M04
+handoff above.
 
-## Frozen PIP-0003 link relocation
+## Approved PIP-0003 revision navigation
 
 The [approved PIP-0003 revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
-preserves historical relative links that no longer resolve in the current tree.
-Use this map when reading that proposal; the proposal and issued reports retain
-their approved or assessed text.
+preserves its historical text, including relative links to files later relocated.
+The [current reader copy](pips/PIP-0003/PIP-0003.md) repairs those links and
+points to the Issue decision and current execution status without changing the
+approved capability boundary. Use this map when reading the exact approved
+revision; issued reports retain their assessed text.
 
 | Historical target in PIP-0003 | Current location or pinned historical revision |
 |---|---|
