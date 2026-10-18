@@ -390,7 +390,7 @@ requires them.
 - Two checked-Base58Check and two SegWit adapters have bounded M04 evidence,
   but no codec provider is selected. Tuupola is a conditional Base58Check lead;
   Muvon has an undeclared BCMath requirement and empty-result classification
-  concern. Both terminal codecs now keep self-decoding in qualification;
+  concern. Both terminal codecs now keep output decoding in qualification;
   Base58Check still decodes the input key at admission. Both SegWit encoders
   remain conditional with no front-runner. BitWasp’s uninstrumented Q12
   exception ambiguity concerns decoding, and cjpgdk has PHP 8.4 diagnostics.
