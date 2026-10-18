@@ -72,13 +72,15 @@ exception ambiguity remains a gate for any decoder boundary. The corrected
 head `33a3294` has no recorded independent review and needs a check under
 [Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
 before M05. No provider is selected and production implementation remains open.
-Separate independent re-reviews of [M00](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28),
-[M01](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29),
+The [Issue #29 M01 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29#issuecomment-6254856342)
+examined the contract and diagrams at `de326cf` without confirming a draft defect;
+it did not verify provider or address behavior. Independent re-reviews of
+[M00](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28),
 [M02](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30) and
 [M03](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31)
-will challenge the earlier bounded evidence, decisions and code quality where
-applicable. Their conclusions and finding dispositions also precede M05; see
-the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) for the current gate.
+and the [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
+remain gates before M05; see the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
+for the current state.
 The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
