@@ -76,6 +76,31 @@ records planning and navigation findings closed through
 its forward-looking M04 criteria should be read alongside the merged M04
 handoff above.
 
+## Drafting and maintaining documentation
+
+Write new milestone and research documents in English. Put detailed evidence in
+the document that owns it, and point the Issue, Execution Plan and documentation
+map to that record. During a draft, check the links from the new page and the
+pages that lead readers to it. When moving a file, repair its incoming links in
+the same PR; use a revision-pinned link for an issued historical artifact whose
+original path must remain recoverable.
+
+Before requesting milestone review, reconcile the Plan's current state and
+roadmap, the affected Mxx handoff, this map, the originating Issue body and the
+PR description. State the reviewed revision, what the evidence establishes, its
+limits and the next gate consistently. Repeat that focused check when a review
+changes the conclusion or a PR merges. Keep the exact approved proposal revision
+as the decision reference; navigation repairs in a current reader copy must not
+change the approved capability boundaries. Do not create a separate status page
+to repeat these records.
+
+Run [`python3 scripts/check-doc-links.py`](../scripts/check-doc-links.py) while
+drafting and before handoff. CI also runs it via `scripts/check-release.sh`.
+It checks local Markdown targets and this repository's `blob/main` paths; inspect
+changed section anchors, external pages, revision-pinned links and Issue/PR
+links separately. This keeps each PR's check limited to the surfaces it affects
+while catching broken local navigation across the current tree automatically.
+
 ## Approved PIP-0003 revision navigation
 
 The [approved PIP-0003 revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
