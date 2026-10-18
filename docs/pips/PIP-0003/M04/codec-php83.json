@@ -60,7 +60,8 @@
                 "bad_root_and_wrong_network": "malformed_key",
                 "bad_point_prefix": "malformed_key",
                 "bad_point_and_wrong_policy": "malformed_key",
-                "unsupported_policy": "unsupported_policy"
+                "unsupported_policy": "unsupported_policy",
+                "unsupported_policy_and_bad_key": "unsupported_policy"
             },
             "bip49_address": true,
             "p2pkh_address": true,
@@ -100,7 +101,8 @@
                 "bad_root_and_wrong_network": "malformed_key",
                 "bad_point_prefix": "malformed_key",
                 "bad_point_and_wrong_policy": "malformed_key",
-                "unsupported_policy": "unsupported_policy"
+                "unsupported_policy": "unsupported_policy",
+                "unsupported_policy_and_bad_key": "unsupported_policy"
             },
             "bip49_address": true,
             "p2pkh_address": true,
@@ -160,17 +162,39 @@
                 "wrong_hrp": "provider_failure",
                 "wrong_program": "provider_failure",
                 "vendor_exception": "provider_failure",
+                "domain_exception": "provider_failure",
+                "native_false_success": "provider_failure",
+                "native_short_result": "provider_failure",
+                "native_wrong_program": "provider_failure",
                 "native_vendor_exception": "provider_failure"
             },
             "bip173_generic_valid_count": 7,
             "bip173_generic_invalid_count": 12,
             "bip173_valid": [
-                "admitted_v0_20",
-                "outside_initial_policy",
-                "outside_initial_policy",
-                "outside_initial_policy",
-                "outside_initial_policy",
-                "outside_initial_policy"
+                {
+                    "policy": "admitted_v0_20",
+                    "category": "accepted"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                }
             ],
             "bip173_invalid_count": 10
         },
@@ -196,17 +220,36 @@
                 "wrong_version": "provider_failure",
                 "wrong_hrp": "provider_failure",
                 "wrong_program": "provider_failure",
-                "vendor_exception": "provider_failure"
+                "vendor_exception": "provider_failure",
+                "domain_exception": "provider_failure"
             },
             "bip173_generic_valid_count": 7,
             "bip173_generic_invalid_count": 12,
             "bip173_valid": [
-                "admitted_v0_20",
-                "outside_initial_policy",
-                "outside_initial_policy",
-                "outside_initial_policy",
-                "outside_initial_policy",
-                "outside_initial_policy"
+                {
+                    "policy": "admitted_v0_20",
+                    "category": "accepted"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                },
+                {
+                    "policy": "outside_initial_policy",
+                    "category": "invalid_witness"
+                }
             ],
             "bip173_invalid_count": 10
         }

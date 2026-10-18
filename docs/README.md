@@ -61,9 +61,12 @@ The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
 and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
 within its bounded research scope. [M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
-within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). BitWasp's uninstrumented
-native-exception ambiguity remains a provider-selection gate for M05, and
-production implementation remains open. The separately approved
+within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
+[corrective re-review in Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
+adds research-probe classification and assertion controls that require their
+own independent check before M05. BitWasp's uninstrumented native decode
+exception remains a selection gate for any decoder boundary; production
+implementation remains open. The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
 its implementation and verification are assigned in the Execution Plan under

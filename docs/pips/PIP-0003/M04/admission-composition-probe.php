@@ -161,6 +161,7 @@ function composeAddress(
             throw new DomainException('path_bounds');
         }
     }
+    admitPolicy($policy);
     $admitted = admitStructure($base58Adapter, $key);
     $point = hex2bin($admitted['point']);
     try {
@@ -322,6 +323,11 @@ $actual = category(fn () => composeAddress('tuupola', 'bitwasp',
     $definitions['mainnet'], $offCurve, 'p2pkh', [2147483648], $countingHmac));
 check($actual === 'path_bounds' && $calls === 0, 'request bounds precede key/provider');
 $faults['request_before_key_provider'] = $actual;
+$calls = 0;
+$actual = category(fn () => composeAddress('tuupola', 'bitwasp', new ParagonieM04(),
+    $definitions['mainnet'], 'bad', 'p2tr', [0], $countingHmac));
+check($actual === 'unsupported_policy' && $calls === 0, 'unknown policy precedes malformed key');
+$faults['unknown_policy_before_key'] = ['category' => $actual, 'hmac_calls' => $calls];
 
 $bip49Payload = decodeChecked('tuupola', $bip49);
 $depth254 = encodeChecked('tuupola', substr_replace($bip49Payload, "\xfe", 4, 1));
