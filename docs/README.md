@@ -61,9 +61,16 @@ The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
 and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
 within its bounded research scope. [M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
-within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). BitWasp's uninstrumented
-native-exception ambiguity remains a provider-selection gate for M05, and
-production implementation remains open. The separately approved
+within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
+[corrective re-review in Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
+and [PR #26](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/26)
+correct research-probe classifications and assertions and separate terminal
+Base58Check and SegWit generation from decode-based qualification. Checked
+Base58Check decoding remains necessary for extended-key admission. The earlier
+blanket BitWasp selection block was overbroad for generation; its native
+exception ambiguity remains a gate for any decoder boundary. The revised
+evidence needs independent review; no provider is selected and production
+implementation remains open. The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
 its implementation and verification are assigned in the Execution Plan under

@@ -146,12 +146,24 @@ function encodeChecked(string $adapter, string $payload, ?Closure $encodeOverrid
         } else {
             throw new LogicException('Unknown research adapter');
         }
-        if (!is_string($text) || $text === '' || decodeChecked($adapter, $text) !== $payload) {
+        if (!is_string($text) || $text === '' || strlen($text) > 160) {
             throw new RuntimeException('Malformed codec output');
         }
         return $text;
     } catch (Throwable) {
         throw new RuntimeException('provider_failure');
+    }
+}
+
+// Qualification only. Checked extended-key decoding is required at request
+// admission, but the terminal address encoder does not decode its own output.
+function verifyCheckedEncoding(string $adapter, string $payload, string $text): bool
+{
+    $other = $adapter === 'tuupola' ? 'muvon' : 'tuupola';
+    try {
+        return decodeChecked($other, $text) === $payload;
+    } catch (Throwable) {
+        return false;
     }
 }
 
@@ -278,11 +290,16 @@ function admitStructure(string $adapter, string $text): array
     ];
 }
 
-function enforceIntent(array $admitted, string $network, string $policy): void
+function admitPolicy(string $policy): void
 {
     if (!in_array($policy, ['p2pkh', 'p2sh-p2wpkh', 'p2wpkh'], true)) {
         throw new DomainException('unsupported_policy');
     }
+}
+
+function enforceIntent(array $admitted, string $network, string $policy): void
+{
+    admitPolicy($policy);
     if (!isset(VERSIONS[$admitted['version']])) {
         throw new DomainException('unsupported_version');
     }
@@ -294,6 +311,7 @@ function enforceIntent(array $admitted, string $network, string $policy): void
 
 function admit(string $adapter, string $text, string $network, string $policy): array
 {
+    admitPolicy($policy);
     $admitted = admitStructure($adapter, $text);
     enforceIntent($admitted, $network, $policy);
     return $admitted;
@@ -317,8 +335,8 @@ function segwitEncode(string $adapter, string $hrp, string $program, ?Closure $e
         } else {
             throw new LogicException('Unknown research adapter');
         }
-        if (!is_string($address) || $address === '' || $address !== strtolower($address)
-            || segwitDecode($adapter, $hrp, $address) !== $program) {
+        if (!is_string($address) || $address === '' || strlen($address) > 90
+            || $address !== strtolower($address) || !str_starts_with($address, $hrp . '1')) {
             throw new RuntimeException('Malformed codec output');
         }
         return $address;
@@ -327,20 +345,52 @@ function segwitEncode(string $adapter, string $hrp, string $program, ?Closure $e
     }
 }
 
-function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $decodeOverride = null): string
+// Qualification only. The address-generation adapter above does not depend on
+// decoding its own result. A second candidate checks the returned witness
+// program here; published vectors remain the independent text oracle.
+function verifySegwitEncoding(string $adapter, string $hrp, string $program, string $address): bool
+{
+    $other = $adapter === 'bitwasp' ? 'cjpgdk' : 'bitwasp';
+    try {
+        return segwitDecode($other, $hrp, $address) === $program;
+    } catch (Throwable) {
+        return false;
+    }
+}
+
+function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $decodeOverride = null,
+    ?Closure $bitwaspDecodeOverride = null): string
 {
     if (!in_array($hrp, ['bc', 'tb'], true) || strlen($address) > 90 || $address === '') {
         throw new DomainException('invalid_witness');
     }
     try {
         if ($decodeOverride !== null) {
-            $returned = $decodeOverride();
+            try {
+                $returned = $decodeOverride();
+            } catch (Throwable) {
+                // The injected call is known to be the provider boundary.
+                throw new RuntimeException('provider_failure');
+            }
             if (!is_array($returned) || count($returned) !== 3) {
                 throw new RuntimeException('provider_failure');
             }
             [$version, $program, $actualHrp] = $returned;
         } elseif ($adapter === 'bitwasp') {
-            [$version, $program] = \BitWasp\Bech32\decodeSegwit($hrp, $address);
+            if ($bitwaspDecodeOverride === null) {
+                $returned = \BitWasp\Bech32\decodeSegwit($hrp, $address);
+            } else {
+                try {
+                    $returned = $bitwaspDecodeOverride();
+                } catch (Throwable) {
+                    throw new RuntimeException('provider_failure');
+                }
+            }
+            if (!is_array($returned) || array_keys($returned) !== [0, 1]
+                || !is_int($returned[0]) || !is_string($returned[1])) {
+                throw new RuntimeException('provider_failure');
+            }
+            [$version, $program] = $returned;
             $actualHrp = $hrp;
         } elseif ($adapter === 'cjpgdk') {
             $program = null;
@@ -356,7 +406,7 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             throw new LogicException('Unknown research adapter');
         }
         if ($version !== 0 || !is_string($program) || strlen($program) !== 20 || $actualHrp !== $hrp) {
-            throw $decodeOverride === null
+            throw $decodeOverride === null && $bitwaspDecodeOverride === null
                 ? new DomainException('invalid_witness')
                 : new RuntimeException('provider_failure');
         }
@@ -373,7 +423,7 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             throw new RuntimeException('provider_failure');
         }
         if (!is_string($reencoded) || $reencoded !== strtolower($address)) {
-            throw $decodeOverride === null
+            throw $decodeOverride === null && $bitwaspDecodeOverride === null
                 ? new DomainException('invalid_witness')
                 : new RuntimeException('provider_failure');
         }
@@ -381,12 +431,8 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
     } catch (DomainException $error) {
         throw $error;
     } catch (\BitWasp\Bech32\Exception\Bech32Exception $error) {
-        // A fault injected at this provider boundary has known provenance.
-        // Without that provenance, this vendor type alone cannot distinguish
-        // malformed input from a provider malfunction; see the M04 handoff.
-        if ($decodeOverride !== null) {
-            throw new RuntimeException('provider_failure');
-        }
+        // Without injection provenance, this type does not distinguish bad
+        // input from a provider malfunction; see the M04 handoff.
         throw new DomainException('invalid_witness');
     } catch (Throwable) {
         throw new RuntimeException('provider_failure');
@@ -454,6 +500,7 @@ foreach (['tuupola', 'muvon'] as $adapter) {
         $payload = hex2bin($version) . substr($base, 4);
         $text = encodeChecked($adapter, $payload);
         check(decodeChecked($adapter, $text) === $payload, "{$adapter} {$version} round trip");
+        check(verifyCheckedEncoding($adapter, $payload, $text), "{$adapter} {$version} other-candidate decode");
         check(admit($adapter, $text, $network, $policy)['version'] === $version, "{$adapter} {$version} admission");
         $cases[$version] = $text;
     }
@@ -481,17 +528,23 @@ foreach (['tuupola', 'muvon'] as $adapter) {
         'bad_point_prefix' => category(fn () => admit($adapter, encodeChecked($adapter, substr_replace($base, "\x04", 45, 1)), 'mainnet', 'p2pkh')),
         'bad_point_and_wrong_policy' => category(fn () => admit($adapter, encodeChecked($adapter, substr_replace($base, "\x04", 45, 1)), 'mainnet', 'p2wpkh')),
         'unsupported_policy' => category(fn () => admit($adapter, $xpub, 'mainnet', 'p2tr')),
+        'unsupported_policy_and_bad_key' => category(fn () => admit($adapter, 'bad', 'mainnet', 'p2tr')),
     ];
     foreach ($negative as $name => $actual) {
-        $expected = $name === 'unsupported_policy' ? 'unsupported_policy'
+        $expected = in_array($name, ['unsupported_policy', 'unsupported_policy_and_bad_key'], true) ? 'unsupported_policy'
             : (in_array($name, ['unknown_version', 'unknown_version_and_wrong_policy', 'unknown_version_and_bad_point', 'private_version', 'private_version_and_bad_point', 'multisig_version'], true)
                 ? 'unsupported_version'
                 : (in_array($name, ['opposite_network', 'wrong_policy'], true) ? 'incompatible_intent' : 'malformed_key'));
         check($actual === $expected, "{$adapter} {$name}: {$actual}");
     }
-    check(encodeChecked($adapter, "\xc4" . $bip49ScriptHash) === '2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2', "{$adapter} BIP49 address");
-    check(encodeChecked($adapter, hex2bin('00010966776006953d5567439e5e39f86a0d273bee'))
-        === '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM', "{$adapter} published P2PKH address");
+    $bip49Payload = "\xc4" . $bip49ScriptHash;
+    $bip49Text = encodeChecked($adapter, $bip49Payload);
+    check($bip49Text === '2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2'
+        && verifyCheckedEncoding($adapter, $bip49Payload, $bip49Text), "{$adapter} BIP49 address");
+    $p2pkhPayload = hex2bin('00010966776006953d5567439e5e39f86a0d273bee');
+    $p2pkhText = encodeChecked($adapter, $p2pkhPayload);
+    check($p2pkhText === '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM'
+        && verifyCheckedEncoding($adapter, $p2pkhPayload, $p2pkhText), "{$adapter} published P2PKH address");
     check(encodeChecked($adapter, $testDefinitions['signet']->p2sh . $bip49ScriptHash)
         === encodeChecked($adapter, $testDefinitions['testnet']->p2sh . $bip49ScriptHash), "{$adapter} Signet reuse");
     $invalidPoints = [];
@@ -509,6 +562,7 @@ foreach (['tuupola', 'muvon'] as $adapter) {
 check($base58['tuupola']['six_versions'] === $base58['muvon']['six_versions'], 'Base58 adapter parity');
 $codecFaults = [];
 foreach (['tuupola', 'muvon'] as $adapter) {
+    $payload = decodeChecked($adapter, $xpub);
     foreach ([
         'empty_success' => static fn (): string => '',
         'false_success' => static fn (): bool => false,
@@ -523,12 +577,22 @@ foreach (['tuupola', 'muvon'] as $adapter) {
     foreach ([
         'encode_empty' => static fn (): string => '',
         'encode_false' => static fn (): bool => false,
+        'encode_malformed' => static fn (): string => '00',
         'encode_wrong' => static fn (): string => '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM',
+        'encode_overlong' => static fn (): string => str_repeat('1', 161),
         'encode_throw' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
     ] as $mode => $override) {
-        $actual = category(fn () => encodeChecked($adapter, decodeChecked($adapter, $xpub), $override));
-        check($actual === 'provider_failure', "{$adapter} {$mode}: {$actual}");
-        $codecFaults[$adapter][$mode] = $actual;
+        $boundary = category(fn () => encodeChecked($adapter, $payload, $override));
+        $expected = in_array($mode, ['encode_malformed', 'encode_wrong'], true)
+            ? 'accepted' : 'provider_failure';
+        check($boundary === $expected, "{$adapter} encode boundary {$mode}: {$boundary}");
+        $qualification = null;
+        if ($boundary === 'accepted') {
+            $text = encodeChecked($adapter, $payload, $override);
+            $qualification = verifyCheckedEncoding($adapter, $payload, $text) ? 'accepted' : 'rejected';
+            check($qualification === 'rejected', "{$adapter} encode qualification {$mode}: {$qualification}");
+        }
+        $codecFaults[$adapter][$mode] = ['boundary' => $boundary, 'qualification' => $qualification];
     }
 }
 
@@ -537,6 +601,7 @@ $bip84Address = 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu';
 $bech32 = [];
 foreach (['bitwasp', 'cjpgdk'] as $adapter) {
     check(segwitEncode($adapter, 'bc', $bip84Program) === $bip84Address, "{$adapter} BIP84 address");
+    check(verifySegwitEncoding($adapter, 'bc', $bip84Program, $bip84Address), "{$adapter} BIP84 independent candidate decode");
     check(segwitDecode($adapter, 'bc', $bip84Address) === $bip84Program, "{$adapter} BIP84 decode");
     $negative = [
         'wrong_hrp' => category(fn () => segwitDecode($adapter, 'tb', $bip84Address)),
@@ -556,9 +621,18 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
         'uppercase_success' => static fn (): string => 'BC1QCR8TE4KR609GCAWUTMRZA0J4XV80JY8Z306FYU',
         'vendor_exception' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
     ] as $mode => $override) {
-        $actual = category(fn () => segwitEncode($adapter, 'bc', $bip84Program, $override));
-        check($actual === 'provider_failure', "{$adapter} encode {$mode}: {$actual}");
-        $encodeFaults[$mode] = $actual;
+        $boundary = category(fn () => segwitEncode($adapter, 'bc', $bip84Program, $override));
+        $expectedBoundary = in_array($mode, ['malformed_success', 'wrong_program'], true)
+            ? 'accepted' : 'provider_failure';
+        check($boundary === $expectedBoundary, "{$adapter} encode boundary {$mode}: {$boundary}");
+        $qualification = null;
+        if ($boundary === 'accepted') {
+            $address = segwitEncode($adapter, 'bc', $bip84Program, $override);
+            $qualification = verifySegwitEncoding($adapter, 'bc', $bip84Program, $address)
+                ? 'accepted' : 'rejected';
+            check($qualification === 'rejected', "{$adapter} encode qualification {$mode}: {$qualification}");
+        }
+        $encodeFaults[$mode] = ['boundary' => $boundary, 'qualification' => $qualification];
     }
     $decodeFaults = [];
     foreach ([
@@ -568,16 +642,23 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
         'wrong_hrp' => static fn (): array => [0, $bip84Program, 'tb'],
         'wrong_program' => static fn (): array => [0, str_repeat("\0", 20), 'bc'],
         'vendor_exception' => static fn (): array => throw new RuntimeException('vendor diagnostic with key material'),
+        'domain_exception' => static fn (): array => throw new DomainException('invalid_witness'),
     ] as $mode => $override) {
         $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, $override));
         check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
         $decodeFaults[$mode] = $actual;
     }
     if ($adapter === 'bitwasp') {
-        $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address,
-            static fn (): array => throw new \BitWasp\Bech32\Exception\Bech32Exception('vendor diagnostic with key material')));
-        check($actual === 'provider_failure', "{$adapter} decode native_vendor_exception: {$actual}");
-        $decodeFaults['native_vendor_exception'] = $actual;
+        foreach ([
+            'native_false_success' => static fn (): bool => false,
+            'native_short_result' => static fn (): array => [0],
+            'native_wrong_program' => static fn (): array => [0, str_repeat("\0", 20)],
+            'native_vendor_exception' => static fn (): array => throw new \BitWasp\Bech32\Exception\Bech32Exception('vendor diagnostic with key material'),
+        ] as $mode => $override) {
+            $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, null, $override));
+            check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
+            $decodeFaults[$mode] = $actual;
+        }
     }
     $bip173 = file_get_contents(__DIR__ . '/../M00/research/provider-refresh-2026-10-02/bip-0173.mediawiki');
     check(is_string($bip173), 'pinned BIP173 source');
@@ -618,8 +699,12 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
         $hrp = str_starts_with(strtolower($address), 'tb') ? 'tb' : 'bc';
         $admitted = str_starts_with($script, '0014') && strlen($script) === 44;
         $actual = category(fn () => segwitDecode($adapter, $hrp, $address));
-        check(($actual === 'accepted') === $admitted, "{$adapter} BIP173 valid {$address}: {$actual}");
-        $valid[] = $admitted ? 'admitted_v0_20' : 'outside_initial_policy';
+        check($actual === ($admitted ? 'accepted' : 'invalid_witness'), "{$adapter} BIP173 valid {$address}: {$actual}");
+        if ($admitted) {
+            check(segwitDecode($adapter, $hrp, $address) === hex2bin(substr($script, 4)),
+                "{$adapter} BIP173 witness program {$address}");
+        }
+        $valid[] = ['policy' => $admitted ? 'admitted_v0_20' : 'outside_initial_policy', 'category' => $actual];
     }
     check(preg_match('/The following list gives invalid segwit.*?\n(.*?)===Checksum design===/s', $bip173, $invalidSection) === 1
         && preg_match_all('/^\* <tt>([^<]+)<\/tt>/m', $invalidSection[1], $invalidCases) === 10,
