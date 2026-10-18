@@ -63,7 +63,8 @@ within its bounded research scope. [M04 codec, admission and definition research
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
 within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
 [corrective re-review in Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-adds research-probe classification and assertion controls that require their
+and [PR #26](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/26)
+add research-probe classification and assertion controls that require their
 own independent check before M05. BitWasp's uninstrumented native decode
 exception remains a selection gate for any decoder boundary; production
 implementation remains open. The separately approved
