@@ -24,7 +24,7 @@ docs/
 │   │   ├── M01/                     # contract draft, report and diagrams
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
-│   │   ├── M04/                     # merged, independently reviewed codec/admission research
+│   │   ├── M04/                     # reviewed research; merged correction awaits independent check
 │   │   └── reviews/                 # pre-M04 execution audit
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
@@ -63,14 +63,16 @@ within its bounded research scope. [M04 codec, admission and definition research
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
 within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
 [corrective re-review in Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-and [PR #26](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/26)
+and [PR #26, merged at `1c43efb`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/1c43efb4e98c1dac8c85c8cedc5c1c04bdab6511)
 correct research-probe classifications and assertions and separate terminal
 Base58Check and SegWit generation from decode-based qualification. Checked
 Base58Check decoding remains necessary for extended-key admission. The earlier
 blanket BitWasp selection block was overbroad for generation; its native
-exception ambiguity remains a gate for any decoder boundary. The revised
-evidence needs independent review; no provider is selected and production
-implementation remains open. The separately approved
+exception ambiguity remains a gate for any decoder boundary. The corrected
+head `33a3294` has no recorded independent review and needs a check under
+[Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
+before M05. No provider is selected and production implementation remains open.
+The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
 its implementation and verification are assigned in the Execution Plan under
