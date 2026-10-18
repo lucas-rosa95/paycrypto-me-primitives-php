@@ -7,6 +7,7 @@ canonical=docs/canonicals/primitives/paycrypto-primitives-canonical-architecture
 test -s "$canonical"
 test -s LICENSE
 grep -Fq "./$canonical" README.md
+python3 scripts/check-doc-links.py
 
 # Validate the actual Git archive, rather than inferring payload from attributes.
 archive_list=$(git archive HEAD | tar -tf -)

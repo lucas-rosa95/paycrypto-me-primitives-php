@@ -60,8 +60,30 @@ status even if the probe or production code did not change. Distinguish
 research reviewed, PR open, PR merged, provider selected, and capability
 verified. Link the PR for its live open/merge state instead of committing
 transient phrases such as "merge pending" into status documents; record the
-stable merge reference when the milestone state is next updated. Keep approved
-PIP proposals and issued historical reports intact;
-link to their exact revisions instead of rewriting them. Do not create a new
-status, handoff, or review artifact solely to repeat information already held
-by the Plan, milestone README, PR, Issue, or CI.
+stable merge reference when the milestone state is next updated. Keep the
+approved proposal revision and issued historical reports intact. If the
+current copy of an approved PIP needs navigation-only repairs, retain a link
+to the exact approved revision and leave its WHAT, WHY and BOUNDARIES
+unchanged. Do not create a new status, handoff, or review artifact solely to
+repeat information already held by the Plan, milestone README, PR, Issue, or CI.
+
+# Documentation maintenance gate
+
+When a PR adds or moves a document, changes a milestone or review conclusion,
+or changes a reader's next action, check the affected current-state text and
+navigation before requesting review. Start from the changed artifact and follow
+its links outward: the relevant Plan and milestone handoff, `docs/README.md`,
+the root `README.md` if its entry path changed, the originating Issue body, and
+the PR description. Repair stale paths, stage labels, evidence references and
+next-gate wording in the same PR or Issue update. Link to the authoritative
+record instead of copying its detailed history into each surface. Historical
+reports and approved revisions remain revision-pinned evidence, not mutable
+status pages.
+
+Run `python3 scripts/check-doc-links.py` before a documentation handoff; CI runs
+it through `scripts/check-release.sh`. The check covers current local Markdown
+targets and this repository's `blob/main` links. Inspect changed anchors,
+external URLs, revision-pinned targets and Issue/PR links that the local check
+cannot prove. Reviewers repeat the affected-path and status check against the
+submitted revision before a favorable conclusion. This is a change-scoped gate,
+not a requirement to reread every historical report on each PR.
