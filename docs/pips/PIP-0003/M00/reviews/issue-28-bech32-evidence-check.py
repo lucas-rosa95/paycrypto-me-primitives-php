@@ -21,15 +21,30 @@ def count_vectors(source: str, section_pattern: str, vector_pattern: str) -> int
     return len(re.findall(vector_pattern, section.group(1), re.MULTILINE))
 
 
+def is_recorded_exception(result: object) -> bool:
+    return (
+        isinstance(result, dict)
+        and result.get("outcome") == "threw"
+        and isinstance(result.get("class"), str)
+        and bool(result["class"])
+        and isinstance(result.get("message"), str)
+        and bool(result["message"])
+    )
+
+
 def check_outcomes(checks: dict, name: str, count: int, expected: object) -> None:
     outcomes = checks.get(name)
     if not isinstance(outcomes, list) or len(outcomes) != count:
         raise ValueError(f"{name}: expected {count} observations")
     for index, result in enumerate(outcomes):
         if expected == "threw":
-            matches = isinstance(result, dict) and result.get("outcome") == "threw"
+            matches = is_recorded_exception(result)
         elif expected == "returned_true":
-            matches = result == {"outcome": "returned", "value": True}
+            matches = (
+                isinstance(result, dict)
+                and result.get("outcome") == "returned"
+                and result.get("value") is True
+            )
         else:
             matches = result is True
         if not matches:
@@ -79,8 +94,8 @@ def verify(output: Path) -> None:
     check_outcomes(checks, "bech32_invalid_generic", 12, "threw")
     check_outcomes(checks, "segwit_v0_vectors", 3, True)
     check_outcomes(checks, "segwit_invalid_vectors", 10, "threw")
-    if not isinstance(checks.get("segwit_v0_bad_program"), dict) or checks["segwit_v0_bad_program"].get("outcome") != "threw":
-        raise ValueError("segwit_v0_bad_program: expected a rejection")
+    if not is_recorded_exception(checks.get("segwit_v0_bad_program")):
+        raise ValueError("segwit_v0_bad_program: expected a recorded rejection")
     print(f"{output}: selected BIP173 acceptance/rejection observations match {counts}")
 
 
