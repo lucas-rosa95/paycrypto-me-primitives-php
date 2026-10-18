@@ -84,8 +84,10 @@ for the current state.
 The [M00 deep review](pips/PIP-0003/M00/reviews/issue-28-deep-review.md) records
 a low-severity Bech32 observation-check and wording gap. Its focused correction
 in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
-preserves the issued probe and outputs; [Issue #28](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28)
-requires an independent check of the corrected revision before a conclusion.
+preserves the issued probe and outputs. The [independent check of `0eb8cbe`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255021386)
+found no remaining defect; the shared verdict decision under
+[Issue #28](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28)
+is pending.
 The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
