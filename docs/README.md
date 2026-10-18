@@ -72,6 +72,13 @@ exception ambiguity remains a gate for any decoder boundary. The corrected
 head `33a3294` has no recorded independent review and needs a check under
 [Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
 before M05. No provider is selected and production implementation remains open.
+Separate independent re-reviews of [M00](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28),
+[M01](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29),
+[M02](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30) and
+[M03](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31)
+will challenge the earlier bounded evidence, decisions and code quality where
+applicable. Their conclusions and finding dispositions also precede M05; see
+the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) for the current gate.
 The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
