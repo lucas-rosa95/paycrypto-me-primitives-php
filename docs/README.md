@@ -64,9 +64,11 @@ has also [passed independent follow-up review](https://github.com/paycrypto-me/p
 within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
 [corrective re-review in Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
 and [PR #26](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/26)
-add research-probe classification and assertion controls that require their
-own independent check before M05. BitWasp's uninstrumented native decode
-exception remains a selection gate for any decoder boundary; production
+correct research-probe classifications and assertions and separate SegWit
+address generation from decode-based qualification. The earlier blanket
+BitWasp selection block was overbroad for generation; its native exception
+ambiguity remains a gate for any decoder boundary. Both encoders remain
+conditional, the revised evidence needs independent review, and production
 implementation remains open. The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
 originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);

@@ -323,13 +323,26 @@ function segwitEncode(string $adapter, string $hrp, string $program, ?Closure $e
         } else {
             throw new LogicException('Unknown research adapter');
         }
-        if (!is_string($address) || $address === '' || $address !== strtolower($address)
-            || segwitDecode($adapter, $hrp, $address) !== $program) {
+        if (!is_string($address) || $address === '' || strlen($address) > 90
+            || $address !== strtolower($address) || !str_starts_with($address, $hrp . '1')) {
             throw new RuntimeException('Malformed codec output');
         }
         return $address;
     } catch (Throwable $error) {
         throw new RuntimeException('SegWit provider failure', 0, $error);
+    }
+}
+
+// Qualification only. The address-generation adapter above does not depend on
+// decoding its own result. A second candidate checks the returned witness
+// program here; published vectors remain the independent text oracle.
+function verifySegwitEncoding(string $adapter, string $hrp, string $program, string $address): bool
+{
+    $other = $adapter === 'bitwasp' ? 'cjpgdk' : 'bitwasp';
+    try {
+        return segwitDecode($other, $hrp, $address) === $program;
+    } catch (Throwable) {
+        return false;
     }
 }
 
@@ -559,6 +572,7 @@ $bip84Address = 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu';
 $bech32 = [];
 foreach (['bitwasp', 'cjpgdk'] as $adapter) {
     check(segwitEncode($adapter, 'bc', $bip84Program) === $bip84Address, "{$adapter} BIP84 address");
+    check(verifySegwitEncoding($adapter, 'bc', $bip84Program, $bip84Address), "{$adapter} BIP84 independent candidate decode");
     check(segwitDecode($adapter, 'bc', $bip84Address) === $bip84Program, "{$adapter} BIP84 decode");
     $negative = [
         'wrong_hrp' => category(fn () => segwitDecode($adapter, 'tb', $bip84Address)),
@@ -578,9 +592,18 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
         'uppercase_success' => static fn (): string => 'BC1QCR8TE4KR609GCAWUTMRZA0J4XV80JY8Z306FYU',
         'vendor_exception' => static fn (): string => throw new RuntimeException('vendor diagnostic with key material'),
     ] as $mode => $override) {
-        $actual = category(fn () => segwitEncode($adapter, 'bc', $bip84Program, $override));
-        check($actual === 'provider_failure', "{$adapter} encode {$mode}: {$actual}");
-        $encodeFaults[$mode] = $actual;
+        $boundary = category(fn () => segwitEncode($adapter, 'bc', $bip84Program, $override));
+        $expectedBoundary = in_array($mode, ['malformed_success', 'wrong_program'], true)
+            ? 'accepted' : 'provider_failure';
+        check($boundary === $expectedBoundary, "{$adapter} encode boundary {$mode}: {$boundary}");
+        $qualification = null;
+        if ($boundary === 'accepted') {
+            $address = segwitEncode($adapter, 'bc', $bip84Program, $override);
+            $qualification = verifySegwitEncoding($adapter, 'bc', $bip84Program, $address)
+                ? 'accepted' : 'rejected';
+            check($qualification === 'rejected', "{$adapter} encode qualification {$mode}: {$qualification}");
+        }
+        $encodeFaults[$mode] = ['boundary' => $boundary, 'qualification' => $qualification];
     }
     $decodeFaults = [];
     foreach ([

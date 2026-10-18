@@ -149,11 +149,26 @@
                 "long_program": "invalid_witness"
             },
             "encode_faults": {
-                "empty_success": "provider_failure",
-                "malformed_success": "provider_failure",
-                "wrong_program": "provider_failure",
-                "uppercase_success": "provider_failure",
-                "vendor_exception": "provider_failure"
+                "empty_success": {
+                    "boundary": "provider_failure",
+                    "qualification": null
+                },
+                "malformed_success": {
+                    "boundary": "accepted",
+                    "qualification": "rejected"
+                },
+                "wrong_program": {
+                    "boundary": "accepted",
+                    "qualification": "rejected"
+                },
+                "uppercase_success": {
+                    "boundary": "provider_failure",
+                    "qualification": null
+                },
+                "vendor_exception": {
+                    "boundary": "provider_failure",
+                    "qualification": null
+                }
             },
             "decode_faults": {
                 "false_success": "provider_failure",
@@ -208,11 +223,26 @@
                 "long_program": "invalid_witness"
             },
             "encode_faults": {
-                "empty_success": "provider_failure",
-                "malformed_success": "provider_failure",
-                "wrong_program": "provider_failure",
-                "uppercase_success": "provider_failure",
-                "vendor_exception": "provider_failure"
+                "empty_success": {
+                    "boundary": "provider_failure",
+                    "qualification": null
+                },
+                "malformed_success": {
+                    "boundary": "accepted",
+                    "qualification": "rejected"
+                },
+                "wrong_program": {
+                    "boundary": "accepted",
+                    "qualification": "rejected"
+                },
+                "uppercase_success": {
+                    "boundary": "provider_failure",
+                    "qualification": null
+                },
+                "vendor_exception": {
+                    "boundary": "provider_failure",
+                    "qualification": null
+                }
             },
             "decode_faults": {
                 "false_success": "provider_failure",
