@@ -505,6 +505,7 @@
         }
     },
     "faults": {
+        "admit_domain": "provider_failure",
         "admit_throw": "provider_failure",
         "admit_changed": "provider_failure",
         "tweak_throw": "provider_failure",

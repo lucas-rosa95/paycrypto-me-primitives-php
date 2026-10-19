@@ -188,52 +188,52 @@ const VERSIONS = [
 // source format are deliberately left to M05.
 final readonly class TrialDefinition
 {
-    public function __construct(
+    private function __construct(
         public string $id,
         public string $p2pkh,
         public string $p2sh,
         public string $hrp,
         public array $versions,
     ) {}
-}
 
-function definition(array $source, bool $testSignet = false): TrialDefinition
-{
-    $fields = ['id', 'p2pkh', 'p2sh', 'hrp', 'versions'];
-    $keys = array_keys($source);
-    sort($keys);
-    sort($fields);
-    if ($keys !== $fields || !is_string($source['id']) || !is_string($source['p2pkh'])
-        || !is_string($source['p2sh']) || !is_string($source['hrp']) || !is_array($source['versions'])) {
-        throw new DomainException('invalid_definition');
-    }
-    $id = $source['id'];
-    $expected = match ($id) {
-        'mainnet' => ['00', '05', 'bc'],
-        'testnet' => ['6f', 'c4', 'tb'],
-        'signet' => $testSignet ? ['6f', 'c4', 'tb'] : null,
-        default => null,
-    };
-    if ($expected === null || [$source['p2pkh'], $source['p2sh'], $source['hrp']] !== $expected) {
-        throw new DomainException('invalid_definition');
-    }
-    $network = $id === 'signet' ? 'testnet' : $id;
-    $versions = [];
-    foreach (VERSIONS as $hex => [$allowedNetwork, $policy]) {
-        if ($allowedNetwork === $network) {
-            $versions[$hex] = $policy;
+    public static function fromSource(array $source, bool $testSignet = false): self
+    {
+        $fields = ['id', 'p2pkh', 'p2sh', 'hrp', 'versions'];
+        $keys = array_keys($source);
+        sort($keys);
+        sort($fields);
+        if ($keys !== $fields || !is_string($source['id']) || !is_string($source['p2pkh'])
+            || !is_string($source['p2sh']) || !is_string($source['hrp']) || !is_array($source['versions'])) {
+            throw new DomainException('invalid_definition');
         }
+        $id = $source['id'];
+        $expected = match ($id) {
+            'mainnet' => ['00', '05', 'bc'],
+            'testnet' => ['6f', 'c4', 'tb'],
+            'signet' => $testSignet ? ['6f', 'c4', 'tb'] : null,
+            default => null,
+        };
+        if ($expected === null || [$source['p2pkh'], $source['p2sh'], $source['hrp']] !== $expected) {
+            throw new DomainException('invalid_definition');
+        }
+        $network = $id === 'signet' ? 'testnet' : $id;
+        $versions = [];
+        foreach (VERSIONS as $hex => [$allowedNetwork, $policy]) {
+            if ($allowedNetwork === $network) {
+                $versions[$hex] = $policy;
+            }
+        }
+        // Version mappings are semantic maps; source insertion order is irrelevant.
+        // Sort copies before strict comparison so values and keys still match exactly.
+        $providedVersions = $source['versions'];
+        ksort($providedVersions, SORT_STRING);
+        $expectedVersions = $versions;
+        ksort($expectedVersions, SORT_STRING);
+        if ($providedVersions !== $expectedVersions) {
+            throw new DomainException('invalid_definition');
+        }
+        return new self($id, hex2bin($source['p2pkh']), hex2bin($source['p2sh']), $source['hrp'], $versions);
     }
-    // Version mappings are semantic maps; source insertion order is irrelevant.
-    // Sort copies before strict comparison so values and keys still match exactly.
-    $providedVersions = $source['versions'];
-    ksort($providedVersions, SORT_STRING);
-    $expectedVersions = $versions;
-    ksort($expectedVersions, SORT_STRING);
-    if ($providedVersions !== $expectedVersions) {
-        throw new DomainException('invalid_definition');
-    }
-    return new TrialDefinition($id, hex2bin($source['p2pkh']), hex2bin($source['p2sh']), $source['hrp'], $versions);
 }
 
 function definitionSource(string $id): array
@@ -253,7 +253,7 @@ function definitionRows(array $rows, bool $testSignet = false): array
 {
     $result = [];
     foreach ($rows as $row) {
-        $view = definition($row, $testSignet);
+        $view = TrialDefinition::fromSource($row, $testSignet);
         if (isset($result[$view->id])) {
             throw new DomainException('invalid_definition');
         }
@@ -455,24 +455,31 @@ check(hash('sha256', hash('ripemd160', $bip49Point, true), true) !== $bip49KeyHa
 $mainSource = definitionSource('mainnet');
 $testSource = definitionSource('testnet');
 $publicDefinitions = definitionRows([$mainSource, $testSource]);
+$directConstructionBlocked = false;
+try {
+    new TrialDefinition('testnet', "\x6f", "\xc4", 'tb', ['043587cf' => 'p2pkh']);
+} catch (Error) {
+    $directConstructionBlocked = true;
+}
+check($directConstructionBlocked, 'definition cannot bypass validated factory');
 $copy = json_decode(json_encode($testSource, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
-check(definition($copy) == $publicDefinitions['testnet'], 'equivalent independent definition');
+check(TrialDefinition::fromSource($copy) == $publicDefinitions['testnet'], 'equivalent independent definition');
 $reordered = $testSource;
 $reordered['versions'] = array_reverse($testSource['versions'], true);
 check($reordered['versions'] !== $testSource['versions'], 'reordered definition fixture');
-check(definition($reordered) == $publicDefinitions['testnet'], 'equivalent reordered definition');
+check(TrialDefinition::fromSource($reordered) == $publicDefinitions['testnet'], 'equivalent reordered definition');
 $copy['hrp'] = 'other';
 check($publicDefinitions['testnet']->hrp === 'tb', 'source mutation cannot affect view');
 $signetSource = definitionSource('signet');
 $definitionNegatives = [
-    'missing' => category(fn () => definition(array_diff_key($testSource, ['hrp' => true]))),
-    'extra' => category(fn () => definition($testSource + ['provider' => 'forbidden'])),
-    'wrong_byte' => category(fn () => definition(array_replace($testSource, ['p2sh' => '00']))),
-    'wrong_hrp' => category(fn () => definition(array_replace($testSource, ['hrp' => 'bc']))),
-    'wrong_version' => category(fn () => definition(array_replace($testSource, ['versions' => ['043587cf' => 'p2wpkh']]))),
+    'missing' => category(fn () => TrialDefinition::fromSource(array_diff_key($testSource, ['hrp' => true]))),
+    'extra' => category(fn () => TrialDefinition::fromSource($testSource + ['provider' => 'forbidden'])),
+    'wrong_byte' => category(fn () => TrialDefinition::fromSource(array_replace($testSource, ['p2sh' => '00']))),
+    'wrong_hrp' => category(fn () => TrialDefinition::fromSource(array_replace($testSource, ['hrp' => 'bc']))),
+    'wrong_version' => category(fn () => TrialDefinition::fromSource(array_replace($testSource, ['versions' => ['043587cf' => 'p2wpkh']]))),
     'duplicate_profile' => category(fn () => definitionRows([$testSource, $testSource])),
-    'public_signet' => category(fn () => definition($signetSource)),
-    'wrong_signet' => category(fn () => definition(array_replace($signetSource, ['hrp' => 'bc']), true)),
+    'public_signet' => category(fn () => TrialDefinition::fromSource($signetSource)),
+    'wrong_signet' => category(fn () => TrialDefinition::fromSource(array_replace($signetSource, ['hrp' => 'bc']), true)),
 ];
 foreach ($definitionNegatives as $name => $actual) {
     check($actual === 'invalid_definition', "definition {$name}: {$actual}");

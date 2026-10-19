@@ -19,9 +19,9 @@ foreach ($matches[1] as $key) {
 }
 
 $addressPayload = '00' . '010966776006953d5567439e5e39f86a0d273bee';
-$first = $matches[1][0];
-$corrupt = substr($first, 0, -1) . ($first[-1] === '1' ? '2' : '1');
-$observe = static function (string $input): array {
+$firstXpub = $matches[1][0];
+$corruptChecksum = substr($firstXpub, 0, -1) . ($firstXpub[-1] === '1' ? '2' : '1');
+$observeCheckedDecode = static function (string $input): array {
     try {
         $decoded = Base58Codec::checkDecode($input);
         return ['outcome' => 'returned', 'hex_length' => strlen($decoded)];
@@ -37,7 +37,7 @@ echo json_encode([
     'xpub_round_trips' => $roundTrips,
     'p2pkh_vector' => Base58Codec::checkEncode($addressPayload) === '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM',
     'leading_zero_bytes' => Base58Codec::decode('111') === "\0\0\0",
-    'corrupt_checksum' => $observe($corrupt),
-    'invalid_alphabet' => $observe('0OIl'),
-    'empty_input' => $observe(''),
-], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), "\n";
+    'corrupt_checksum' => $observeCheckedDecode($corruptChecksum),
+    'invalid_alphabet' => $observeCheckedDecode('0OIl'),
+    'empty_input' => $observeCheckedDecode(''),
+], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR), "\n";

@@ -56,6 +56,9 @@ draft did not establish that approval or verify the capability.
 The [M02 protocol record](pips/PIP-0003/M02/M02-PROTOCOL.md) contains accepted
 protocol decisions and a conditional provider qualification handoff; it was
 merged in [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
+Its [Issue #30 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30)
+has a focused precedence and research-probe correction awaiting an independent
+check of the submitted revision. The earlier M03/M04 reviews do not cover this correction.
 The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
 [PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12),
 and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
