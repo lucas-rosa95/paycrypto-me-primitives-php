@@ -24,7 +24,7 @@ docs/
 │   │   ├── M01/                     # contract draft, report and diagrams
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
-│   │   ├── M04/                     # reviewed research; PR #36 correction awaits review in Issue #25
+│   │   ├── M04/                     # reviewed research; PR #36 correction checked in Issue #25
 │   │   └── reviews/                 # pre-M04 execution audit
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
@@ -81,10 +81,11 @@ exception ambiguity remains a gate for any decoder boundary. An independent
 check of PR #26 head `33a3294` reproduced its evidence but found a native
 cjpgdk exception-classification gap in the qualification decoder, which the
 address-generation adapter does not call. [PR #36](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/36)
-corrects that research boundary; review its final head and record the bounded
+corrects that research boundary. The bounded independent
 [Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-disposition before M05. No provider is selected and production implementation
-remains open.
+check accepted its code and evidence at `fcd71d5`; the PR records its live
+integration state. No provider is selected and production implementation remains
+open.
 The [Issue #29 M01 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29#issuecomment-6254856342)
 examined the contract and diagrams at `de326cf` without confirming a draft defect;
 it did not verify provider or address behavior. The
@@ -93,7 +94,7 @@ low-severity Bech32 observation-check and wording gap. Its focused correction
 in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
 preserves the issued probe and outputs. The [independent check of `0eb8cbe`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255021386)
 found no remaining defect, and the [shared Issue #28 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255212773)
-accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the [M03 corrected-code check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050) is complete within its research scope, while the [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) remains a gate before M05; see the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
+accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the [M03 corrected-code check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050) is complete within its research scope, and the bounded [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) accepted PR #36's code and evidence at `fcd71d5`. Its integration and a joint M05 decision remain; see the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
 for the current state.
 The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
