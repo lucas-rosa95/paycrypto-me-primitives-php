@@ -10,8 +10,12 @@ merged the bounded research handoff at
 [execution plan](../EXECUTION-PLAN.md) remains the source of milestone scope
 and later Q04–Q08/Q12 obligations.
 The separate [Issue #31 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31)
-will challenge that bounded evidence and research-code quality before M05;
-it has no conclusion yet and does not replace the review at `2aa0194`.
+examined `b07e6082b00a5ffba2b1dc384ba0f98d46ebb391` and led to a
+[focused correction](#issue-31-corrective-research--2026-10-19) at technical
+revision `85fdae149c803c713795eea7a1bb6ed4b9dc118e` in
+[PR #37](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/37). Its independent
+check and bounded conclusion are pending; the prior review at `2aa0194`
+retains only its declared scope.
 For the original review handoff and its then-current risks, see the dated
 [reviewer notes](REVIEWER-NOTES.md); the follow-up report records the final
 bounded M03 review verdict.
@@ -279,6 +283,9 @@ while parsing an otherwise valid BIP32 public point. The
 33-byte compressed point shape first, then maps only the source-pinned parser's
 off-curve signal to `malformed_point`. Other parser exceptions, non-point
 returns, and malformed serializer outputs become `provider_failure`.
+For the Simplito adapter, a successful compressed-point parse followed by
+`validate() === false` is also a provider inconsistency: its pinned
+`pointFromX` rejects an off-curve compressed input during parsing.
 
 The [pinned Paragonie parser](https://github.com/paragonie/phpecc/blob/1a49380410b8ce826bc7fd3de6324053e049205c/src/Primitives/CurveFp.php)
 raises `PointRecoveryException` when compressed x-coordinate recovery fails.
@@ -298,6 +305,9 @@ distinguish its true cause without independent evidence. The ordinary CKDpub
 comparison still matches the existing six-run result on both PHP runtimes and
 both PHP adapters. This is a research-adapter correction, not production
 provider qualification or closure of Q12.
+The Issue #31 addition injects a real Simplito `KeyPair` with corrupted point
+state after a successful parse of a valid published point. Its failed
+validation now yields `provider_failure` in the same four-run record.
 
 To reproduce the focused challenge with the M03 Composer lock at `/research`
 and this directory mounted at `/probe`, run each command on PHP 8.3 and 8.4:
@@ -501,6 +511,68 @@ The [independent follow-up review](cp-reviewer-2026-10-16-074200.md) reran the
 corrected evidence at `2aa0194`, closed R1 and R3, and passed CP-07/CP-10.
 It retained R2 for M05/M06. The issued first review remains unchanged for its
 earlier revision.
+
+## Issue #31 corrective research — 2026-10-19
+
+The deep review began at `b07e6082b00a5ffba2b1dc384ba0f98d46ebb391`;
+the focused correction is in [PR #37](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/37).
+It reproduced the published BIP32, ECC, native and runtime records on PHP
+8.3.35 and 8.4.26, then found two research-boundary gaps. At technical
+revision `85fdae149c803c713795eea7a1bb6ed4b9dc118e`:
+
+- `SimplitoPointTrial::admit()` maps failed validation **after successful
+  parsing** to `provider_failure`. The injected real `KeyPair` with corrupted
+  point state reaches that branch; the published BIP32 off-curve point still
+  fails during parsing as `malformed_point`. The updated
+  [parser record](php-parser-fault-comparison.json) covers both runtimes.
+- The shared CKDpub consumer delegates both HASH160 stages through a guarded
+  fingerprint helper. Exceptions, non-string and wrong-width results become
+  `provider_failure`, with no next index attempted. The focused
+  [hash-fault record](hash-fault-comparison.json) covers all three ECC adapters
+  on both runtimes, `hash` and `hash_hmac` disabled separately, input-path
+  precedence, and a plausible wrong digest rejected by the full published
+  node. The runtime probe preflight now checks both functions as well as the
+  extension and algorithms. Its ordinary [8.3](hash-conversion-php83.json) and
+  [8.4](hash-conversion-php84.json) answers remain unchanged.
+- Internal `TrialFailure` objects no longer retain raw provider exceptions in
+  `getPrevious()`. Every forced research failure checks its category, message
+  and empty exception chain. This addresses the M03 research-chain exposure
+  observed in R2. A future **public** exception boundary must still be defined
+  and checked against selected providers in M05/M06; no such API exists in M03.
+
+The six complete BIP32 child nodes and all pre-existing CKDpub forced cases
+still match [the saved comparison](ckdpub-comparison.json) across three adapters
+and both runtimes. Mutants restoring the old Simplito classification, removing
+the SHA-256 width guard, or reattaching a vendor diagnostic each fail the new
+controls on both runtimes. The native reference still confirms infinity through
+the same library; its coordinated-fault limit remains as previously recorded.
+These are research corrections pending an independent check of the corrected
+revision, not production-provider selection or assembled-capability verification.
+
+With the focused Composer install at `/research`, M03 at `/probe`, and the
+pinned native extension loaded for `native`, reproduce the new controls on
+each PHP runtime:
+
+```sh
+php /probe/ckdpub-composition-probe.php simplito --parser-faults
+php /probe/ckdpub-composition-probe.php paragonie --hash-faults
+php /probe/ckdpub-composition-probe.php simplito --hash-faults
+LD_LIBRARY_PATH=/native/build/secp256k1/lib \
+    php -d extension=/native/modules/secp256k1.so \
+    /probe/ckdpub-composition-probe.php native --hash-faults
+php -d disable_functions=hash \
+    /probe/ckdpub-composition-probe.php paragonie --expect-disabled-hash
+php -d disable_functions=hash_hmac \
+    /probe/ckdpub-composition-probe.php paragonie --expect-disabled-hmac
+php -d disable_functions=hash \
+    /probe/hash-conversion-probe.php --expect-disabled-hash
+php -d disable_functions=hash_hmac \
+    /probe/hash-conversion-probe.php --expect-disabled-hmac
+```
+
+The result objects match the parser and hash-fault records above. The disabled
+function controls require the corresponding `-d` setting; ordinary probes
+remain those in the reproduction section below.
 
 ## Reproduction
 
