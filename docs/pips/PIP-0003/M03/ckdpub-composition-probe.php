@@ -19,9 +19,9 @@ interface PublicPointTrial
 
 final class TrialFailure extends RuntimeException
 {
-    public function __construct(public readonly string $category, ?Throwable $previous = null)
+    public function __construct(public readonly string $category)
     {
-        parent::__construct($category, 0, $previous);
+        parent::__construct($category);
     }
 }
 
@@ -119,7 +119,10 @@ final class SimplitoPointTrial implements PublicPointTrial
             throw new TrialFailure('provider_failure');
         }
         if ($validation['result'] === false) {
-            throw new TrialFailure('malformed_point');
+            // A compressed off-curve input fails in pointFromX during parsing.
+            // A successful parse followed by failed validation is inconsistent
+            // provider output, not evidence against the caller's input.
+            throw new TrialFailure('provider_failure');
         }
         try {
             $serialized = $key->getPublic(true, 'hex');
@@ -152,8 +155,8 @@ final class NativePointTrial implements PublicPointTrial
         pointShape($point);
         try {
             $parsed = secp256k1_ec_pubkey_parse($point);
-        } catch (Throwable $error) {
-            throw new TrialFailure('provider_failure', $error);
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
         }
         if ($parsed === false) {
             throw new TrialFailure('malformed_point');
@@ -162,8 +165,8 @@ final class NativePointTrial implements PublicPointTrial
             $canonical = $this->serializeOverride === null
                 ? secp256k1_ec_pubkey_serialize($parsed)
                 : ($this->serializeOverride)($parsed);
-        } catch (Throwable $error) {
-            throw new TrialFailure('provider_failure', $error);
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
         }
         if (!is_string($canonical) || strlen($canonical) !== 33 || $canonical !== $point) {
             // Parsing succeeded. A different or malformed serialization is a
@@ -190,8 +193,8 @@ function parsePublicNode(string $payload, PublicPointTrial $provider): array
         $point = $provider->admit($encodedPoint);
     } catch (TrialFailure $error) {
         throw $error;
-    } catch (Throwable $error) {
-        throw new TrialFailure('provider_failure', $error);
+    } catch (Throwable) {
+        throw new TrialFailure('provider_failure');
     }
     if ($point !== $encodedPoint) {
         throw new TrialFailure('provider_failure');
@@ -212,7 +215,25 @@ function publicPayload(array $node): string
         . pack('N', $node['child_number']) . $node['chain_code'] . $node['point'];
 }
 
-function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Closure $hmac = null): array
+function parentFingerprint(string $point, ?Closure $digest = null): string
+{
+    $digest ??= static fn (string $algorithm, string $input): string => hash($algorithm, $input, true);
+    try {
+        $sha = $digest('sha256', $point);
+        if (!is_string($sha) || strlen($sha) !== 32) {
+            throw new UnexpectedValueException('invalid SHA-256 result');
+        }
+        $ripemd = $digest('ripemd160', $sha);
+        if (!is_string($ripemd) || strlen($ripemd) !== 20) {
+            throw new UnexpectedValueException('invalid RIPEMD-160 result');
+        }
+    } catch (Throwable) {
+        throw new TrialFailure('provider_failure');
+    }
+    return substr($ripemd, 0, 4);
+}
+
+function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Closure $hmac = null, ?Closure $hash = null): array
 {
     if ($path === [] || !array_is_list($path)) {
         throw new TrialFailure('path_bounds');
@@ -230,8 +251,8 @@ function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Cl
     foreach ($path as $index) {
         try {
             $digest = $hmac($node['chain_code'], $node['point'] . pack('N', $index));
-        } catch (Throwable $error) {
-            throw new TrialFailure('provider_failure', $error);
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
         }
         if (!is_string($digest) || strlen($digest) !== 64) {
             throw new TrialFailure('provider_failure');
@@ -242,8 +263,8 @@ function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Cl
         }
         try {
             $point = $provider->tweak($node['point'], $left);
-        } catch (Throwable $error) {
-            throw new TrialFailure('provider_failure', $error);
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
         }
         if ($point === null) {
             throw new TrialFailure('invalid_child');
@@ -254,8 +275,8 @@ function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Cl
         try {
             // Output admission catches malformed/cross-curve provider results.
             $canonical = $provider->admit($point);
-        } catch (Throwable $error) {
-            throw new TrialFailure('provider_failure', $error);
+        } catch (Throwable) {
+            throw new TrialFailure('provider_failure');
         }
         if ($canonical !== $point) {
             throw new TrialFailure('provider_failure');
@@ -263,7 +284,7 @@ function deriveExact(array $parent, array $path, PublicPointTrial $provider, ?Cl
         $node = [
             'version' => $node['version'],
             'depth' => $node['depth'] + 1,
-            'parent_fingerprint' => substr(hash('ripemd160', hash('sha256', $node['point'], true), true), 0, 4),
+            'parent_fingerprint' => parentFingerprint($node['point'], $hash),
             'child_number' => $index,
             'chain_code' => substr($digest, 32, 32),
             'point' => $point,
@@ -279,6 +300,9 @@ function requireFailure(string $label, string $category, Closure $operation): vo
     } catch (TrialFailure $error) {
         if ($error->category !== $category) {
             throw new RuntimeException("$label: expected $category, got $error->category", 0, $error);
+        }
+        if ($error->getMessage() !== $category || $error->getPrevious() !== null) {
+            throw new RuntimeException("$label: unsafe failure diagnostic", 0, $error);
         }
         return;
     }
@@ -355,13 +379,26 @@ if (($argv[2] ?? '') === '--parser-faults') {
     requireFailure('wrong_parser_exception', 'provider_failure', fn () => parsePublicNode($payload,
         $withParser(static fn (): never => throw new Exception('Unknown point format'))));
 
+    if ($selected === 'simplito') {
+        // A valid compressed input has parsed successfully. Simulate a provider
+        // that returns a real KeyPair with corrupted internal point state.
+        $curve = new Elliptic\EC('secp256k1');
+        $badKey = $curve->keyFromPublic(bin2hex(substr($payload, 45, 33)), 'hex');
+        $badKey->pub = $curve->curve->point(null, null);
+        if ($badKey->validate()['result'] !== false) {
+            throw new RuntimeException('Injected failed validation was not exercised');
+        }
+        requireFailure('failed_validation_after_parse', 'provider_failure', fn () => parsePublicNode($payload,
+            $withParser(static fn () => $badKey)));
+    }
+
     // An unexpected fault that copies the provider's documented invalid-point
     // signal exactly is indistinguishable from malformed input at this boundary.
     $mimic = $selected === 'paragonie'
         ? static fn (): never => throw new Mdanter\Ecc\Exception\PointRecoveryException('synthetic mimic')
         : static fn (): never => throw new Exception('Invalid point');
     requireFailure('mimicked_invalid_signal', 'malformed_point', fn () => parsePublicNode($payload, $withParser($mimic)));
-    echo json_encode([
+    $result = [
         'php' => PHP_VERSION,
         'provider' => $provider->name(),
         'published_off_curve' => 'malformed_point',
@@ -369,7 +406,87 @@ if (($argv[2] ?? '') === '--parser-faults') {
         'malformed_parser_result' => 'provider_failure',
         'wrong_parser_exception' => 'provider_failure',
         'mimicked_invalid_signal_on_valid_point' => 'malformed_point',
+    ];
+    if ($selected === 'simplito') {
+        $result['failed_validation_after_parse'] = 'provider_failure';
+    }
+    echo json_encode($result, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+    exit;
+}
+if (($argv[2] ?? '') === '--hash-faults') {
+    $fixture = $fixtures['official_vectors']['vector_2_root_to_0'];
+    $parent = parsePublicNode(hex2bin($fixture['parent']), $provider);
+    $algorithms = [];
+    $checked = static function (string $algorithm, string $input) use (&$algorithms, $parent): string {
+        if (($algorithm === 'sha256' && $input !== $parent['point'])
+            || ($algorithm === 'ripemd160' && strlen($input) !== 32)) {
+            throw new RuntimeException('Wrong HASH160 input or order');
+        }
+        $algorithms[] = $algorithm;
+        return hash($algorithm, $input, true);
+    };
+    $normal = bin2hex(publicPayload(deriveExact($parent, [0], $provider, null, $checked)));
+    if ($normal !== $fixture['expected'] || $algorithms !== ['sha256', 'ripemd160']) {
+        throw new RuntimeException('Published fingerprint or HASH160 order changed');
+    }
+
+    $faults = [
+        'sha_exception' => static fn (): never => throw new RuntimeException('secret hash diagnostic'),
+        // Return a valid-width second stage so each first-stage guard is
+        // necessary on its own; a constant is enough for this fault hook.
+        'sha_short' => static fn (string $algorithm): string => str_repeat("\0", $algorithm === 'sha256' ? 31 : 20),
+        'sha_non_string' => static fn (string $algorithm): string|bool => $algorithm === 'sha256'
+            ? false : str_repeat("\0", 20),
+        'ripemd_exception' => static fn (string $algorithm, string $input): string => $algorithm === 'sha256'
+            ? hash($algorithm, $input, true) : throw new RuntimeException('secret hash diagnostic'),
+        'ripemd_short' => static fn (string $algorithm, string $input): string => $algorithm === 'sha256'
+            ? hash($algorithm, $input, true) : str_repeat("\0", 19),
+        'ripemd_non_string' => static fn (string $algorithm, string $input): string|bool => $algorithm === 'sha256'
+            ? hash($algorithm, $input, true) : false,
+    ];
+    $results = [];
+    foreach ($faults as $label => $fault) {
+        $calls = 0;
+        $countedHmac = static function (string $key, string $message) use (&$calls): string {
+            ++$calls;
+            return hash_hmac('sha512', $message, $key, true);
+        };
+        requireFailure($label, 'provider_failure', fn () => deriveExact($parent, [0, 1], $provider, $countedHmac, $fault));
+        if ($calls !== 1) {
+            throw new RuntimeException("$label: advanced after failed fingerprint");
+        }
+        $results[$label] = ['category' => 'provider_failure', 'hmac_calls' => $calls];
+    }
+
+    // A plausible wrong digest can only be caught by the published full node.
+    $wrong = bin2hex(publicPayload(deriveExact($parent, [0], $provider, null,
+        static fn (string $algorithm, string $input): string => $algorithm === 'sha256'
+            ? str_repeat("\0", 32) : hash($algorithm, $input, true))));
+    if ($wrong === $fixture['expected'] || substr($wrong, 0, 10) !== substr($normal, 0, 10)
+        || substr($wrong, 18) !== substr($normal, 18)) {
+        throw new RuntimeException('Wrong-digest negative control did not isolate the fingerprint');
+    }
+    echo json_encode([
+        'php' => PHP_VERSION,
+        'provider' => $provider->name(),
+        'published_node_and_hash_order' => 'matched',
+        'malformed_hash_results' => $results,
+        'plausible_wrong_fingerprint_rejected_by_published_node' => true,
     ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+    exit;
+}
+if (in_array($argv[2] ?? '', ['--expect-disabled-hash', '--expect-disabled-hmac'], true)) {
+    $disabled = ($argv[2] === '--expect-disabled-hash') ? 'hash' : 'hash_hmac';
+    if (function_exists($disabled)) {
+        throw new RuntimeException("$disabled must be disabled for this control");
+    }
+    $fixture = $fixtures['official_vectors']['vector_2_root_to_0'];
+    $parent = parsePublicNode(hex2bin($fixture['parent']), $provider);
+    requireFailure("path_before_disabled_$disabled", 'path_bounds', fn () => deriveExact($parent, [], $provider));
+    requireFailure("disabled_$disabled", 'provider_failure', fn () => deriveExact($parent, [0], $provider));
+    echo json_encode(['php' => PHP_VERSION, 'provider' => $provider->name(),
+        'disabled_function' => $disabled, 'category' => 'provider_failure',
+        'path_bounds_precedes_disabled_facility' => true], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
     exit;
 }
 if (($argv[2] ?? '') === '--common-mode') {

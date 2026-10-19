@@ -70,6 +70,9 @@ function observedRawFailure(string $label, Closure $operation): string
 
 function requireFacilities(array $extensions, array $algorithms): void
 {
+    if (!function_exists('hash') || !function_exists('hash_hmac')) {
+        throw new RuntimeException('provider_environment_failure');
+    }
     foreach ($extensions as $extension) {
         if (!extension_loaded($extension)) {
             throw new RuntimeException('provider_environment_failure');
@@ -109,6 +112,17 @@ if (($argv[1] ?? '') === '--expect-missing-gmp') {
         return str_repeat("\0", 32);
     });
     echo json_encode(['php' => PHP_VERSION, 'gmp_loaded' => false, 'missing_gmp' => $result], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
+    exit;
+}
+if (in_array($argv[1] ?? '', ['--expect-disabled-hash', '--expect-disabled-hmac'], true)) {
+    $disabled = $argv[1] === '--expect-disabled-hash' ? 'hash' : 'hash_hmac';
+    check(!function_exists($disabled), "$disabled intentionally disabled");
+    $result = expectRuntimeFailure("disabled $disabled", static function (): string {
+        requireFacilities(['hash', 'gmp'], ['sha256', 'ripemd160', 'sha512']);
+        return str_repeat("\0", 32);
+    });
+    echo json_encode(['php' => PHP_VERSION, 'disabled_function' => $disabled,
+        'category' => $result], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), "\n";
     exit;
 }
 
