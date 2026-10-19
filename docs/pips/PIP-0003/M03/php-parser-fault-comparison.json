@@ -3,7 +3,7 @@
   "fixtures": {
     "valid_point": "BIP32 vector 2 root public node",
     "invalid_point": "BIP32 vector 5 compressed off-curve x=7",
-    "faults": "Injected at parser entry after shared point-shape admission"
+    "faults": "Injected at parser entry after shared point-shape admission; Simplito also receives a real KeyPair with corrupted point state after successful parsing"
   },
   "runs": {
     "php83": {
@@ -23,7 +23,8 @@
         "unexpected_parser_exception": "provider_failure",
         "malformed_parser_result": "provider_failure",
         "wrong_parser_exception": "provider_failure",
-        "mimicked_invalid_signal_on_valid_point": "malformed_point"
+        "mimicked_invalid_signal_on_valid_point": "malformed_point",
+        "failed_validation_after_parse": "provider_failure"
       }
     },
     "php84": {
@@ -43,7 +44,8 @@
         "unexpected_parser_exception": "provider_failure",
         "malformed_parser_result": "provider_failure",
         "wrong_parser_exception": "provider_failure",
-        "mimicked_invalid_signal_on_valid_point": "malformed_point"
+        "mimicked_invalid_signal_on_valid_point": "malformed_point",
+        "failed_validation_after_parse": "provider_failure"
       }
     }
   }

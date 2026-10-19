@@ -1,0 +1,265 @@
+{
+  "scope": "Research CKDpub HASH160 fault containment and disabled PHP hash facility checks; no public API or provider selection",
+  "source": "BIP32 vector 2 root-to-0 complete public node; same CKDpub consumer across three ECC adapters",
+  "matrix": {
+    "php83": {
+      "paragonie": {
+        "php": "8.3.35",
+        "provider": "paragonie/ecc",
+        "published_node_and_hash_order": "matched",
+        "malformed_hash_results": {
+          "sha_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          }
+        },
+        "plausible_wrong_fingerprint_rejected_by_published_node": true
+      },
+      "simplito": {
+        "php": "8.3.35",
+        "provider": "simplito/elliptic-php",
+        "published_node_and_hash_order": "matched",
+        "malformed_hash_results": {
+          "sha_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          }
+        },
+        "plausible_wrong_fingerprint_rejected_by_published_node": true
+      },
+      "native": {
+        "php": "8.3.35",
+        "provider": "uma/secp256k1-php+libsecp256k1",
+        "published_node_and_hash_order": "matched",
+        "malformed_hash_results": {
+          "sha_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          }
+        },
+        "plausible_wrong_fingerprint_rejected_by_published_node": true
+      }
+    },
+    "php84": {
+      "paragonie": {
+        "php": "8.4.26",
+        "provider": "paragonie/ecc",
+        "published_node_and_hash_order": "matched",
+        "malformed_hash_results": {
+          "sha_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          }
+        },
+        "plausible_wrong_fingerprint_rejected_by_published_node": true
+      },
+      "simplito": {
+        "php": "8.4.26",
+        "provider": "simplito/elliptic-php",
+        "published_node_and_hash_order": "matched",
+        "malformed_hash_results": {
+          "sha_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          }
+        },
+        "plausible_wrong_fingerprint_rejected_by_published_node": true
+      },
+      "native": {
+        "php": "8.4.26",
+        "provider": "uma/secp256k1-php+libsecp256k1",
+        "published_node_and_hash_order": "matched",
+        "malformed_hash_results": {
+          "sha_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "sha_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_exception": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_short": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          },
+          "ripemd_non_string": {
+            "category": "provider_failure",
+            "hmac_calls": 1
+          }
+        },
+        "plausible_wrong_fingerprint_rejected_by_published_node": true
+      }
+    }
+  },
+  "disabled_facilities": {
+    "php83": {
+      "hash": {
+        "consumer": {
+          "php": "8.3.35",
+          "provider": "paragonie/ecc",
+          "disabled_function": "hash",
+          "category": "provider_failure",
+          "path_bounds_precedes_disabled_facility": true
+        },
+        "preflight": {
+          "php": "8.3.35",
+          "disabled_function": "hash",
+          "category": "provider_environment_failure"
+        }
+      },
+      "hash_hmac": {
+        "consumer": {
+          "php": "8.3.35",
+          "provider": "paragonie/ecc",
+          "disabled_function": "hash_hmac",
+          "category": "provider_failure",
+          "path_bounds_precedes_disabled_facility": true
+        },
+        "preflight": {
+          "php": "8.3.35",
+          "disabled_function": "hash_hmac",
+          "category": "provider_environment_failure"
+        }
+      }
+    },
+    "php84": {
+      "hash": {
+        "consumer": {
+          "php": "8.4.26",
+          "provider": "paragonie/ecc",
+          "disabled_function": "hash",
+          "category": "provider_failure",
+          "path_bounds_precedes_disabled_facility": true
+        },
+        "preflight": {
+          "php": "8.4.26",
+          "disabled_function": "hash",
+          "category": "provider_environment_failure"
+        }
+      },
+      "hash_hmac": {
+        "consumer": {
+          "php": "8.4.26",
+          "provider": "paragonie/ecc",
+          "disabled_function": "hash_hmac",
+          "category": "provider_failure",
+          "path_bounds_precedes_disabled_facility": true
+        },
+        "preflight": {
+          "php": "8.4.26",
+          "disabled_function": "hash_hmac",
+          "category": "provider_environment_failure"
+        }
+      }
+    }
+  },
+  "limit": "Plausible wrong digests require published full-node comparison; selected production diagnostics remain an M05 contract and later assembled-capability check."
+}
