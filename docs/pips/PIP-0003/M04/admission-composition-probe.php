@@ -9,8 +9,19 @@ require __DIR__ . '/codec-composition-probe.php';
 interface TrialPointProvider
 {
     public function name(): string;
+    /** Return the identical compressed point; use TrialMalformedPoint only for validated invalid input. */
     public function admit(string $point): string;
     public function tweak(string $point, string $scalar): ?string;
+}
+
+// Only a validated input or a source-pinned invalid-point signal may use this
+// outcome. Other adapter exceptions, even DomainException, are provider faults.
+final class TrialMalformedPoint extends DomainException
+{
+    public function __construct()
+    {
+        parent::__construct('malformed_key');
+    }
 }
 
 function trialPointShape(string $point): void
@@ -18,7 +29,7 @@ function trialPointShape(string $point): void
     $prime = hex2bin('fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f');
     if (strlen($point) !== 33 || !in_array(ord($point[0]), [2, 3], true)
         || strcmp(substr($point, 1), $prime) >= 0) {
-        throw new DomainException('malformed_key');
+        throw new TrialMalformedPoint();
     }
 }
 
@@ -42,7 +53,7 @@ final class ParagonieM04 implements TrialPointProvider
         try {
             $parsed = $this->serializer->unserialize($this->generator->getCurve(), bin2hex($point));
         } catch (Mdanter\Ecc\Exception\PointRecoveryException) {
-            throw new DomainException('malformed_key');
+            throw new TrialMalformedPoint();
         } catch (Throwable) {
             throw new RuntimeException('provider_failure');
         }
@@ -80,7 +91,7 @@ final class SimplitoM04 implements TrialPointProvider
             $key = $this->curve->keyFromPublic(bin2hex($point), 'hex');
         } catch (Exception $error) {
             if ($error::class === Exception::class && $error->getMessage() === 'Invalid point') {
-                throw new DomainException('malformed_key');
+                throw new TrialMalformedPoint();
             }
             throw new RuntimeException('provider_failure');
         } catch (Throwable) {
@@ -96,7 +107,7 @@ final class SimplitoM04 implements TrialPointProvider
             throw new RuntimeException('provider_failure');
         }
         if ($valid['result'] === false) {
-            throw new DomainException('malformed_key');
+            throw new TrialMalformedPoint();
         }
         if (!is_string($encoded) || strlen($encoded) !== 66 || !ctype_xdigit($encoded)
             || hex2bin($encoded) !== $point) {
@@ -119,6 +130,9 @@ final class FaultPointM04 implements TrialPointProvider
     public function name(): string { return 'fault:' . $this->mode; }
     public function admit(string $point): string
     {
+        if ($this->mode === 'admit_domain') {
+            throw new DomainException('malformed_key');
+        }
         if ($this->mode === 'admit_throw') {
             throw new RuntimeException('vendor diagnostic with key material');
         }
@@ -152,7 +166,6 @@ function composeAddress(
     array $path,
     ?Closure $hmacOverride = null,
 ): array {
-    $network = $definition->id === 'signet' ? 'testnet' : $definition->id;
     if ($path === [] || !array_is_list($path)) {
         throw new DomainException('path_bounds');
     }
@@ -168,12 +181,11 @@ function composeAddress(
         if ($pointProvider->admit($point) !== $point) {
             throw new RuntimeException('provider_failure');
         }
-    } catch (DomainException $error) {
+    } catch (TrialMalformedPoint $error) {
         throw $error;
     } catch (Throwable) {
         throw new RuntimeException('provider_failure');
     }
-    enforceIntent($admitted, $network, $policy);
     if (!isset($definition->versions[$admitted['version']])
         || $definition->versions[$admitted['version']] !== $policy) {
         throw new DomainException('incompatible_intent');
@@ -286,7 +298,7 @@ foreach (['tuupola', 'muvon'] as $base58Adapter) {
 }
 
 $faults = [];
-foreach (['admit_throw', 'admit_changed', 'tweak_throw', 'tweak_short', 'tweak_infinity'] as $mode) {
+foreach (['admit_domain', 'admit_throw', 'admit_changed', 'tweak_throw', 'tweak_short', 'tweak_infinity'] as $mode) {
     $actual = category(fn () => composeAddress('tuupola', 'bitwasp',
         new FaultPointM04(new ParagonieM04(), $mode), $definitions['testnet'], $bip49, 'p2sh-p2wpkh', [0, 0]));
     $expected = $mode === 'tweak_infinity' ? 'invalid_child' : 'provider_failure';
