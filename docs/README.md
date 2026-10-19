@@ -63,8 +63,11 @@ The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
 and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
 within its bounded research scope.
 The [Issue #31 M03 correction](pips/PIP-0003/M03/README.md#issue-31-corrective-research--2026-10-19)
-at technical revision `85fdae1` is in [PR #37](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/37);
-its separate independent check and bounded conclusion remain required before M05.
+at technical revision `85fdae1` [merged in PR #37 at `7696ba6`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7696ba66a7fb328bb435b6cb45319b7ab2db3795).
+Its [separate independent check of `762ec02`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050)
+accepted the bounded corrected code and evidence. The status reconciliation
+followed the merge; the [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
+remains a pre-M05 gate.
 [M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
 within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
@@ -86,7 +89,7 @@ low-severity Bech32 observation-check and wording gap. Its focused correction
 in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
 preserves the issued probe and outputs. The [independent check of `0eb8cbe`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255021386)
 found no remaining defect, and the [shared Issue #28 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255212773)
-accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the independent [M03 re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31) and [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) remain gates before M05; see the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
+accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the [M03 corrected-code check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050) is complete within its research scope, while the [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) remains a gate before M05; see the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
 for the current state.
 The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)

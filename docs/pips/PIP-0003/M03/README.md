@@ -13,8 +13,13 @@ The separate [Issue #31 deep re-review](https://github.com/paycrypto-me/paycrypt
 examined `b07e6082b00a5ffba2b1dc384ba0f98d46ebb391` and led to a
 [focused correction](#issue-31-corrective-research--2026-10-19) at technical
 revision `85fdae149c803c713795eea7a1bb6ed4b9dc118e` in
-[PR #37](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/37). Its independent
-check and bounded conclusion are pending; the prior review at `2aa0194`
+[PR #37](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/37),
+merged at [`7696ba6`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7696ba66a7fb328bb435b6cb45319b7ab2db3795).
+The [separate independent check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050)
+accepted the bounded corrected code and evidence at
+`762ec02eb075668b133fa1d064a98a129a15b1eb`. The requested status-only
+update was not made before merge; this later status reconciliation records
+that sequence without extending the review. The prior review at `2aa0194`
 retains only its declared scope.
 For the original review handoff and its then-current risks, see the dated
 [reviewer notes](REVIEWER-NOTES.md); the follow-up report records the final
@@ -546,8 +551,13 @@ and both runtimes. Mutants restoring the old Simplito classification, removing
 the SHA-256 width guard, or reattaching a vendor diagnostic each fail the new
 controls on both runtimes. The native reference still confirms infinity through
 the same library; its coordinated-fault limit remains as previously recorded.
-These are research corrections pending an independent check of the corrected
-revision, not production-provider selection or assembled-capability verification.
+The [independent check of the submitted head](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050)
+accepted F1, F2 and the research portion of R2 within this bounded scope. It
+repeated focused parser, HASH160 and disabled-function runs on PHP 8.3/8.4,
+but used the already compiled, source-pinned native binding rather than an
+independently rebuilt binary. The correction does not select a production
+provider or verify an assembled capability. A public exception contract still
+requires implementation and qualification in M05/M06.
 
 With the focused Composer install at `/research`, M03 at `/probe`, and the
 pinned native extension loaded for `native`, reproduce the new controls on
