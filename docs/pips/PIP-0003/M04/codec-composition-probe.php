@@ -364,6 +364,8 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
     if (!in_array($hrp, ['bc', 'tb'], true) || strlen($address) > 90 || $address === '') {
         throw new DomainException('invalid_witness');
     }
+    $knownProviderFault = $decodeOverride !== null || $bitwaspDecodeOverride !== null
+        || $cjpgdkDecodeOverride !== null;
     try {
         if ($decodeOverride !== null) {
             try {
@@ -409,15 +411,17 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             }
             if (!$decoded || strtolower($actualHrp) !== $hrp
                 || $encoding !== \Bech32\Bech32Encoding::BECH32) {
-                throw new DomainException('invalid_witness');
+                throw $knownProviderFault
+                    ? new RuntimeException('provider_failure')
+                    : new DomainException('invalid_witness');
             }
         } else {
             throw new LogicException('Unknown research adapter');
         }
         if ($version !== 0 || !is_string($program) || strlen($program) !== 20 || $actualHrp !== $hrp) {
-            throw $decodeOverride === null && $bitwaspDecodeOverride === null
-                ? new DomainException('invalid_witness')
-                : new RuntimeException('provider_failure');
+            throw $knownProviderFault
+                ? new RuntimeException('provider_failure')
+                : new DomainException('invalid_witness');
         }
         try {
             if ($adapter === 'bitwasp') {
@@ -432,9 +436,9 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             throw new RuntimeException('provider_failure');
         }
         if (!is_string($reencoded) || $reencoded !== strtolower($address)) {
-            throw $decodeOverride === null && $bitwaspDecodeOverride === null
-                ? new DomainException('invalid_witness')
-                : new RuntimeException('provider_failure');
+            throw $knownProviderFault
+                ? new RuntimeException('provider_failure')
+                : new DomainException('invalid_witness');
         }
         return $program;
     } catch (DomainException $error) {
@@ -676,10 +680,15 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
             $decodeFaults[$mode] = $actual;
         }
     } else {
-        $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, null, null,
-            static fn (): bool => throw new DomainException('invalid_witness')));
-        check($actual === 'provider_failure', "{$adapter} decode native_domain_exception: {$actual}");
-        $decodeFaults['native_domain_exception'] = $actual;
+        foreach ([
+            'native_domain_exception' => static fn (): bool => throw new DomainException('invalid_witness'),
+            'native_false_success' => static fn (): bool => false,
+            'native_missing_fields' => static fn (): bool => true,
+        ] as $mode => $override) {
+            $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, null, null, $override));
+            check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
+            $decodeFaults[$mode] = $actual;
+        }
     }
     $bip173 = file_get_contents(__DIR__ . '/../M00/research/provider-refresh-2026-10-02/bip-0173.mediawiki');
     check(is_string($bip173), 'pinned BIP173 source');

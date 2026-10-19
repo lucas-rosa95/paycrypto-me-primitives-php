@@ -292,7 +292,9 @@
                 "wrong_program": "provider_failure",
                 "vendor_exception": "provider_failure",
                 "domain_exception": "provider_failure",
-                "native_domain_exception": "provider_failure"
+                "native_domain_exception": "provider_failure",
+                "native_false_success": "provider_failure",
+                "native_missing_fields": "provider_failure"
             },
             "bip173_generic_valid_count": 7,
             "bip173_generic_invalid_count": 12,
