@@ -359,11 +359,13 @@ function verifySegwitEncoding(string $adapter, string $hrp, string $program, str
 }
 
 function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $decodeOverride = null,
-    ?Closure $bitwaspDecodeOverride = null): string
+    ?Closure $bitwaspDecodeOverride = null, ?Closure $cjpgdkDecodeOverride = null): string
 {
     if (!in_array($hrp, ['bc', 'tb'], true) || strlen($address) > 90 || $address === '') {
         throw new DomainException('invalid_witness');
     }
+    $knownProviderFault = $decodeOverride !== null || $bitwaspDecodeOverride !== null
+        || $cjpgdkDecodeOverride !== null;
     try {
         if ($decodeOverride !== null) {
             try {
@@ -397,18 +399,29 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             $version = -1;
             $actualHrp = '';
             $encoding = null;
-            if (!Bech32::decodeSegWit($address, $program, $version, $actualHrp, $encoding)
-                || strtolower($actualHrp) !== $hrp
+            try {
+                $decoded = $cjpgdkDecodeOverride === null
+                    ? Bech32::decodeSegWit($address, $program, $version, $actualHrp, $encoding)
+                    : $cjpgdkDecodeOverride();
+            } catch (Throwable) {
+                throw new RuntimeException('provider_failure');
+            }
+            if (!is_bool($decoded)) {
+                throw new RuntimeException('provider_failure');
+            }
+            if (!$decoded || strtolower($actualHrp) !== $hrp
                 || $encoding !== \Bech32\Bech32Encoding::BECH32) {
-                throw new DomainException('invalid_witness');
+                throw $knownProviderFault
+                    ? new RuntimeException('provider_failure')
+                    : new DomainException('invalid_witness');
             }
         } else {
             throw new LogicException('Unknown research adapter');
         }
         if ($version !== 0 || !is_string($program) || strlen($program) !== 20 || $actualHrp !== $hrp) {
-            throw $decodeOverride === null && $bitwaspDecodeOverride === null
-                ? new DomainException('invalid_witness')
-                : new RuntimeException('provider_failure');
+            throw $knownProviderFault
+                ? new RuntimeException('provider_failure')
+                : new DomainException('invalid_witness');
         }
         try {
             if ($adapter === 'bitwasp') {
@@ -423,9 +436,9 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             throw new RuntimeException('provider_failure');
         }
         if (!is_string($reencoded) || $reencoded !== strtolower($address)) {
-            throw $decodeOverride === null && $bitwaspDecodeOverride === null
-                ? new DomainException('invalid_witness')
-                : new RuntimeException('provider_failure');
+            throw $knownProviderFault
+                ? new RuntimeException('provider_failure')
+                : new DomainException('invalid_witness');
         }
         return $program;
     } catch (DomainException $error) {
@@ -663,6 +676,16 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
             'native_vendor_exception' => static fn (): array => throw new \BitWasp\Bech32\Exception\Bech32Exception('vendor diagnostic with key material'),
         ] as $mode => $override) {
             $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, null, $override));
+            check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
+            $decodeFaults[$mode] = $actual;
+        }
+    } else {
+        foreach ([
+            'native_domain_exception' => static fn (): bool => throw new DomainException('invalid_witness'),
+            'native_false_success' => static fn (): bool => false,
+            'native_missing_fields' => static fn (): bool => true,
+        ] as $mode => $override) {
+            $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, null, null, $override));
             check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
             $decodeFaults[$mode] = $actual;
         }
