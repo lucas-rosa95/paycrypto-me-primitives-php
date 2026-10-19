@@ -359,7 +359,7 @@ function verifySegwitEncoding(string $adapter, string $hrp, string $program, str
 }
 
 function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $decodeOverride = null,
-    ?Closure $bitwaspDecodeOverride = null): string
+    ?Closure $bitwaspDecodeOverride = null, ?Closure $cjpgdkDecodeOverride = null): string
 {
     if (!in_array($hrp, ['bc', 'tb'], true) || strlen($address) > 90 || $address === '') {
         throw new DomainException('invalid_witness');
@@ -397,8 +397,17 @@ function segwitDecode(string $adapter, string $hrp, string $address, ?Closure $d
             $version = -1;
             $actualHrp = '';
             $encoding = null;
-            if (!Bech32::decodeSegWit($address, $program, $version, $actualHrp, $encoding)
-                || strtolower($actualHrp) !== $hrp
+            try {
+                $decoded = $cjpgdkDecodeOverride === null
+                    ? Bech32::decodeSegWit($address, $program, $version, $actualHrp, $encoding)
+                    : $cjpgdkDecodeOverride();
+            } catch (Throwable) {
+                throw new RuntimeException('provider_failure');
+            }
+            if (!is_bool($decoded)) {
+                throw new RuntimeException('provider_failure');
+            }
+            if (!$decoded || strtolower($actualHrp) !== $hrp
                 || $encoding !== \Bech32\Bech32Encoding::BECH32) {
                 throw new DomainException('invalid_witness');
             }
@@ -666,6 +675,11 @@ foreach (['bitwasp', 'cjpgdk'] as $adapter) {
             check($actual === 'provider_failure', "{$adapter} decode {$mode}: {$actual}");
             $decodeFaults[$mode] = $actual;
         }
+    } else {
+        $actual = category(fn () => segwitDecode($adapter, 'bc', $bip84Address, null, null,
+            static fn (): bool => throw new DomainException('invalid_witness')));
+        check($actual === 'provider_failure', "{$adapter} decode native_domain_exception: {$actual}");
+        $decodeFaults['native_domain_exception'] = $actual;
     }
     $bip173 = file_get_contents(__DIR__ . '/../M00/research/provider-refresh-2026-10-02/bip-0173.mediawiki');
     check(is_string($bip173), 'pinned BIP173 source');
