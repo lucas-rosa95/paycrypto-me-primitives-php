@@ -24,7 +24,7 @@ docs/
 │   │   ├── M01/                     # contract draft, report and diagrams
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
-│   │   ├── M04/                     # reviewed research; PR #26 check remains open in Issue #25
+│   │   ├── M04/                     # reviewed research; PR #36 correction awaits review in Issue #25
 │   │   └── reviews/                 # pre-M04 execution audit
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
@@ -70,10 +70,13 @@ correct research-probe classifications and assertions and separate terminal
 Base58Check and SegWit generation from decode-based qualification. Checked
 Base58Check decoding remains necessary for extended-key admission. The earlier
 blanket BitWasp selection block was overbroad for generation; its native
-exception ambiguity remains a gate for any decoder boundary. The corrected
-head `33a3294` has no recorded independent review and needs a check under
+exception ambiguity remains a gate for any decoder boundary. An independent
+check of PR #26 head `33a3294` reproduced its evidence but found a native
+cjpgdk decoder exception-classification gap. [PR #36](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/36)
+corrects that research adapter; review its final head and record the
 [Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-before M05. No provider is selected and production implementation remains open.
+disposition before M05. No provider is selected and production implementation
+remains open.
 The [Issue #29 M01 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29#issuecomment-6254856342)
 examined the contract and diagrams at `de326cf` without confirming a draft defect;
 it did not verify provider or address behavior. The
