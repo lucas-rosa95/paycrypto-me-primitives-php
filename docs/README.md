@@ -66,8 +66,8 @@ The [Issue #31 M03 correction](pips/PIP-0003/M03/README.md#issue-31-corrective-r
 at technical revision `85fdae1` [merged in PR #37 at `7696ba6`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7696ba66a7fb328bb435b6cb45319b7ab2db3795).
 Its [separate independent check of `762ec02`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050)
 accepted the bounded corrected code and evidence. The status reconciliation
-followed the merge; the [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-remains a pre-M05 gate.
+followed the merge. The [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25#issuecomment-6279899487)
+is also complete within its bounded research scope.
 [M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
 has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
 within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
