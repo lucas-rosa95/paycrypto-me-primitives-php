@@ -1,0 +1,59 @@
+name: GitLab mirror
+
+on:
+  push:
+    branches: [main]
+    tags: ['**']
+  workflow_dispatch:
+  schedule:
+    - cron: '23 4 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gitlab-recovery-mirror
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    if: >-
+      github.repository == 'paycrypto-me/paycrypto-me-primitives-php' &&
+      (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Read automation from authoritative main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Reconcile main and tags
+        shell: bash
+        env:
+          MIRROR_KEY: ${{ secrets.PAYCRYPTO_ME_GITLAB_MIRROR }}
+        run: |
+          set -euo pipefail
+          umask 077
+          test -n "$MIRROR_KEY" || { echo 'Missing GitLab mirror deploy key' >&2; exit 1; }
+          mirror_dir=$(mktemp -d "$RUNNER_TEMP/gitlab-mirror.XXXXXXXX")
+          echo "MIRROR_TEMP_DIR=$mirror_dir" >> "$GITHUB_ENV"
+          trap 'rm -rf -- "$mirror_dir"' EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          printf '%s\n' "$MIRROR_KEY" > "$mirror_dir/identity"
+          unset MIRROR_KEY
+          chmod 600 "$mirror_dir/identity"
+          # Official GitLab.com ED25519 host key; see docs/operations/gitlab-mirror.md.
+          printf '%s\n' 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf' > "$mirror_dir/known_hosts"
+          export GIT_SSH_COMMAND="ssh -F /dev/null -i '$mirror_dir/identity' -o IdentityAgent=none -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile='$mirror_dir/known_hosts' -o GlobalKnownHostsFile=/dev/null -o HostKeyAlgorithms=ssh-ed25519 -o UpdateHostKeys=no -o ConnectTimeout=20"
+          export GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null GIT_TERMINAL_PROMPT=0
+          export TMPDIR="$mirror_dir"
+          python3 scripts/mirror-gitlab.py
+      - name: Remove temporary credentials
+        if: always()
+        shell: bash
+        run: |
+          if [[ -n "${MIRROR_TEMP_DIR:-}" ]]; then
+            rm -rf -- "$MIRROR_TEMP_DIR"
+          fi
