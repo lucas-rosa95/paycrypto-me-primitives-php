@@ -3,6 +3,12 @@
 This file is a navigation map for the repository documentation. It is **not**
 an architecture canonical and does not create architectural authority.
 
+## Repository operations
+
+[GitLab recovery mirror](operations/gitlab-mirror.md) documents synchronization
+policy, activation, verification and recovery. Live operation must be confirmed
+by a successful Actions run and remote-reference verification.
+
 ## Current structure
 
 ```text
