@@ -56,15 +56,15 @@ Primitives favors small capabilities that can be composed into protocol flows.
 
 ```text
 HMAC-SHA512 ───────┐
-                   ├── BIP32 public derivation
+                    ├── BIP32 public derivation
 secp256k1 tweak ───┘
 
 SHA-256 ──────┐
-              ├── HASH160
+               ├── HASH160
 RIPEMD-160 ───┘
 
 HASH160 + address semantics + encoding
-                    ↓
+                    |
               public address
 ```
 
