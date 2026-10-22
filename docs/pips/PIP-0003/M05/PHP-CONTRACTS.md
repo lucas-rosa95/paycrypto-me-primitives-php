@@ -16,9 +16,144 @@ requirement row. Names below are proposed public identifiers, rooted in
 `PayCryptoMe\Primitives`; final file placement follows the concrete capability
 responsibility rather than a provider or network hierarchy.
 
+## Agreed composition direction
+
+The joint design discussion on 2026-10-22 established the following direction
+for refining M05. This agreement concerns architecture, not provider/runtime
+selection or a freeze of the PHP signatures and schema representation below.
+It applies the accepted M02 O05/O06 decisions and the
+[Canonical composition and definition boundaries](../../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md#8-primitive-composition-principle).
+The exploratory cross-protocol examples inform design fitness; they do not
+add supported networks, policies or operations.
+
+- Equivalent behavior reuses one composition declaration; parameter differences
+  enter as validated data. Do not hide the entire flow in a specialized
+  function, method or composition class for each coin/network.
+- A composition is inspectable data describing capability connections and
+  parameter bindings. Each connection must satisfy the next capability's
+  semantic input contract, not merely match a PHP type or byte length.
+- Capabilities retain cohesive behavior and their own invariants. Declaring
+  composition does not require turning every internal instruction into data.
+- An exception aborts the whole operation. No subsequent stage, substitute
+  result, alternate provider, policy, key or index is attempted.
+
+Names are not the architectural constraint. A name such as `BitcoinDefinition`
+may describe an appropriate shared protocol schema/value; it is not prohibited
+because it contains a coin name. Assess its responsibility and reuse. The
+accepted rule still excludes a class per network merely to carry constants,
+and a descriptive name must not conceal duplicated behavior or composition.
+Ordinary methods may validate data or execute admitted capabilities; their
+existence is not the problem.
+
+### Separate data responsibilities
+
+| Record | Meaning and boundary |
+|---|---|
+| Parameter definition | Immutable identifiers, versions, HRPs and admitted version/policy mappings. No callbacks, providers or execution graph inside `NetworkDefinition`. |
+| Composition declaration | Data identifying owned capabilities or reusable subcompositions, their named input/output connections, parameter requirements and operation result. It contains no executable callback or vendor class. |
+| Network/policy binding | An explicit association between an admitted intent, a composition and the required parameter definition. Mainnet/testnet reuse the same policy composition. A matching prefix never selects intent. |
+| Provider wiring | Explicit setup binds an owned capability contract to one qualified implementation. This remains separate from network data and composition semantics; no availability-based selection. |
+
+Capability contracts supply the meaning and failure rules that declarations
+reference. Schemas validate data structure; semantic validation checks the
+connections and operation constraints. A declaration cannot override the
+contract it references. Its validated representation is immutable and must
+not retain mutable caller references.
+
+The initial scope is the compositions required by the approved operations and
+six network/policy combinations. This is not approval for an arbitrary public
+workflow language or a public extension registry. PHP arrays, typed builders,
+schema representation and the execution mechanism remain concrete M05 design
+choices. They must preserve visible composition rather than reducing every
+declaration to a pointer to a coin-specific implementation.
+
+### Concrete flow and semantic connections
+
+The shared public flow has ordered request/definition admission, extended-key
+admission, remaining-depth validation, exact-path public derivation and key
+HASH160 before the selected terminal composition. Extended-key admission
+retains the visible substeps in [validation order](#failure-contract-and-validation-order):
+checked decoding and common metadata, version eligibility, point validation,
+then intent compatibility. Neither a graph scheduler nor a builder may reorder
+them. Only the explicitly selected policy branch runs.
+
+| Connection | Meaning required by its consumer |
+|---|---|
+| Request to key admission | Original serialized public key and validated explicit network/policy intent; no inferred intent or coerced path values. |
+| Key admission to exact-path derivation | A complete admitted public node, including chain code, version and metadata; a compressed key alone is insufficient. The validated path must also fit remaining depth. |
+| Derivation to key hashing | The final admitted compressed public key from the exact requested path. The full node remains the derivation result; hashing uses its public-key field. |
+| Key hashing to terminal composition | A 20-byte HASH160 of that derived compressed key, with that semantic origin. An arbitrary 20-byte digest is not interchangeable. |
+| Terminal composition to public result | A complete address for the same admitted intent and path; result context comes from the validated request, not encoding-based inference. |
+
+HASH160 is a reusable composition of delegated SHA-256 followed by delegated
+RIPEMD-160, with binary 32-byte and 20-byte results respectively. Reusing it
+does not erase whether its input is a public key or a witness redeem script.
+Those semantic origins remain explicit at the surrounding connections.
+
+| Policy | Shared input | Owned construction and parameter binding | Delegated terminal encoding |
+|---|---|---|---|
+| `p2pkh` | Derived compressed-key HASH160 | The admitted network's P2PKH version byte followed by the key hash. | Base58Check of the complete 21-byte payload. |
+| `p2sh-p2wpkh` | The same key-hash semantics | Form the 22-byte witness redeem script `0x00 0x14` followed by the key hash; apply HASH160 to that script; prepend the admitted P2SH version byte. | Base58Check of the complete 21-byte payload. |
+| `p2wpkh` | The same key-hash semantics | Bind that hash as the witness-v0 20-byte program and the admitted network's HRP. | The qualified SegWit-v0 key-hash encoder. |
+
+This table exposes the shared prefix and actual terminal divergence without
+making one class per policy a requirement. P2PKH key hash, P2SH script hash and
+witness program can have the same byte length while requiring different
+connections. The supported compositions fix these relationships; a generic
+byte concatenator or `mixed -> mixed` stage interface cannot establish them.
+Standardized hashing and encoding machinery remains delegated. Owned fixed
+payload/script construction does not introduce a general script engine.
+
+The receiving operation adds ordered account/index admission and exact
+network/policy/account source selection, then invokes the same generic
+operation with the selected serialized key and `[0, index]`. Its result adds
+the logical account, branch `0` and index. This boundary is itself inspectable;
+it must not hide another derivation flow or bypass generic key admission.
+
+### Schema and execution obligations
+
+The schema must make these fields or equivalent semantics reviewable: a
+composition identifier, required inputs/parameters, capability or
+subcomposition references, named connections, ordering constraints and result
+bindings. Exact PHP field names and syntax are not frozen by this list.
+
+1. At setup, reject duplicate identifiers/bindings, unknown references or
+   fields, missing inputs, cycles and connections with incompatible semantic
+   types. Reject partial or ambiguous assembly before provider execution.
+2. Check operation invariants beyond structural validity: the exact admission
+   order, complete-node derivation, policy-specific payload construction,
+   matching parameter roles, and same-request result context. No declaration
+   may skip validation, convert a script hash into a key hash by relabeling,
+   introduce an extra executable branch or change exact-path semantics.
+3. Freeze the fully validated composition before serving requests. Bind one
+   provider per required contract explicitly. Parameter-only changes reuse
+   the same declaration; provider replacement leaves its semantics unchanged.
+4. At execution, enforce actual value contracts at the capability boundaries.
+   Static connection validation is not proof that a provider returned correct
+   bytes. Independently anchored qualification still detects plausible wrong
+   outputs that runtime shape checks cannot establish as wrong.
+
+Composition and binding data errors use the proposed `INVALID_DEFINITION`
+category at setup. Provider/environment failures retain their categories.
+Malformed request data keeps its request-stage category; declaration errors
+must not become delayed request failures.
+
+Failure abort is an operation invariant, not a configurable `on_error` policy.
+Adapters normalize vendor conventions at their owned boundary; the executor
+propagates owned failures without replacing their semantic reason. No catch
+handler may turn failure into `null`, a default address, a partial result or
+another execution attempt. The caller handles the public exception. No
+failure-path schema fields enable fallback, skip, retry or index advancement.
+
+The documented point capability's `null` for confirmed infinity is a specific
+internal outcome, not a continuation value. CKDpub immediately translates it
+to `INVALID_CHILD` and terminates; it never reaches an address-construction
+stage. Zero tweak remains a valid input with complete child metadata updates.
+
 ## Entry points and results
 
-Proposed operations in `Bitcoin\Address`:
+Proposed entry-point signatures; namespace placement remains open under the
+capability responsibilities above (`Bitcoin\Address` was the initial sketch):
 
 ```php
 final class DerivePublicAddress
@@ -79,15 +214,18 @@ input key, chain code, provider object, diagnostic payload or allocator state.
 There is no implicit string/JSON serialization contract; consumers access the
 documented properties and choose their own transport representation.
 
-The generic operation is explicitly wired with the shared key-admission,
-CKDpub, hashing and terminal address capabilities. The receiving operation is
-wired with one immutable account-key source and that same generic operation.
+The generic operation executes the validated declaration connecting shared
+key-admission, CKDpub, hashing and terminal address capabilities. Its entry-point
+class does not replace that declaration with a hard-coded per-coin flow. The
+receiving operation is wired with one immutable account-key source and that
+same generic operation.
 It contributes request admission, exact mapping selection and result
 coordinates, not a second derivation or address algorithm.
 
 ## Definitions and immutable provisioning
 
-Use PHP lists of field/value pairs as the initial provisioning format. A
+PHP lists of field/value pairs are the current provisioning candidate, not a
+requirement for the final authoring syntax or the composition schema. A
 duplicate field must remain observable before normalization; an associative
 array or JSON object that has already overwritten duplicate keys cannot prove
 their absence. The loader accepts data already in memory and performs no file,
@@ -210,7 +348,7 @@ class for every failure while preserving meaningful caller handling.
 | `INCOMPATIBLE_INTENT / incompatible_intent` | An admitted public key's version/policy/network meaning conflicts with the explicit validated intent. |
 | `PATH_BOUNDS / path_bounds` | Empty/non-list path, non-integer or out-of-range path/account/index, proposed global path count bound, or insufficient remaining BIP32 depth. |
 | `INVALID_CHILD / invalid_child` | At the exact attempted edge, HMAC left half is at/above the group order or delegated tweak confirms infinity. No child/address is emitted. |
-| `INVALID_DEFINITION / invalid_definition` | Definition schema, duplicate data, provenance catalogue or semantic invariants fail. |
+| `INVALID_DEFINITION / invalid_definition` | Parameter/composition/binding schema, duplicate data, provenance catalogue or semantic invariants fail. Composition/binding admission occurs at setup; a conflicting supplied definition also fails at request/source lookup. |
 | `INVALID_ACCOUNT_SOURCE / invalid_account_source` | Provisioned rows contain malformed/duplicate/unsupported/incompatible mapping data. |
 | `MISSING_ACCOUNT_MAPPING / missing_account_mapping` | No key exists for the exact admitted network/policy/account tuple. |
 | `ENVIRONMENT_FAILURE / environment_failure` | A required PHP facility, algorithm, integer width or selected provider dependency is unavailable at its setup/use gate. |
@@ -344,6 +482,16 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
   points and source construction, including faults during setup and use and
   library-owned trace arguments. No favorable public containment claim follows
   from research `category()` output.
+- At M06, challenge declaration admission with cycles, unknown capabilities,
+  duplicate bindings, missing ports and same-width semantic substitutions.
+  Reject reordered admission, incorrect parameter roles and failure-path
+  overrides before execution. Confirm mainnet/testnet reuse one declaration.
+- At M06/M07, inject a failure at each executable stage and record calls:
+  no later stage, unselected policy, alternate provider or replacement result
+  may occur. Preserve the original owned reason and diagnostic containment;
+  confirm infinity aborts derivation while zero tweak completes correctly.
+  Cover receiving source-selection failure before generic execution and
+  generic failures without address/result construction in the receiving flow.
 - Preserve normative complete-node/address anchors and two real adapter
   replacement exercises. Test valid-looking wrong outputs against independent
   expected values rather than requiring generation to decode its own output.
@@ -351,6 +499,11 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
   policies and network contexts, including missing mapping, insufficient depth,
   invalid first/final edge and changed provider conditions after provisioning.
   Tests must verify exactly one tuple and `[0, index]`, with no fallback.
+
+The agreed composition direction still needs concrete schema/representation
+and execution-boundary review; no schema validator or executor has been
+implemented or qualified by this document. M06 applies the assigned cases to
+the first complete branch; M07 extends them to all policies and receiving.
 
 The provider/runtime decision, these proposed signatures/data/failure choices,
 feasibility evidence and assigned acceptance obligations must converge before

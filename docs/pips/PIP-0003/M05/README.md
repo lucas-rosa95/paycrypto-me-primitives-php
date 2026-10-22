@@ -5,7 +5,7 @@ under the approved PIP-0003 and PIP00010 boundaries in the
 [Execution Plan](../EXECUTION-PLAN.md). Execution PR:
 [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44).
 
-Status, 2026-10-21: **executor assessment in progress; no joint selection or
+Status, 2026-10-22: **executor assessment in progress; no joint selection or
 contract freeze**. This record owns the current candidate comparison and its
 reproducible evidence. The Plan owns execution status and the
 [M00–M04 resumption checkpoint](../EXECUTION-PLAN.md#m05-resumption-checkpoint).
@@ -38,6 +38,17 @@ executor draft, not a freeze. Consumer reach and migration effort cannot current
 be quantified. Keep alternatives available for qualification; install one
 chosen implementation per boundary in production, with explicit wiring and
 no runtime fallback or backend autodetection.
+
+The [composition direction](PHP-CONTRACTS.md#agreed-composition-direction)
+was agreed in the joint design discussion on 2026-10-22: inspectable composition
+data, parameter-only reuse, semantic compatibility between connections and
+immediate abort on failure. Names such as `BitcoinDefinition` are assessed by
+responsibility; the constraint concerns hidden or duplicated behavior, not a
+naming ban. The proposal now maps the three approved policy flows, distinguishes
+parameter data, composition declarations and provider wiring, and assigns
+schema/abort acceptance cases to M06/M07. Concrete schemas, PHP representation,
+execution mechanism and the provider/runtime decision remain open. This
+design refinement adds no runtime evidence or implemented capability.
 
 ## Current package suitability
 
