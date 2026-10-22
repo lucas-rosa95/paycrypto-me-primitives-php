@@ -46,9 +46,16 @@ immediate abort on failure. Names such as `BitcoinDefinition` are assessed by
 responsibility; the constraint concerns hidden or duplicated behavior, not a
 naming ban. The proposal now maps the three approved policy flows, distinguishes
 parameter data, composition declarations and provider wiring, and assigns
-schema/abort acceptance cases to M06/M07. Concrete schemas, PHP representation,
-execution mechanism and the provider/runtime decision remain open. This
-design refinement adds no runtime evidence or implemented capability.
+schema/abort acceptance cases to M06/M07. The new
+[preliminary schema and execution proposal](PHP-CONTRACTS.md#preliminary-schema-and-execution-proposal)
+advances C1–C6 before joint discussion: ordered declarations, duplicate-observable
+source records, semantic lineage, explicit intent bindings and execution/failure
+boundaries. Its [reading guide](PHP-CONTRACTS.md#reading-and-decision-status)
+distinguishes accepted constraints, agreed direction and unaccepted proposals.
+Concrete choices, including admission/body separation and owned-code failure
+classification, remain open alongside provider/runtime selection. This is a
+reviewable design proposal, not an implementation handoff; it adds no runtime
+evidence or implemented capability.
 
 ## Current package suitability
 
@@ -236,6 +243,7 @@ review them and assign their affected acceptance cases before the M06 handoff:
 | Public request/result | Freeze concrete signatures and immutable representations for serialized key, nonempty integer path, validated network and explicit policy; return address plus exact network/policy/path context. Keep generic derivation distinct from receiving account/index. |
 | Integer ingress | Reject booleans, numeric strings and integral floats **before coercion**. PHP parameter types plus callee `strict_types` do not suffice when the caller is weakly typed. Use explicit original-value validation at the admission boundary; later callers consume admitted semantic values. Test both caller modes. |
 | Definitions | Choose a concrete immutable schema and construction boundary that cannot bypass validation, rejects unknown/duplicate data and preserves order-independent equivalence. Test-only Signet data variation must not become public network support. `testnet` describes encoding parameters and does not authenticate testnet3/testnet4/Signet chain identity. |
+| Composition and execution | Review the explicitly preliminary C1–C6 choices: ordered declarations and slots, pair-list source, role/lineage validation, operation prelude/body boundary, terminal parameter exposure and explicit provider assembly. Resolve representation feasibility and unexpected owned-code failure handling before freeze; no validator or executor has been qualified. |
 | Receiving source | Freeze duplicate-safe provisioning, validation timing and missing/malformed/incompatible mapping failures. Select exactly by network/policy/account; provisioning binds ancestry, which serialized metadata cannot prove. Invoke generic `[0, index]` without advancement or fallback; return logical account/branch/index. |
 | Lower capabilities | Name only boundaries with real protocol responsibility and replacement evidence. Preserve zero-tweak identity, distinguish confirmed infinity from provider malfunction, and define the meaning of every nullable/boolean/outcome return. No vendor objects or generic buffer/crypto framework in public contracts. |
 | Failures and precedence | Choose owned exception classes/categories, safe messages and previous-chain rules; preserve corrected M02 validation stages and exact-index failure without partial success. Verify absent facilities, wrong provider types/widths and thrown faults through the eventual public operation. Do not expose raw vendor messages or exception chains. |

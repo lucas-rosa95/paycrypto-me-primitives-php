@@ -16,6 +16,24 @@ requirement row. Names below are proposed public identifiers, rooted in
 `PayCryptoMe\Primitives`; final file placement follows the concrete capability
 responsibility rather than a provider or network hierarchy.
 
+## Reading and decision status
+
+This document contains different levels of authority. **Permission to advance
+the draft is not agreement with the executor's proposed choices.**
+
+| Material | Status and how to read it |
+|---|---|
+| Referenced M02 decisions and approved PIPs | Existing boundaries. This draft does not amend them. |
+| [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. Its schema obligations constrain the proposal, without selecting a representation or executor. |
+| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **New executor proposal, advanced before joint discussion. Not agreed, frozen, implemented or qualified.** Alternatives and unresolved costs are explicit. |
+| Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
+| Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
+
+For the new material, start with the [choice table](#preliminary-choices-for-joint-discussion),
+then examine the schema, full flow and admission rules. A subsequent joint
+decision must identify which choices were accepted, revised or deferred; silence,
+a documentation merge or a passing documentation check does not settle them.
+
 ## Agreed composition direction
 
 The joint design discussion on 2026-10-22 established the following direction
@@ -149,6 +167,337 @@ The documented point capability's `null` for confirmed infinity is a specific
 internal outcome, not a continuation value. CKDpub immediately translates it
 to `INVALID_CHILD` and terminates; it never reaches an address-construction
 stage. Zero tweak remains a valid input with complete child metadata updates.
+
+## Preliminary schema and execution proposal
+
+**Everything in this section is an executor proposal for discussion.** It was
+advanced at the user's request before joint alignment on the concrete design.
+The agreed requirements above remain constraints; the representation, mechanism,
+identifiers and responsibility splits below are not additional agreed decisions.
+The section ends at [Entry points and results](#entry-points-and-results).
+
+### Preliminary choices for joint discussion
+
+| Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
+|---|---|---|
+| C1 — Execution model | Ordered, acyclic declarations with named connections, reusable subcompositions and slots resolved at assembly. Execute synchronously in the declared order. This makes failure precedence and selected work inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by our agreement. |
+| C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | Typed builders could improve authoring feedback if they retain duplicate detection and yield the same inspectable data. Pair lists are verbose; whether their ergonomics justify them for repository-owned declarations is still open. |
+| C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
+| C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |
+| C5 — Ownership and extension | Ship a closed composition catalogue. Consumers provision admitted network/account data; provider wiring is explicit and separate. No public arbitrary composition-loader API in this slice. | A public extension registry introduces compatibility, validation and support commitments beyond the current operations. Internal data still must undergo validation; being repository-owned is not proof of correctness. Future extension remains a separate design question. |
+| C6 — Setup and runtime | Validate and resolve a complete assembly once; keep request values in a fresh invocation frame. Execute only the plan selected by explicit network/policy intent, with no fallback. | Interpretation adds dispatch and frame costs. No benchmark or working executor establishes those costs yet. Compilation or caching must not be introduced as an unreviewed optimization that changes order, admission or failure behavior. |
+
+These choices are separable. Agreeing with ordered execution, for example, does
+not automatically approve pair-list authoring, the names below or a public API.
+
+### Preliminary source schema and immutable form — C1/C2/C5
+
+Propose the following **internal** source grammar. `Record` means a PHP list
+of exact `[field, value]` pairs; every listed field is required exactly once,
+including empty lists where applicable. Unknown or duplicate fields fail.
+Identifiers are nonempty ASCII strings matching `[a-z][A-Za-z0-9-]*`, scoped to
+their containing catalogue/record. All collections below are lists, not maps
+that may have overwritten duplicates. No JSON/YAML parser or executable PHP
+file loader is part of this proposal; assembly receives data already in memory.
+
+| Record | Exact fields and constraints |
+|---|---|
+| Composition | `id`: unique identifier; `contract`: owned catalogue identifier; `inputs`: port records; `parameters`: port records; `slots`: slot records; `steps`: nonempty ordered step records; `outputs`: binding records. Contract input/parameter/output names must match exactly. |
+| Port | `name`, `type`: identifiers. The type must exist in the owned catalogue and match the composition contract. A source cannot define new types or change their meaning. |
+| Slot | `name`, `contract`: identifiers. A slot names one required subcomposition contract; assembly must bind it exactly once. It has no default. |
+| Step | `id`; `target`: exact `[kind, identifier]`; `inputs`, `parameters`: binding-record lists. Kinds are `capability`, `composition`, `slot`, or `operation`. The last kind permits only the receiving-to-generic call in this slice. |
+| Binding | `port`: destination name; `source`: one reference below. Bind every required destination exactly once; reject extras. Output bindings use this same record and the composition's declared result ports. |
+| Intent binding | `network`, `policy`, `composition`: identifiers; `slots`: records with `name`, `composition`; `parameters`: binding-record list. Exactly one row per admitted network/policy tuple, with no duplicate rows even if identical. |
+
+Source references have only these exact tuple forms:
+
+```text
+['input', inputName]
+['parameter', parameterName]
+['output', earlierStepId, outputPortName]
+['field', reference, advertisedFieldName]
+['network']  // intent bindings only: the admitted NetworkDefinition
+```
+
+In `field`, `reference` is exactly an `input`, `parameter` or `output` tuple;
+nested field traversal is disallowed. It projects one immutable field
+advertised by its producer's contract,
+not an arbitrary property path or method call. For example, the complete-node
+contract advertises `publicKey`; its projection retains the node's derivation
+origin. No literal-value, cast, expression, callback, environment-variable or
+container-service reference exists in this grammar. The network reference resolves
+the admitted definition; projection retains its field roles. Protocol constants
+such as receiving branch `0` and witness version `0` belong to owned contracts,
+not to changeable literals in composition data.
+
+Each step can consume only declared inputs/parameters and outputs of earlier
+steps in the same composition. Subcompositions have isolated names and receive
+only their declared ports. Reject recursive composition/operation references,
+self references, forward references and unknown fields/ports. Slot bindings
+are resolved before traversal, so they cannot conceal a cycle. Declaration
+order is execution order; the loader does not repair or topologically reorder
+a rejected declaration. Record-field order is immaterial; step order is not.
+
+Here is one complete **source-shape example**, not executable implementation:
+
+```php
+[
+    ['id', 'hash160'],
+    ['contract', 'hash160'],
+    ['inputs', [[['name', 'bytes'], ['type', 'binary-bytes']]]],
+    ['parameters', []],
+    ['slots', []],
+    ['steps', [
+        [
+            ['id', 'sha'],
+            ['target', ['capability', 'sha256']],
+            ['inputs', [[['port', 'bytes'], ['source', ['input', 'bytes']]]]],
+            ['parameters', []],
+        ],
+        [
+            ['id', 'ripe'],
+            ['target', ['capability', 'ripemd160']],
+            ['inputs', [[['port', 'bytes'], ['source', ['output', 'sha', 'digest']]]]],
+            ['parameters', []],
+        ],
+    ]],
+    ['outputs', [[['port', 'digest'], ['source', ['output', 'ripe', 'digest']]]]],
+]
+```
+
+The catalogue defines `sha256` as binary input to a 32-byte digest and
+`ripemd160` as binary input to a 20-byte digest, with the delegated behavior
+and failures already described below. `hash160` declares no new algorithm.
+Its contract requires exactly this ordered connection, not any operation
+ending in 20 bytes. A caller-written `contract = hash160` label cannot certify
+an unrelated declaration. The semantic check inspects its resolved steps.
+
+The loaded form would contain private immutable `Composition`, `Step`,
+`PortBinding` and `IntentBinding` records (names provisional), with references
+resolved to owned catalogue entries and slot/frame positions. Their constructors
+are not a public bypass around admission. Rebuild scalar leaves before retaining
+them; reject mutable objects in source data. Provider instances occupy a
+separate explicit assembly, not these data records. No universal public
+`Stage::run(mixed): mixed` contract is proposed: dispatch calls the narrow
+capability interfaces, even if an internal interpreter uses a private frame.
+
+### Preliminary complete composition and intent bindings — C3/C4
+
+The following tables specify the other declarations at port level. They are
+readable expansions of the grammar, **not additional approved PHP APIs**.
+`$name` denotes an input, `@name` a parameter and `step.port` an earlier output;
+`derive.node.publicKey` abbreviates the permitted `field` reference. Every
+unlisted parameter/slot list is explicitly empty when encoded. Each table row
+is one step in execution order.
+
+Ports name semantic connections, not new overloads of the PHP signatures
+below. For example, dispatch to `ExtendedPublicKeyAdmission::admit` extracts
+the admitted request's original key text, definition and policy into its three
+arguments. A fixed owned invocation mapping performs this projection; source
+data cannot name a PHP class/method or invoke an arbitrary function. Similar
+mapping supplies `CkdPublicDerivation` with the complete node and checked path.
+Concrete internal helper names remain part of C4 review.
+
+The proposed `public-address` declaration takes one `request` input of type
+`admitted-public-request`, has a `terminal` slot with contract `key-hash-address`,
+and a `network` parameter of type `network-definition`. The operation's raw
+request capture preserves original argument types; it performs no decoding
+or coercion.
+The public method cannot look up a plan using unvalidated caller values.
+Its fixed admission prefix validates definition, path, policy and key-text
+shape in the documented order. Only then does it select the matching binding
+and execute this shared body, whose input is the admitted `request`:
+
+| Step / target | Named inputs and parameters | Output and required meaning |
+|---|---|---|
+| `admit` / capability `extended-public-key-admission` | `request = $request` | `node`: complete imported node admitted for the request's explicit intent. Internally: checked decode/common metadata, version eligibility, point validity, intent compatibility, in that order. |
+| `depth` / capability `remaining-depth` | `node = admit.node`, `request = $request` | `path`: the unchanged request path, checked against this imported node's remaining depth. No HMAC or ECC derivation. |
+| `derive` / capability `ckd-public-path` | `parent = admit.node`, `path = depth.path` | `node`: complete final node from exactly that parent and path. No nullable/partial node. |
+| `keyhash` / composition `hash160` | `bytes = derive.node.publicKey` | `digest`: HASH160 of that derived compressed public key. |
+| `encode` / slot `terminal` | `keyHash = keyhash.digest`; `network = @network` | `address`: selected policy's complete address under the same network binding. |
+| `result` / capability `public-address-result` | `request = $request`, `address = encode.address` | `result`: the complete immutable public result; output binding is `result.result`. |
+
+**Representation detail still preliminary:** represent the fixed raw admission
+prefix as an operation-contract prelude, referenced by `public-address`, and
+the table as its admitted body. Its catalogue entry must show the prelude and
+body together; it must not disguise admission as an implicit executor behavior.
+The public operation contract binds the raw entry signature to that exact
+prelude and body. The body cannot bypass the prelude through a public API.
+An alternative is a top-level operation declaration containing both;
+that would need an explicit selection construct. This prelude/body boundary
+is a substantive C4 discussion point, not a settled exception to inspectability.
+
+Each terminal implements `key-hash-address`: input `keyHash`, parameter
+`network`, output `address`. It receives the immutable definition and projects
+only the parameter roles it needs. Here `@network.p2pkhVersion` abbreviates
+`['field', ['parameter', 'network'], 'p2pkhVersion']`; the other fields follow
+the same rule. The catalogue distinguishes `p2pkh-version`, `p2sh-version` and
+`segwit-hrp` by role and origin, not merely PHP string shape. Passing the whole
+semantic definition keeps the slot interface uniform but exposes more parameters
+than each terminal needs; narrower role-specific bundles are an alternative
+to discuss under C3. Neither choice permits an arbitrary parameter bag.
+
+| Declaration | Ordered steps, exact input connections and output binding |
+|---|---|
+| `p2pkh-address` | `payload`: owned `p2pkh-payload(keyHash = $keyHash; version = @network.p2pkhVersion)` returns the 21-byte P2PKH payload. `encode`: delegated `base58check-encode(payload = payload.payload)` returns `address`; export `encode.address`. |
+| `nested-witness-address` | `script`: owned `witness-v0-keyhash-script(keyHash = $keyHash)` returns the 22-byte `0014` redeem script. `scripthash`: composition `hash160(bytes = script.script)` returns `digest`. `payload`: owned `p2sh-payload(scriptHash = scripthash.digest; version = @network.p2shVersion)` returns the 21-byte P2SH payload. `encode`: the same `base58check-encode(payload = payload.payload)`; export `encode.address`. |
+| `native-witness-address` | `program`: owned `witness-v0-keyhash-program(keyHash = $keyHash)` admits the key hash's witness-program role without changing its bytes. `encode`: delegated `segwit-v0-keyhash-encode(program = program.program; hrp = @network.segwitHrp)` returns `address`; export `encode.address`. |
+
+The payload/script constructors own protocol meaning and fixed layout; they
+are not configurable byte concatenators or reimplementations of codecs.
+The witness-program role can be a checked connection in the loaded form
+instead of a standalone runtime object/call, if qualification proves equivalent
+admission and failure order. This is an unresolved implementation economy,
+not permission to accept arbitrary 20-byte values as the derived key hash.
+
+Proposed intent-binding data, with no implicit rows or policy inference:
+
+| Network | Policy | Shared composition | `terminal` slot | Parameter projected inside terminal |
+|---|---|---|---|---|
+| `mainnet` | `p2pkh` | `public-address` | `p2pkh-address` | `version <- network.p2pkhVersion` |
+| `testnet` | `p2pkh` | `public-address` | `p2pkh-address` | `version <- network.p2pkhVersion` |
+| `mainnet` | `p2sh-p2wpkh` | `public-address` | `nested-witness-address` | `version <- network.p2shVersion` |
+| `testnet` | `p2sh-p2wpkh` | `public-address` | `nested-witness-address` | `version <- network.p2shVersion` |
+| `mainnet` | `p2wpkh` | `public-address` | `native-witness-address` | `hrp <- network.segwitHrp` |
+| `testnet` | `p2wpkh` | `public-address` | `native-witness-address` | `hrp <- network.segwitHrp` |
+
+Every intent row supplies the shared composition's `network` parameter using
+the binding record `[['port', 'network'], ['source', ['network']]]`.
+The last column shows the terminal's subsequent projection, not another
+intent-record field. At request admission the supplied definition must be
+semantically equivalent to that binding's definition; identifier equality alone
+does not admit different parameters. Equivalent independent instances remain valid.
+No repeated policy implementation exists per network. Selection yields one
+resolved plan; all other policy plans remain unexecuted. The future Signet
+counter-proof supplies a test-only definition and three analogous bindings
+to the same compositions, without expanding the shipped catalogue.
+
+These six rows describe the completed M07 surface. An M06 assembly advertises
+only its implemented first policy on both networks and explicitly rejects the
+remaining policies. It must validate all bindings it advertises, rather than
+claiming all six network/policy combinations with missing providers or lazy failures.
+Adding the remaining supported rows is a later implementation increment, not
+a runtime fallback or a change to the target semantics.
+
+Receiving has its own raw admission prelude (network, account, index, policy)
+and one admitted body, bound to the immutable source and generic operation
+at assembly. It has no terminal slot and takes no caller branch parameter:
+
+| Step / target | Named connections | Output and required meaning |
+|---|---|---|
+| `select` / capability `account-key-selection` | `request = $request`; source is an explicit assembly dependency | `key`: exact tuple's original serialized key, or missing-mapping failure. |
+| `request` / capability `receiving-public-request` | `request = $request`, `key = select.key` | `generic`: raw generic arguments with the same network/policy, selected key and exact `[0, index]`; no decoding or derivation. |
+| `generic` / operation `derive-public-address` | `request = request.generic` | `result`: invoke the same public operation including its full raw admission prelude and selected declared body. No admitted-node shortcut. |
+| `result` / capability `receiving-address-result` | `request = $request`, `generic = generic.result` | `result`: complete address and original logical account/branch/index, after checking generic context/path agreement; export `result.result`. |
+
+The receiving declaration is not replicated for six tuples. It delegates
+selection of the generic body to the same explicit intent table. The only
+variable-length iteration is CKDpub's already bounded exact path inside its
+owned capability; this schema adds no loops, branching predicates, retry
+instructions or arbitrary operation calls.
+
+### Preliminary semantic admission and execution — C3/C6
+
+Propose three admission passes followed by one execution rule:
+
+1. **Source shape and references:** validate all records and duplicates before
+   normalization; resolve catalogue references and slot bindings, reject cycles,
+   missing/extra ports, forward references and unavailable required bindings.
+   No cryptographic/codec work occurs. Check every shipped intent binding,
+   not merely the first request's branch.
+2. **Operation semantics:** check the resolved connections against the owned
+   operation contract. Check each prelude, full-node and depth dependencies,
+   selected terminal's protocol meaning and exact parameter roles, and result
+   context. Reject unused executable steps and extra branches as well as
+   missing steps. Contract labels alone never pass this gate.
+3. **Explicit assembly:** bind one implementation per required lower contract
+   and check its required environment. Bind the receiving source separately;
+   its eager admission may invoke providers, as specified below. Return the
+   immutable usable operation only after every required gate succeeds. No
+   partially configured operation is returned. A generic-only assembly does
+   not need an account source; receiving reuses an already valid generic one.
+4. **Invocation:** preserve raw arguments, run the documented prelude, select
+   the resolved binding, allocate a fresh private frame, and execute its steps
+   synchronously. Publish a step's outputs to that frame only after successful
+   return and boundary checks. A subcomposition must finish before the next
+   step; no speculative, parallel or unselected work is scheduled. Expose only
+   the final immutable result after complete success.
+
+The semantic validator can remain bounded to known producers and consumers.
+For example, retain these relations as private loaded-plan metadata, not as
+caller-writable labels or a public generic type system:
+
+| Produced value | Relation that the consuming connection must establish |
+|---|---|
+| `depth.path` | The same request path, checked against `admit.node`, not another node of the same depth. |
+| `derive.node.publicKey` | Projection from the complete result of exactly `ckd-public-path(admit.node, depth.path)`, never the imported key or a separately supplied 33-byte string. |
+| `keyhash.digest` | Exactly SHA-256 then RIPEMD-160 of that projection, with binary outputs. |
+| `scripthash.digest` | Exactly HASH160 of the witness-v0 key-hash script built from that same `keyhash.digest`; not the key hash relabeled as a script hash. |
+| Terminal parameters and result | Values from the selected definition's correct roles; address and returned coordinates belong to the same admitted request. Equal version bytes or hash widths do not establish this relation. |
+
+Catalogue entries own these compatibility/lineage rules. Unfold known
+subcompositions for checking while retaining their reusable declaration
+identity; do not duplicate their behavior in a second handwritten executor.
+This is a finite validation proposal, not a claim of a general theorem prover.
+The exact division between reusable contract metadata and small owned
+validators still needs implementation feasibility review. The validator
+must not grow into a second address-generation implementation.
+
+At runtime, actual capability arguments/results still undergo their promised
+checks. Static lineage proves intended connections, not that a defective
+provider computed the right point/hash/address. No extra encode/decode
+round trip is introduced to pretend otherwise. Independent expected values
+and real-provider replacement tests remain necessary.
+
+When any stage throws, unwind this invocation and its callers immediately.
+The frame cannot yield a public partial result, and result constructors have
+not run if their predecessors failed. The executor does not catch an owned
+failure to replace its reason, switch a binding or resume. Vendor failures
+are normalized in the selected adapter before reaching it. Setup data failures
+use `INVALID_DEFINITION`; source and environment/provider failures retain the
+meanings below. There is no `on_error`, nullable address or default output in
+the schema. Aborting guarantees no subsequent library stage, not rollback of
+arbitrary provider side effects or memory erasure; no persistent writes or
+application callbacks are introduced by this assembly.
+
+**Unresolved failure-design consequence:** the earlier reason enum covers
+caller/configuration faults and delegated provider/environment failures, but
+does not explicitly classify an unexpected defect in the owned interpreter or
+result construction. A candidate refinement is an owned `INTERNAL_FAILURE`
+reason with the same fixed-message/no-previous containment, preserving already
+owned exceptions while containing unexpected implementation exceptions at the
+operation boundary. This is not selected or added to the earlier enum by this
+draft. Resolve it under C6 before freeze; do not silently blame a caller or a
+provider for an owned-code defect, leak vendor details, or resume execution.
+
+### Preliminary challenge cases and limits
+
+These are design checks and proposed downstream tests, **not executed results**.
+They identify where the model should fail and what the eventual validator and
+executor must demonstrate in addition to the existing acceptance list.
+
+| Mutation or fault | Required outcome and responsible gate |
+|---|---|
+| Bind P2SH payload's `scriptHash` directly to `keyhash.digest` | Setup semantic rejection despite both being 20 bytes. |
+| Hash `admit.node.publicKey` instead of `derive.node.publicKey` | Setup lineage rejection; a valid hash of the wrong key cannot satisfy the operation. |
+| Use the P2PKH network field for the P2SH terminal | Setup role rejection even in a fixture with equal byte values. |
+| Duplicate an intent row, give a slot an incompatible terminal, or create a recursive subcomposition | Setup rejection before provider work; no first-row-wins or lazy repair. |
+| Add an unused step that executes another policy or validates the point before version eligibility | Reject extra execution or the broken admission contract. Internal key-admission order also needs mixed-invalid runtime tests; the loader cannot prove adapter code from a label. |
+| Fail key admission, depth, a first/middle/final CKDpub edge, hash or encoder | Preserve the documented reason; observe no later stage, other policy/provider/index, or result construction. Instrument inside cohesive capabilities as well as at composition steps. |
+| Fail exact receiving lookup or the generic call | No alternate tuple/key; generic admission never runs after failed lookup, and receiving result construction never runs after failed generic derivation. |
+| Return a plausible but wrong digest/address from a provider | May pass runtime shape checks; independently anchored qualification must expose it. Do not claim static schema validation catches it. |
+| Supply equivalent reordered definitions, then mutate the caller's source arrays | Equivalent bindings and results, with no retained alias changing the admitted plan. Reordering steps remains a different declaration and is checked separately. |
+
+Before joint freeze, resolve C1–C6 against the actual PHP interfaces, including
+the prelude/body selection boundary, terminal parameter exposure, unexpected
+owned-code failure classification and how
+lineage is retained without a generic type framework. A bounded feasibility
+probe may be appropriate after choosing which model to challenge; this document
+does not supply one. M06/M07 implement and test the selected design, not an
+automatic mandate to build this interpreter. Provider/runtime selection and
+earlier signature/provisioning proposals also remain open. **This section is
+ready for discussion, not an implementation handoff or a favorable independent
+review.**
 
 ## Entry points and results
 
@@ -500,9 +849,10 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
   invalid first/final edge and changed provider conditions after provisioning.
   Tests must verify exactly one tuple and `[0, index]`, with no fallback.
 
-The agreed composition direction still needs concrete schema/representation
-and execution-boundary review; no schema validator or executor has been
-implemented or qualified by this document. M06 applies the assigned cases to
+The [preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal)
+makes concrete choices available for joint discussion; C1–C6 remain unaccepted.
+No schema validator or executor has been implemented or qualified by this
+document. M06 applies the assigned cases to
 the first complete branch; M07 extends them to all policies and receiving.
 
 The provider/runtime decision, these proposed signatures/data/failure choices,
