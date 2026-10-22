@@ -2,8 +2,8 @@
 # Shared runtime matrix for CI, setup and release. Update image pins here.
 PHP_VERSIONS=(8.3 8.4)
 PHP_IMAGES=(
-    'php:8.3-cli-bookworm@sha256:4687aec76c4a895b68b91bcd5e48f1ba7a3dea120f6de50bba7e1a93af5372dd'
-    'php:8.4-cli-bookworm@sha256:836ac6c672d1372a47c8fd61b625015bd07760f493fb2eaab2087636498a2b4b'
+    'php:8.3.36-cli-bookworm@sha256:cdb77e306d6bb99db40e513fbe036ecc6c53b575cbcb7e581387845fef26d755'
+    'php:8.4.27-cli-bookworm@sha256:496b5e02fe9fe44fcfb715023b931048111dc4e0bc719789d83c906be9f04b05'
 )
 DEV_PHP_VERSION=8.3
 
