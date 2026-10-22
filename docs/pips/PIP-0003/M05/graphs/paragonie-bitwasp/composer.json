@@ -1,0 +1,22 @@
+{
+  "name": "paycrypto-me/m05-paragonie-bitwasp-trial",
+  "description": "Isolated M05 candidate graph; not production selection.",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "bitwasp/bech32": "0.0.1",
+    "ext-ctype": "*",
+    "ext-gmp": "*",
+    "ext-hash": "*",
+    "paragonie/ecc": "2.6.0",
+    "php": "^8.1",
+    "php-64bit": "*",
+    "tuupola/base58": "2.2.0"
+  },
+  "config": {
+    "platform": {
+      "php": "8.1.0"
+    },
+    "sort-packages": true
+  }
+}

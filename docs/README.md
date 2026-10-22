@@ -31,6 +31,7 @@ docs/
 │   │   ├── M02/                     # accepted protocol record and provider research
 │   │   ├── M03/                     # completed, independently reviewed research handoff
 │   │   ├── M04/                     # reviewed research; Issue #25 correction merged in PR #36
+│   │   ├── M05/                     # current provider/runtime assessment; joint selection open
 │   │   └── reviews/                 # pre-M04 execution audit
 │   ├── PIP00010/                    # approved receiving-entry proposal
 │   └── PIPxxxxx/                    # Issue-derived identity for a new governed PIP
@@ -52,7 +53,7 @@ The [approved PIP-0003 proposal](https://github.com/paycrypto-me/paycrypto-me-pr
 defines the public address capability boundary. Its
 [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
 current operational reference. Start with its Current state, Reading path and
-Execution roadmap; consult the linked M00–M04 records for the specific research,
+Execution roadmap; consult the linked M00–M05 records for the specific research,
 decisions, draft contract and assessment evidence.
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
 is its retrospective coordination anchor. A
@@ -98,7 +99,7 @@ low-severity Bech32 observation-check and wording gap. Its focused correction
 in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
 preserves the issued probe and outputs. The [independent check of `0eb8cbe`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255021386)
 found no remaining defect, and the [shared Issue #28 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255212773)
-accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the [M03 corrected-code check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050) is complete within its research scope, and the bounded [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) accepted PR #36's code and evidence at `fcd71d5`. [M05 execution is coordinated in Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41), with the [M00–M04 resumption baseline revalidated](pips/PIP-0003/EXECUTION-PLAN.md#m05-resumption-checkpoint); joint provider, runtime and contract decisions remain open. See the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
+accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the [M03 corrected-code check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050) is complete within its research scope, and the bounded [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) accepted PR #36's code and evidence at `fcd71d5`. [M05 execution is coordinated in Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41), with the [M00–M04 resumption baseline revalidated](pips/PIP-0003/EXECUTION-PLAN.md#m05-resumption-checkpoint); the [M05 provider/runtime assessment](pips/PIP-0003/M05/README.md) adds refreshed suitability, three pinned graphs and 84 bounded commands on PHP 8.2–8.5 in [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44). The [concrete PHP proposal](pips/PIP-0003/M05/PHP-CONTRACTS.md) adds signatures, immutable provisioning and owned failure reasons, with four language controls exposing coercion, readonly-array aliasing and trace-redaction limits. Both proposals remain provisional: joint selection, consumer constraints and contract qualification/freeze remain open. The configured PHP 8.3 minimum and 8.3/8.4 verification matrix are unchanged; the development/setup/CI/release patch pins are refreshed to 8.3.36/8.4.27, and the final graph evidence uses patched releases. See the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
 for the current state. M05 also [assesses the consumer PHP minimum and verification matrix together with provider selection](pips/PIP-0003/EXECUTION-PLAN.md#m05-provider-and-consumer-runtime-selection), including adoption impact and evidenced compatibility tradeoffs.
 The separately approved
 [PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)

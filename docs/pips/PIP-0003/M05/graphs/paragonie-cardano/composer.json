@@ -1,0 +1,22 @@
+{
+  "name": "paycrypto-me/m05-paragonie-cardano-trial",
+  "description": "Isolated M05 candidate graph; not production selection.",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "cardano-php/bech32": "1.1.0",
+    "ext-ctype": "*",
+    "ext-gmp": "*",
+    "ext-hash": "*",
+    "paragonie/ecc": "2.6.0",
+    "php": "^8.2",
+    "php-64bit": "*",
+    "tuupola/base58": "2.2.0"
+  },
+  "config": {
+    "platform": {
+      "php": "8.2.0"
+    },
+    "sort-packages": true
+  }
+}

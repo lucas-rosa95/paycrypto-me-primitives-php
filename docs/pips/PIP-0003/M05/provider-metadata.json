@@ -1,0 +1,791 @@
+{
+  "retrieved_at": "2026-10-21T18:36:25.138838+00:00",
+  "scope": "Candidate and transitive package metadata; not selection or security certification",
+  "packages": {
+    "paragonie/ecc": {
+      "metadata_url": "https://packagist.org/packages/paragonie/ecc.json",
+      "repository": "https://github.com/paragonie/phpecc",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v2.6.0",
+        "version_normalized": "2.6.0.0",
+        "time": "2026-08-20T07:00:03+00:00",
+        "source": {
+          "url": "https://github.com/paragonie/phpecc.git",
+          "type": "git",
+          "reference": "1a49380410b8ce826bc7fd3de6324053e049205c"
+        },
+        "require": {
+          "php": "^7.1||^8.0",
+          "ext-gmp": "*",
+          "genkgo/php-asn1": "^2",
+          "paragonie/sodium_compat": "^1|^2"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "Mdanter\\Ecc\\": "src/"
+          }
+        },
+        "suggest": {
+          "ext-openssl": "(PHP 8.1, OpenSSL 3+) Improved performance, less worries about side-channels"
+        }
+      },
+      "github": {
+        "url": "https://github.com/paragonie/phpecc",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2026-08-20T07:00:25Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "1a49380410b8ce826bc7fd3de6324053e049205c",
+          "html_url": "https://github.com/paragonie/phpecc/commit/1a49380410b8ce826bc7fd3de6324053e049205c",
+          "committed_at": "2026-08-20T07:00:03Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "genkgo/php-asn1": {
+      "metadata_url": "https://packagist.org/packages/genkgo/php-asn1.json",
+      "repository": "https://github.com/genkgo/php-asn1",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v2.9.0",
+        "version_normalized": "2.9.0.0",
+        "time": "2026-01-06T11:43:05+00:00",
+        "source": {
+          "url": "https://github.com/genkgo/php-asn1.git",
+          "type": "git",
+          "reference": "dc535345d0ecc69181c6a1e17e57a625bd01f891"
+        },
+        "require": {
+          "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "FG\\": "lib/"
+          }
+        },
+        "suggest": {
+          "ext-gmp": "GMP is the preferred extension for big integer calculations",
+          "ext-bcmath": "BCmath is the fallback extension for big integer calculations",
+          "phpseclib/bcmath_compat": "BCmath polyfill for servers where neither GMP nor BCmath is available",
+          "ext-curl": "For loading OID information from the web if they have not bee defined statically"
+        }
+      },
+      "github": {
+        "url": "https://github.com/genkgo/php-asn1",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2026-01-06T11:45:54Z",
+        "open_issues_including_prs": 1,
+        "latest_commit": {
+          "sha": "50ef66f427be6b30735fe299a74d4e292306bfb5",
+          "html_url": "https://github.com/genkgo/php-asn1/commit/50ef66f427be6b30735fe299a74d4e292306bfb5",
+          "committed_at": "2026-01-06T11:45:53Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "paragonie/sodium_compat": {
+      "metadata_url": "https://packagist.org/packages/paragonie/sodium_compat.json",
+      "repository": "https://github.com/paragonie/sodium_compat",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v2.5.2",
+        "version_normalized": "2.5.2.0",
+        "time": "2026-08-18T23:46:48+00:00",
+        "source": {
+          "url": "https://github.com/paragonie/sodium_compat.git",
+          "type": "git",
+          "reference": "3246b36803c177847e677862fedeb7f937869adb"
+        },
+        "require": {
+          "php": "^8.1",
+          "php-64bit": "*"
+        },
+        "license": [
+          "ISC"
+        ],
+        "autoload": {
+          "files": [
+            "autoload.php"
+          ],
+          "psr-4": {
+            "ParagonIE\\Sodium\\": "namespaced/"
+          }
+        },
+        "suggest": {
+          "ext-sodium": "Better performance, password hashing (Argon2i), secure memory management (memzero), and better security."
+        }
+      },
+      "github": {
+        "url": "https://github.com/paragonie/sodium_compat",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2026-08-18T23:47:48Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "3246b36803c177847e677862fedeb7f937869adb",
+          "html_url": "https://github.com/paragonie/sodium_compat/commit/3246b36803c177847e677862fedeb7f937869adb",
+          "committed_at": "2026-08-18T23:46:48Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "simplito/elliptic-php": {
+      "metadata_url": "https://packagist.org/packages/simplito/elliptic-php.json",
+      "repository": "https://github.com/simplito/elliptic-php",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "1.0.12",
+        "version_normalized": "1.0.12.0",
+        "time": "2024-01-09T14:57:04+00:00",
+        "source": {
+          "url": "https://github.com/simplito/elliptic-php.git",
+          "type": "git",
+          "reference": "be321666781be2be2c89c79c43ffcac834bc8868"
+        },
+        "require": {
+          "ext-gmp": "*",
+          "simplito/bn-php": "~1.1.0"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "Elliptic\\": "lib/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/simplito/elliptic-php",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2025-02-21T13:56:34Z",
+        "open_issues_including_prs": 10,
+        "latest_commit": {
+          "sha": "49cb6e11dee47b4619125a10e9f16a14032a897f",
+          "html_url": "https://github.com/simplito/elliptic-php/commit/49cb6e11dee47b4619125a10e9f16a14032a897f",
+          "committed_at": "2025-02-21T13:56:33Z"
+        },
+        "open_issues": [
+          {
+            "number": 44,
+            "title": "How to use smaller s value in signature and recalculate recoveryParam",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/44",
+            "created_at": "2022-11-04T08:45:36Z",
+            "updated_at": "2022-11-07T01:43:34Z"
+          },
+          {
+            "number": 42,
+            "title": "Big Issue when recovering a signature of a hashed message",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/42",
+            "created_at": "2022-08-25T08:52:09Z",
+            "updated_at": "2022-10-26T23:41:27Z"
+          },
+          {
+            "number": 38,
+            "title": "about EOS",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/38",
+            "created_at": "2022-03-25T17:35:52Z",
+            "updated_at": "2022-03-25T17:35:52Z"
+          },
+          {
+            "number": 36,
+            "title": "PubKey from RAW TX",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/36",
+            "created_at": "2021-12-12T13:44:04Z",
+            "updated_at": "2021-12-12T14:45:59Z"
+          },
+          {
+            "number": 29,
+            "title": "Error in verify signature: Cannot initialize",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/29",
+            "created_at": "2020-12-23T03:39:13Z",
+            "updated_at": "2020-12-23T03:39:13Z"
+          },
+          {
+            "number": 26,
+            "title": "Error in _projDbl for ordinary Edwards curves",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/26",
+            "created_at": "2020-07-24T15:42:50Z",
+            "updated_at": "2020-07-24T15:42:50Z"
+          },
+          {
+            "number": 24,
+            "title": "PHP Fatal error: Uncaught Error: Class 'Elliptic\\EC' not found",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/24",
+            "created_at": "2020-05-01T22:15:48Z",
+            "updated_at": "2020-05-01T22:15:48Z"
+          },
+          {
+            "number": 23,
+            "title": "AdMob SSV in Php",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/23",
+            "created_at": "2020-04-14T11:30:20Z",
+            "updated_at": "2020-04-14T11:30:20Z"
+          },
+          {
+            "number": 18,
+            "title": "Lib failed comparison agains trusty native Curve25519",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/18",
+            "created_at": "2020-01-07T12:47:06Z",
+            "updated_at": "2020-01-18T23:41:39Z"
+          },
+          {
+            "number": 2,
+            "title": "Testing with Wycheproof",
+            "html_url": "https://github.com/simplito/elliptic-php/issues/2",
+            "created_at": "2018-04-20T07:59:07Z",
+            "updated_at": "2018-04-20T10:49:03Z"
+          }
+        ],
+        "issue_listing_limit": 100
+      }
+    },
+    "simplito/bn-php": {
+      "metadata_url": "https://packagist.org/packages/simplito/bn-php.json",
+      "repository": "https://github.com/simplito/bn-php",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "1.1.4",
+        "version_normalized": "1.1.4.0",
+        "time": "2024-01-10T16:16:59+00:00",
+        "source": {
+          "url": "https://github.com/simplito/bn-php.git",
+          "type": "git",
+          "reference": "83446756a81720eacc2ffb87ff97958431451fd6"
+        },
+        "require": {
+          "simplito/bigint-wrapper-php": "~1.0.0"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "BN\\": "lib/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/simplito/bn-php",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2024-01-10T16:17:29Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "83446756a81720eacc2ffb87ff97958431451fd6",
+          "html_url": "https://github.com/simplito/bn-php/commit/83446756a81720eacc2ffb87ff97958431451fd6",
+          "committed_at": "2024-01-10T16:16:59Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "simplito/bigint-wrapper-php": {
+      "metadata_url": "https://packagist.org/packages/simplito/bigint-wrapper-php.json",
+      "repository": "https://github.com/simplito/bigint-wrapper-php",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "time": "2018-02-27T12:38:08+00:00",
+        "source": {
+          "url": "https://github.com/simplito/bigint-wrapper-php.git",
+          "type": "git",
+          "reference": "cf21ec76d33f103add487b3eadbd9f5033a25930"
+        },
+        "require": null,
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "BI\\": "lib/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/simplito/bigint-wrapper-php",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2022-01-05T18:33:30Z",
+        "open_issues_including_prs": 5,
+        "latest_commit": {
+          "sha": "cf21ec76d33f103add487b3eadbd9f5033a25930",
+          "html_url": "https://github.com/simplito/bigint-wrapper-php/commit/cf21ec76d33f103add487b3eadbd9f5033a25930",
+          "committed_at": "2018-02-27T12:38:08Z"
+        },
+        "open_issues": [
+          {
+            "number": 5,
+            "title": "gmp_init issue",
+            "html_url": "https://github.com/simplito/bigint-wrapper-php/issues/5",
+            "created_at": "2022-07-24T13:52:28Z",
+            "updated_at": "2022-07-24T13:52:28Z"
+          },
+          {
+            "number": 4,
+            "title": "Hexadecimal numbers are rejected if they have \"0x\" prefix",
+            "html_url": "https://github.com/simplito/bigint-wrapper-php/issues/4",
+            "created_at": "2022-01-11T09:18:29Z",
+            "updated_at": "2022-01-18T01:43:40Z"
+          },
+          {
+            "number": 1,
+            "title": "CI integration",
+            "html_url": "https://github.com/simplito/bigint-wrapper-php/issues/1",
+            "created_at": "2018-04-18T03:21:41Z",
+            "updated_at": "2018-04-18T13:59:50Z"
+          }
+        ],
+        "issue_listing_limit": 100
+      }
+    },
+    "tuupola/base58": {
+      "metadata_url": "https://packagist.org/packages/tuupola/base58.json",
+      "repository": "https://github.com/tuupola/base58",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "2.2.0",
+        "version_normalized": "2.2.0.0",
+        "time": "2025-12-29T07:13:44+00:00",
+        "source": {
+          "url": "https://github.com/tuupola/base58.git",
+          "type": "git",
+          "reference": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        },
+        "require": {
+          "php": "^7.2|^8.0"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "Tuupola\\": "src"
+          }
+        },
+        "suggest": {
+          "ext-gmp": "GMP extension provides the fastest encoding and decoding."
+        }
+      },
+      "github": {
+        "url": "https://github.com/tuupola/base58",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "2.x",
+        "pushed_at": "2026-01-10T12:00:29Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "b0e3e7e09c14c2b955aaf264db843a908e793e37",
+          "html_url": "https://github.com/tuupola/base58/commit/b0e3e7e09c14c2b955aaf264db843a908e793e37",
+          "committed_at": "2026-01-10T12:00:12Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "muvon/base58-codec": {
+      "metadata_url": "https://packagist.org/packages/muvon/base58-codec.json",
+      "repository": "https://github.com/Muvon/php-kiss-base58-codec",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "0.1",
+        "version_normalized": "0.1.0.0",
+        "time": "2021-04-27T14:58:03+00:00",
+        "source": {
+          "url": "https://github.com/Muvon/php-kiss-base58-codec.git",
+          "type": "git",
+          "reference": "753aeb34bbcb5d2bf902b8644efbca6052932b00"
+        },
+        "require": null,
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "Muvon\\KISS\\": "src/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/Muvon/php-kiss-base58-codec",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2021-04-27T15:05:09Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "753aeb34bbcb5d2bf902b8644efbca6052932b00",
+          "html_url": "https://github.com/Muvon/php-kiss-base58-codec/commit/753aeb34bbcb5d2bf902b8644efbca6052932b00",
+          "committed_at": "2021-04-27T14:58:03Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "bitwasp/bech32": {
+      "metadata_url": "https://packagist.org/packages/bitwasp/bech32.json",
+      "repository": "https://github.com/Bit-Wasp/bech32",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v0.0.1",
+        "version_normalized": "0.0.1.0",
+        "time": "2018-02-05T22:23:47+00:00",
+        "source": {
+          "url": "https://github.com/Bit-Wasp/bech32.git",
+          "type": "git",
+          "reference": "e1ea58c848a4ec59d81b697b3dfe9cc99968d0e7"
+        },
+        "require": null,
+        "license": [
+          "Unlicense"
+        ],
+        "autoload": {
+          "files": [
+            "src/bech32.php"
+          ],
+          "psr-4": {
+            "BitWasp\\Bech32\\": "src/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/Bit-Wasp/bech32",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2021-09-23T00:56:11Z",
+        "open_issues_including_prs": 2,
+        "latest_commit": {
+          "sha": "4817830364ca029a9371d8d2a223bbbeb43b63fa",
+          "html_url": "https://github.com/Bit-Wasp/bech32/commit/4817830364ca029a9371d8d2a223bbbeb43b63fa",
+          "committed_at": "2019-04-09T14:42:59Z"
+        },
+        "open_issues": [
+          {
+            "number": 7,
+            "title": "Is it intended that this repo have no license and therefore not be open source?",
+            "html_url": "https://github.com/Bit-Wasp/bech32/issues/7",
+            "created_at": "2019-04-08T23:19:52Z",
+            "updated_at": "2019-04-09T01:38:25Z"
+          }
+        ],
+        "issue_listing_limit": 100
+      }
+    },
+    "cjpgdk/bech32": {
+      "metadata_url": "https://packagist.org/packages/cjpgdk/bech32.json",
+      "repository": "https://github.com/cjpgdk/bech32",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v0.1.2",
+        "version_normalized": "0.1.2.0",
+        "time": "2022-03-23T10:10:10+00:00",
+        "source": {
+          "url": "https://github.com/cjpgdk/bech32.git",
+          "type": "git",
+          "reference": "179e48a87d7824cda335636443fdd2ebc4f96255"
+        },
+        "require": {
+          "php": "^8.1"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "files": [
+            "src/functions.php"
+          ],
+          "psr-4": {
+            "Bech32\\": "src/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/cjpgdk/bech32",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2022-08-12T10:09:50Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "179e48a87d7824cda335636443fdd2ebc4f96255",
+          "html_url": "https://github.com/cjpgdk/bech32/commit/179e48a87d7824cda335636443fdd2ebc4f96255",
+          "committed_at": "2022-03-23T10:10:10Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "cardano-php/bech32": {
+      "metadata_url": "https://packagist.org/packages/cardano-php/bech32.json",
+      "repository": "https://github.com/cardano-php/bech32",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
+        "time": "2025-01-07T23:59:44+00:00",
+        "source": {
+          "url": "https://github.com/cardano-php/bech32.git",
+          "type": "git",
+          "reference": "4d46b51f78a1968d7d0a0ddccf9595ac47294060"
+        },
+        "require": {
+          "php": "^8.2",
+          "ext-sodium": "*"
+        },
+        "license": [
+          "Apache-2.0"
+        ],
+        "autoload": {
+          "psr-4": {
+            "CardanoPhp\\Bech32\\": "src/"
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/cardano-php/bech32",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "main",
+        "pushed_at": "2025-01-08T00:00:21Z",
+        "open_issues_including_prs": 6,
+        "latest_commit": {
+          "sha": "4d46b51f78a1968d7d0a0ddccf9595ac47294060",
+          "html_url": "https://github.com/cardano-php/bech32/commit/4d46b51f78a1968d7d0a0ddccf9595ac47294060",
+          "committed_at": "2025-01-07T23:59:44Z"
+        },
+        "open_issues": [
+          {
+            "number": 13,
+            "title": "Add documentation for encoding/decoding native assets",
+            "html_url": "https://github.com/cardano-php/bech32/issues/13",
+            "created_at": "2025-01-08T01:45:04Z",
+            "updated_at": "2025-01-08T01:45:11Z"
+          },
+          {
+            "number": 12,
+            "title": "Add Explicit Exceptions",
+            "html_url": "https://github.com/cardano-php/bech32/issues/12",
+            "created_at": "2025-01-06T14:49:49Z",
+            "updated_at": "2025-01-06T14:49:49Z"
+          },
+          {
+            "number": 10,
+            "title": "Add support for CIP-105 (Governance Identifiers)",
+            "html_url": "https://github.com/cardano-php/bech32/issues/10",
+            "created_at": "2025-01-05T02:42:38Z",
+            "updated_at": "2025-01-05T02:42:39Z"
+          },
+          {
+            "number": 9,
+            "title": "Add Unit Tests for BIP-00173 Test Vectors",
+            "html_url": "https://github.com/cardano-php/bech32/issues/9",
+            "created_at": "2025-01-03T16:48:11Z",
+            "updated_at": "2025-01-03T16:48:12Z"
+          },
+          {
+            "number": 4,
+            "title": "Minor: The `encode` method does not handle empty data arrays explicitly",
+            "html_url": "https://github.com/cardano-php/bech32/issues/4",
+            "created_at": "2025-01-02T21:12:57Z",
+            "updated_at": "2025-01-02T21:13:13Z"
+          },
+          {
+            "number": 3,
+            "title": "Minor Suggestions",
+            "html_url": "https://github.com/cardano-php/bech32/issues/3",
+            "created_at": "2025-01-02T21:11:42Z",
+            "updated_at": "2025-01-02T21:13:22Z"
+          }
+        ],
+        "issue_listing_limit": 100
+      }
+    },
+    "uma/secp256k1-php": {
+      "metadata_url": "https://packagist.org/packages/uma/secp256k1-php.json",
+      "repository": "https://github.com/1ma/secp256k1-php",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v0.1.2",
+        "version_normalized": "0.1.2.0",
+        "time": "2026-10-11T18:40:25+00:00",
+        "source": {
+          "url": "https://github.com/1ma/secp256k1-php.git",
+          "type": "git",
+          "reference": "3ee95fa4299c108877e0527e8bd1efc4f57982ba"
+        },
+        "require": {
+          "php": ">=8.2"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": null,
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/1ma/secp256k1-php",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2026-10-18T10:12:38Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "860aa042ade85d8191acd9fe8a15a4c7b2f9ebec",
+          "html_url": "https://github.com/1ma/secp256k1-php/commit/860aa042ade85d8191acd9fe8a15a4c7b2f9ebec",
+          "committed_at": "2026-10-18T10:12:34Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "stephenhill/base58": {
+      "metadata_url": "https://packagist.org/packages/stephenhill/base58.json",
+      "repository": "https://github.com/stephen-hill/base58php",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "v2.1.0",
+        "version_normalized": "2.1.0.0",
+        "time": "2025-11-19T11:50:12+00:00",
+        "source": {
+          "url": "https://github.com/stephen-hill/base58php.git",
+          "type": "git",
+          "reference": "3030c00c0a1e1b78520f3ace6fbf813dacddfab5"
+        },
+        "require": {
+          "php": ">=8.1"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "StephenHill\\": "src/"
+          }
+        },
+        "suggest": {
+          "ext-bcmath": "Required for BC Math support",
+          "ext-gmp": "Required for GMP support"
+        }
+      },
+      "github": {
+        "url": "https://github.com/stephen-hill/base58php",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2025-11-19T11:54:06Z",
+        "open_issues_including_prs": 1,
+        "latest_commit": {
+          "sha": "3030c00c0a1e1b78520f3ace6fbf813dacddfab5",
+          "html_url": "https://github.com/stephen-hill/base58php/commit/3030c00c0a1e1b78520f3ace6fbf813dacddfab5",
+          "committed_at": "2025-11-19T11:50:12Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "furqansiddiqui/base58check-php": {
+      "metadata_url": "https://packagist.org/packages/furqansiddiqui/base58check-php.json",
+      "repository": "https://github.com/furqansiddiqui/base58check-php",
+      "abandoned": false,
+      "latest_stable": {
+        "version": "0.1.5",
+        "version_normalized": "0.1.5.0",
+        "time": "2019-11-20T13:53:15+00:00",
+        "source": {
+          "url": "https://github.com/furqansiddiqui/base58check-php.git",
+          "type": "git",
+          "reference": "cbd6ba632bb5818722e22cd311c31996137bb3f8"
+        },
+        "require": {
+          "php-64bit": "^7.2",
+          "ext-openssl": "*",
+          "ext-bcmath": "*",
+          "comely-io/data-types": "^1.0.30"
+        },
+        "license": [
+          "MIT"
+        ],
+        "autoload": {
+          "psr-4": {
+            "FurqanSiddiqui\\Base58\\": [
+              "src"
+            ]
+          }
+        },
+        "suggest": null
+      },
+      "github": {
+        "url": "https://github.com/furqansiddiqui/base58check-php",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2019-11-21T07:07:51Z",
+        "open_issues_including_prs": 0,
+        "latest_commit": {
+          "sha": "cbd6ba632bb5818722e22cd311c31996137bb3f8",
+          "html_url": "https://github.com/furqansiddiqui/base58check-php/commit/cbd6ba632bb5818722e22cd311c31996137bb3f8",
+          "committed_at": "2019-11-20T13:53:15Z"
+        },
+        "open_issues": [],
+        "issue_listing_limit": 100
+      }
+    },
+    "allty/base58": {
+      "metadata_url": "https://packagist.org/packages/allty/base58.json",
+      "repository": "https://github.com/mattallty/base58",
+      "abandoned": false,
+      "latest_stable": null,
+      "github": {
+        "url": "https://github.com/mattallty/base58",
+        "archived": false,
+        "disabled": false,
+        "default_branch": "master",
+        "pushed_at": "2014-04-28T13:01:03Z",
+        "open_issues_including_prs": 1,
+        "latest_commit": {
+          "sha": "fc495282154933d5de3c2c38bddcf8c8aa8bd07a",
+          "html_url": "https://github.com/mattallty/base58/commit/fc495282154933d5de3c2c38bddcf8c8aa8bd07a",
+          "committed_at": "2014-04-28T13:01:02Z"
+        },
+        "open_issues": [
+          {
+            "number": 3,
+            "title": "encode/decode does not result in the same number in some cases.",
+            "html_url": "https://github.com/mattallty/base58/issues/3",
+            "created_at": "2018-06-19T16:27:59Z",
+            "updated_at": "2024-02-21T17:39:54Z"
+          }
+        ],
+        "issue_listing_limit": 100
+      }
+    }
+  }
+}

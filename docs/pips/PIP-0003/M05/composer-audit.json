@@ -1,0 +1,30 @@
+{
+  "checked_on": "2026-10-21",
+  "command": "composer audit --locked --no-dev --format=json",
+  "graphs": {
+    "paragonie-bitwasp": {
+      "exit": 0,
+      "result": {
+        "advisories": [],
+        "abandoned": [],
+        "filter": []
+      }
+    },
+    "simplito-cjpgdk": {
+      "exit": 0,
+      "result": {
+        "advisories": [],
+        "abandoned": [],
+        "filter": []
+      }
+    },
+    "paragonie-cardano": {
+      "exit": 0,
+      "result": {
+        "advisories": [],
+        "abandoned": [],
+        "filter": []
+      }
+    }
+  }
+}

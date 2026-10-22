@@ -1,0 +1,714 @@
+{
+  "image_id": "72c1cdc1ac79c39dffd2237f1605f32e4a78d9b7169da3cadaa9e2425dceb252",
+  "probe_sources_sha256": {
+    "docs/pips/PIP-0003/M05/run-graph-probes.py": "155785f73c0c5644876d2cdfe36398fda45e84ec85fafc483d8062cd00db8569",
+    "docs/pips/PIP-0003/M05/provider-graph-probe.php": "5706d594d386d8e269e13ce2a58ffef110d006a5084c0187c36081259d353ec2",
+    "docs/pips/PIP-0003/M03/ckdpub-composition-probe.php": "4e06a70915053f962d3391c6ccdb5d407cb9f7c9093651627537c86816b6de4b",
+    "docs/pips/PIP-0003/M03/native-false-classifier.php": "3d8699edfb334256d7d730a39df921a15d4bb2217600212e34399f5a32056970",
+    "docs/pips/PIP-0003/M03/ckdpub-public-fixtures.json": "a62ab4f3501b6a4f1d79a7e003ca36580b357eddb09afda1f968d32d3e83e70f",
+    "docs/pips/PIP-0003/M03/ckdpub-comparison.json": "d426cccde88386f27aba044f159d92250424220de072133dceb769e6319c009b",
+    "docs/pips/PIP-0003/M03/php-parser-fault-comparison.json": "bb773ef8c95a1ed9a771b2226eb16ed4078ea7afe3bc44fd9710bea588848d79",
+    "docs/pips/PIP-0003/M03/hash-fault-comparison.json": "a76e837e087bf592cdafd8a7679db0544be4b64f6e5bdfe8c523bb1168a70aac",
+    "docs/pips/PIP-0003/M03/common-mode-comparison.json": "acf78bc9ec3d90185c6c9d3f5cf5a35431b2bd8d9017f5145351ffbb3d30f548",
+    "docs/pips/PIP-0003/M00/reviews/bitwasp-public-derivation/bip-0032.mediawiki": "e5e00a8289db2f681052cf24a745320afc225e66b25d1e489a7c884d2fc7f11f",
+    "docs/pips/PIP-0003/M04/codec-composition-probe.php": "9873af27b515dd80554d79ed89d6d248b3a216e59c535f16895ab81a6089e0b8"
+  },
+  "graphs": {
+    "paragonie-bitwasp": {
+      "php": "8.5.12",
+      "integer_bytes": 8,
+      "lock_sha256": "cd94f8b4019b4b973ca5af45510c483c82383288b80b1212149a1b0aba9a956c",
+      "installed_packages": [
+        {
+          "name": "bitwasp/bech32",
+          "version": "v0.0.1",
+          "source": "e1ea58c848a4ec59d81b697b3dfe9cc99968d0e7"
+        },
+        {
+          "name": "genkgo/php-asn1",
+          "version": "v2.9.0",
+          "source": "dc535345d0ecc69181c6a1e17e57a625bd01f891"
+        },
+        {
+          "name": "paragonie/ecc",
+          "version": "v2.6.0",
+          "source": "1a49380410b8ce826bc7fd3de6324053e049205c"
+        },
+        {
+          "name": "paragonie/sodium_compat",
+          "version": "v2.5.2",
+          "source": "3246b36803c177847e677862fedeb7f937869adb"
+        },
+        {
+          "name": "tuupola/base58",
+          "version": "2.2.0",
+          "source": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        }
+      ],
+      "commands": [
+        {
+          "label": "platform",
+          "command": [
+            "composer",
+            "check-platform-reqs",
+            "--no-dev",
+            "--format=json"
+          ],
+          "exit": 0,
+          "stdout_sha256": "559ade599b64b975256adcf22f4051426d2f37ebc0db01614b78999dfbd063ff",
+          "stderr_sha256": "23be42d5d451773dfc5c957b7aef1c07cfc43631b1883649797ef72275a475e2"
+        },
+        {
+          "label": "graph",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M05/provider-graph-probe.php",
+            "paragonie",
+            "bitwasp"
+          ],
+          "exit": 0,
+          "stdout_sha256": "5b3505948e98ad9a5bb879b41ccb067cd0f3af4d4108172aa81a8864cbfdbc12",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "parser-faults",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--parser-faults"
+          ],
+          "exit": 0,
+          "stdout_sha256": "52257f80877027ccb931b601f97101814d564a30448da858e90ef748a6568e9b",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "hash-faults",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--hash-faults"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8b1a294f3e9cad374317053ec06cca4686af384e886a5fd637922248d76f0950",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "common-mode",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--common-mode"
+          ],
+          "exit": 0,
+          "stdout_sha256": "424086c3c07c64f80d789e7a46aafcc820d3f395f542bf7505489ead8aaeb523",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "expect-disabled-hash",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "disable_functions=hash",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--expect-disabled-hash"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f5664da95e82e15b287c2415e9c07b2b749c817dd35e3f2660d6e75ee4b156d4",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "expect-disabled-hmac",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "disable_functions=hash_hmac",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--expect-disabled-hmac"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b43b5ab5f70d93d5f30966155ba8bf899d77506ac7043a4ecfb36d09cb0967cf",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "graph_result": {
+        "php": "8.5.12",
+        "integer_bytes": 8,
+        "ecc": "paragonie",
+        "segwit": "bitwasp",
+        "ckdpub_matches_saved_common_result": true,
+        "published_and_differential_addresses": {
+          "bip173_mainnet": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+          "bip173_testnet": "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx",
+          "bip84_mainnet": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+          "bc_zeros": "bc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9e75rs",
+          "bc_ones": "bc1qllllllllllllllllllllllllllllllllfglmy6",
+          "bc_ascending": "bc1qqqqsyqcyq5rqwzqfpg9scrgwpugpzysn4v0345",
+          "tb_zeros": "tb1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq0l98cr",
+          "tb_ones": "tb1qllllllllllllllllllllllllllllllllrwyglf",
+          "tb_ascending": "tb1qqqqsyqcyq5rqwzqfpg9scrgwpugpzysnl25zw8"
+        },
+        "six_public_versions": {
+          "0488b21e": "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
+          "049d7cb2": "ypub6QqdH2c5z7967BioGSfAWFHM1EHzHPBZK7wrND3ZpEWFtzmCqvsD1bgpaE6pSAPkiSKhkuWPCJV6mZTSNMd2tK8xYTcJ48585pZecmSUzWp",
+          "04b24746": "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL",
+          "043587cf": "tpubD6NzVbkrYhZ4XgiXtGrdW5XDAPFCL9h7we1vwNCpn8tGbBcgfVYjXyhWo4E1xkh56hjod1RhGjxbaTLV3X4FyWuejifB9jusQ46QzG87VKp",
+          "044a5262": "upub57Wa4MvRPNyAhzxKw1WfftuLKMiCWuDZefryEdU2JCzjgbWHqJCxXM4GVQGUSXn55srUm189Mf4uER1BVZxyhNQZ56pbiUoAzvK54VEYrWu",
+          "045f1cf6": "vpub5SLqN2bLY4WeZJ9SmNJHsyzqVKreTXD4ZnPC22MugDNcjhKX5xNX9QiQWcE4SSRzVWyHWUihpKRT7hckDGNzVc69wSX2JPcfGeNiT5c2XZy"
+        },
+        "bip49_address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+        "faults": {
+          "program_0": "invalid_witness",
+          "program_19": "invalid_witness",
+          "program_21": "invalid_witness",
+          "program_32": "invalid_witness",
+          "encode_empty": "provider_failure",
+          "encode_wrong_type": "provider_failure",
+          "encode_uppercase": "provider_failure",
+          "encode_exception": "provider_failure",
+          "encode_wrong_valid_address": "accepted"
+        },
+        "cardano_conversion_faults": [],
+        "installed_package_references": {
+          "bitwasp/bech32": "e1ea58c848a4ec59d81b697b3dfe9cc99968d0e7",
+          "genkgo/php-asn1": "dc535345d0ecc69181c6a1e17e57a625bd01f891",
+          "paragonie/ecc": "1a49380410b8ce826bc7fd3de6324053e049205c",
+          "paragonie/sodium_compat": "3246b36803c177847e677862fedeb7f937869adb",
+          "tuupola/base58": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        },
+        "loaded_vendor_files_sha256": {
+          "autoload.php": "b6346ccb10a0386c9d2bd029bd68b559c09a8c0a77fa62a6446870ff8858bad9",
+          "bitwasp/bech32/src/bech32.php": "7e2ed5a0a138f164529cd0c90d7a3ed17c92efec10a7ea04b0a08996feec1dd5",
+          "paragonie/ecc/src/Curves/BrainpoolCurve.php": "c3ad76605a61bcf7d7252cae41b5326a8f7cf2d0148c26a87aee6e228fed2c3e",
+          "paragonie/ecc/src/Curves/NamedCurveFp.php": "0ce973172d2e7ac0d34be49d2b0b022007c10c804e0a484448a32a31678d57cd",
+          "paragonie/ecc/src/Curves/NistCurve.php": "a00f21137a30701bbb50715a62b3115c70269029172a62817a37a8af946899de",
+          "paragonie/ecc/src/Curves/OpensslTrait.php": "e0f4015ec990815076862374b9161e81df0b835df781a5c1160a94b1a2d9a505",
+          "paragonie/ecc/src/Curves/SecgCurve.php": "f07da8450bce3f50da3d48934c8c1146605ef5ba86d061059b27f4040c8806fd",
+          "paragonie/ecc/src/Exception/NumberTheoryException.php": "b71e4835238006086443de86bf0df96a064e25700d8782f116b2d8b37df02420",
+          "paragonie/ecc/src/Exception/PointException.php": "f1545dc30601cd7eb38acbdbf1cceb6dbadcf6bd2f6da73e0d8287c30bff7b52",
+          "paragonie/ecc/src/Exception/PointRecoveryException.php": "2a2d5fd1823363e9e729ce594b4bd5dc5d636139a7cb40621a3a7e31eed66750",
+          "paragonie/ecc/src/Exception/SquareRootException.php": "633c58ad927570c8a45f8c51a99df5fb6c7515d9202df1dfb042affe90b1f344",
+          "paragonie/ecc/src/Math/ConstantTimeMath.php": "4a1f98f1d6b948b616bbebbad47519a7fd22988640445218d52b9909f2621aa3",
+          "paragonie/ecc/src/Math/GmpMath.php": "f3b2d07d2f98f858808f5a66d0cc3db5ceb640a062eb0657167d1aa36100b2a7",
+          "paragonie/ecc/src/Math/GmpMathInterface.php": "1879e849e00b80de298becc9b73a43369eca6e6548f6c499cdc59a94bd7b642f",
+          "paragonie/ecc/src/Math/MathAdapterFactory.php": "6b7ebfa9f373ce525c8ea7fdecd14497ef684e1bca2522b3f302eb0cc182765d",
+          "paragonie/ecc/src/Math/ModularArithmetic.php": "3627c301ed7964c56f24986f626bf40ee4e1a6328f6b1e0c03c48e0684bd6c07",
+          "paragonie/ecc/src/Math/NumberTheory.php": "692c19c48c621ef681cdced81ae936ebf7a16ab65af831dca4170f6841fa51af",
+          "paragonie/ecc/src/OpensslFallbackTrait.php": "be7fa7172ed1248501c38cff7a66316a665833ec100482fe39f33a385ba5041e",
+          "paragonie/ecc/src/Primitives/CurveFp.php": "2c6e2b261268ff6c2ff94cc2a2e65887aff59c148a29867d2164dca70f5e8f91",
+          "paragonie/ecc/src/Primitives/CurveFpInterface.php": "46f026e930c7860b4df2e14f685bc1a83c53e2bf7fd25a44a54e15405850465d",
+          "paragonie/ecc/src/Primitives/CurveParameters.php": "1fe08708eea6a92ca665153759ed6f3e37bb565bb3403a78b7eaac27a529f46c",
+          "paragonie/ecc/src/Primitives/GeneratorPoint.php": "d98b0552a31d8a19b8223e2e8089697de1967726b01180c2db55b2ebf657bd83",
+          "paragonie/ecc/src/Primitives/Point.php": "bcac7c29964bcb900c09bf05cd007ddc832cb689fc62f9da4e81cd27cb984673",
+          "paragonie/ecc/src/Primitives/PointInterface.php": "db3c264b28b5c7c7a841a73f70efdd87bc97dd322a0af90b3d0d2fcbda97efef",
+          "paragonie/ecc/src/Random/RandomGeneratorFactory.php": "d7f6ef9eca422e1cffd33d32048daccc8478be281035227810a5060e197b762b",
+          "paragonie/ecc/src/Random/RandomNumberGenerator.php": "6a056424d01dd57760728c11676c47deed0ae1b5e9bc27f63e2f8e9c06699987",
+          "paragonie/ecc/src/Random/RandomNumberGeneratorInterface.php": "2fb2da568bfb88f08e34490e239bbc57f0d500716206f69036bcd2c2d6196aa0",
+          "paragonie/ecc/src/Serializer/Point/CompressedPointSerializer.php": "10dcf81f2e27567ae8d369673b340081857c7f4f0ddf0581a496de136d1648ff",
+          "paragonie/ecc/src/Serializer/Point/PointSerializerInterface.php": "873fb83cd78359fde0229954d81bd7bc5501a8d07bbfcb50f40c12ce4890b6d7",
+          "paragonie/ecc/src/Serializer/Util/CurveOidMapper.php": "aa809afffc3671115f1bff5109516b0f1838e8a0d6ff323f12f1f6c1ce90a4d8",
+          "paragonie/ecc/src/Util/BinaryString.php": "571f13be431320198861c81cc5fc96fc2951dedbba9510cb988bbe8f08cf0e72",
+          "paragonie/sodium_compat/autoload.php": "25215d2d3078f9a18500b76fb0653fdf2abb8bc9f5bf9cd845aed33511b8057c",
+          "paragonie/sodium_compat/lib/php84compat_const.php": "c775d52838278ab3f8d739d16c1350223038c69e3a98503066d7c6b022fffbd6",
+          "paragonie/sodium_compat/lib/ristretto255.php": "6039658ad533e245a956c6603dfe3b1d1ced63b0a3f2352f1fb2ea871352b843",
+          "paragonie/sodium_compat/lib/stream-xchacha20.php": "5f0f7d2ed757d5f2d55d205e160a10c4d113f33cc8ae05e315771cc12a7e5c54",
+          "paragonie/sodium_compat/src/Compat.php": "00464b60ae939bcda1a163b86b6426ce20451c3601662947152ffc737251a588",
+          "paragonie/sodium_compat/src/Core/Util.php": "d12fb000527782595df61ec2794d2bc8c32d8bdd5291eb2d90af64dbe4ec4821",
+          "paragonie/sodium_compat/src/File.php": "dddfcd5672b060e2d1bd1a40e492446e93a3d3ad5541d5b10715771d37db3135",
+          "tuupola/base58/src/Base58.php": "bc7f40b71b674b6a03dfb19b0a2fd7373f0b0df06ac217513bcd6789c3abe347",
+          "tuupola/base58/src/Base58/BaseEncoder.php": "77e2ac2588d99606131c7ae9c06a8f8f505feae171c3b156698770a5088c1bbe",
+          "tuupola/base58/src/Base58/PhpEncoder.php": "7c8029ce9156059658938d36464692ba070cc1a00538f52f3c39eb389cc4fccb"
+        }
+      }
+    },
+    "simplito-cjpgdk": {
+      "php": "8.5.12",
+      "integer_bytes": 8,
+      "lock_sha256": "e89f88fd8e5cf38fd72c36cd5f5c31f23266f5a756037b110318a0cfd5f97d7c",
+      "installed_packages": [
+        {
+          "name": "cjpgdk/bech32",
+          "version": "v0.1.2",
+          "source": "179e48a87d7824cda335636443fdd2ebc4f96255"
+        },
+        {
+          "name": "simplito/bigint-wrapper-php",
+          "version": "1.0.0",
+          "source": "cf21ec76d33f103add487b3eadbd9f5033a25930"
+        },
+        {
+          "name": "simplito/bn-php",
+          "version": "1.1.4",
+          "source": "83446756a81720eacc2ffb87ff97958431451fd6"
+        },
+        {
+          "name": "simplito/elliptic-php",
+          "version": "1.0.12",
+          "source": "be321666781be2be2c89c79c43ffcac834bc8868"
+        },
+        {
+          "name": "tuupola/base58",
+          "version": "2.2.0",
+          "source": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        }
+      ],
+      "commands": [
+        {
+          "label": "platform",
+          "command": [
+            "composer",
+            "check-platform-reqs",
+            "--no-dev",
+            "--format=json"
+          ],
+          "exit": 0,
+          "stdout_sha256": "559ade599b64b975256adcf22f4051426d2f37ebc0db01614b78999dfbd063ff",
+          "stderr_sha256": "23be42d5d451773dfc5c957b7aef1c07cfc43631b1883649797ef72275a475e2"
+        },
+        {
+          "label": "graph",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M05/provider-graph-probe.php",
+            "simplito",
+            "cjpgdk"
+          ],
+          "exit": 0,
+          "stdout_sha256": "87f65457018f25b7c85910ad89cc515e1eb8c717338ca7c9086c8ebf2712240f",
+          "stderr_sha256": "64a5df01d8e8dbca2d779993a82b0d9a8109544d13439269b14299ef5aaec861"
+        },
+        {
+          "label": "parser-faults",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "simplito",
+            "--parser-faults"
+          ],
+          "exit": 0,
+          "stdout_sha256": "63479526322b621f3a5c790a3885b2d2fbd986704eafc770241045a99eed634d",
+          "stderr_sha256": "f1c5f3ad244e0441a16b3ed4dab45390807349cf39f0be621aa79e3de739ba5b"
+        },
+        {
+          "label": "hash-faults",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "simplito",
+            "--hash-faults"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9c8e865363664bbee944e43a6925d53be241ef6f05bc78127f12716645958edb",
+          "stderr_sha256": "f1c5f3ad244e0441a16b3ed4dab45390807349cf39f0be621aa79e3de739ba5b"
+        },
+        {
+          "label": "common-mode",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "simplito",
+            "--common-mode"
+          ],
+          "exit": 0,
+          "stdout_sha256": "ef09db0647deca26cb8d6388084900d94446f840606de51c79cc4d09130416e4",
+          "stderr_sha256": "f1c5f3ad244e0441a16b3ed4dab45390807349cf39f0be621aa79e3de739ba5b"
+        },
+        {
+          "label": "expect-disabled-hash",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "disable_functions=hash",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "simplito",
+            "--expect-disabled-hash"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4ba8085695daf3c943ff28ea14e5d7c9ea661307535e2587d88914126add87bd",
+          "stderr_sha256": "f1c5f3ad244e0441a16b3ed4dab45390807349cf39f0be621aa79e3de739ba5b"
+        },
+        {
+          "label": "expect-disabled-hmac",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "disable_functions=hash_hmac",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "simplito",
+            "--expect-disabled-hmac"
+          ],
+          "exit": 0,
+          "stdout_sha256": "1adeba97ae1986dbf9abf5982f663acd63a4583cde334d75e3d623610c6dd367",
+          "stderr_sha256": "f1c5f3ad244e0441a16b3ed4dab45390807349cf39f0be621aa79e3de739ba5b"
+        }
+      ],
+      "graph_result": {
+        "php": "8.5.12",
+        "integer_bytes": 8,
+        "ecc": "simplito",
+        "segwit": "cjpgdk",
+        "ckdpub_matches_saved_common_result": true,
+        "published_and_differential_addresses": {
+          "bip173_mainnet": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+          "bip173_testnet": "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx",
+          "bip84_mainnet": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+          "bc_zeros": "bc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9e75rs",
+          "bc_ones": "bc1qllllllllllllllllllllllllllllllllfglmy6",
+          "bc_ascending": "bc1qqqqsyqcyq5rqwzqfpg9scrgwpugpzysn4v0345",
+          "tb_zeros": "tb1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq0l98cr",
+          "tb_ones": "tb1qllllllllllllllllllllllllllllllllrwyglf",
+          "tb_ascending": "tb1qqqqsyqcyq5rqwzqfpg9scrgwpugpzysnl25zw8"
+        },
+        "six_public_versions": {
+          "0488b21e": "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
+          "049d7cb2": "ypub6QqdH2c5z7967BioGSfAWFHM1EHzHPBZK7wrND3ZpEWFtzmCqvsD1bgpaE6pSAPkiSKhkuWPCJV6mZTSNMd2tK8xYTcJ48585pZecmSUzWp",
+          "04b24746": "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL",
+          "043587cf": "tpubD6NzVbkrYhZ4XgiXtGrdW5XDAPFCL9h7we1vwNCpn8tGbBcgfVYjXyhWo4E1xkh56hjod1RhGjxbaTLV3X4FyWuejifB9jusQ46QzG87VKp",
+          "044a5262": "upub57Wa4MvRPNyAhzxKw1WfftuLKMiCWuDZefryEdU2JCzjgbWHqJCxXM4GVQGUSXn55srUm189Mf4uER1BVZxyhNQZ56pbiUoAzvK54VEYrWu",
+          "045f1cf6": "vpub5SLqN2bLY4WeZJ9SmNJHsyzqVKreTXD4ZnPC22MugDNcjhKX5xNX9QiQWcE4SSRzVWyHWUihpKRT7hckDGNzVc69wSX2JPcfGeNiT5c2XZy"
+        },
+        "bip49_address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+        "faults": {
+          "program_0": "invalid_witness",
+          "program_19": "invalid_witness",
+          "program_21": "invalid_witness",
+          "program_32": "invalid_witness",
+          "encode_empty": "provider_failure",
+          "encode_wrong_type": "provider_failure",
+          "encode_uppercase": "provider_failure",
+          "encode_exception": "provider_failure",
+          "encode_wrong_valid_address": "accepted"
+        },
+        "cardano_conversion_faults": [],
+        "installed_package_references": {
+          "cjpgdk/bech32": "179e48a87d7824cda335636443fdd2ebc4f96255",
+          "simplito/bigint-wrapper-php": "cf21ec76d33f103add487b3eadbd9f5033a25930",
+          "simplito/bn-php": "83446756a81720eacc2ffb87ff97958431451fd6",
+          "simplito/elliptic-php": "be321666781be2be2c89c79c43ffcac834bc8868",
+          "tuupola/base58": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        },
+        "loaded_vendor_files_sha256": {
+          "autoload.php": "f37c7261f4451427159c13838c100c7d97b95cbcf7860fd7a68b583963188e7f",
+          "cjpgdk/bech32/src/Bech32.php": "9c98da3f52a1d062b03f05622e2ad59b441552efb28f1711d1f86189b95f3274",
+          "cjpgdk/bech32/src/Bech32Encoding.php": "70d0f170c6f88a769f415aac465cc566392e0096dd7afd2a0aafc83a7e08f319",
+          "cjpgdk/bech32/src/functions.php": "8803d595a1f7f4feece7e4b4c21f3176baa742fca3589eaa5e966991d5c6a9aa",
+          "simplito/bigint-wrapper-php/lib/BigInteger.php": "26513cd0cf8026989a2cdc619840da2b8963ee1977d48187d572f12f0ae82415",
+          "simplito/bn-php/lib/BN.php": "fb5c231d0874b9186404dee9e7e138133deadadf4e840959f3014b50dcad1db1",
+          "simplito/bn-php/lib/Red.php": "ddb6ab78b69233f2705953172f29a5e2813028e82ab734fc97ab28ab32f6727f",
+          "simplito/elliptic-php/lib/Curve/BaseCurve.php": "22745b4871e50fe5007bac1f58b562419a1c1e56076a4d0acd5e5d3a0e29637e",
+          "simplito/elliptic-php/lib/Curve/BaseCurve/Point.php": "19e510468aed234cb2fbfeee643702bbd1228a18277de7ddc5375629afdb83e7",
+          "simplito/elliptic-php/lib/Curve/EdwardsCurve.php": "b7532480eeaa4206519e3b8629b8a55d2aa95e0604b7deba9407163acb907da1",
+          "simplito/elliptic-php/lib/Curve/EdwardsCurve/Point.php": "7061bd20e7505cffd989156f5ed4e123a89976b82b684f5475beab3f77fb16fe",
+          "simplito/elliptic-php/lib/Curve/MontCurve.php": "f23c85903bbba21a66451bcf337f3a1c68fa9111a4d0f888bf0b4410296e4b3f",
+          "simplito/elliptic-php/lib/Curve/MontCurve/Point.php": "6fad36ae6902941522a1fa2b6561f73f89401fb80521dcf0f034e1703e130bf0",
+          "simplito/elliptic-php/lib/Curve/PresetCurve.php": "79265bda854d45f103654e09e8a4dac23ac165cde004d3ed43a2d550b0570d47",
+          "simplito/elliptic-php/lib/Curve/ShortCurve.php": "1a9fe338f28de3d33b60f2b7fe41f6d543d819fc04ca50bf875ea6a2b7932783",
+          "simplito/elliptic-php/lib/Curve/ShortCurve/JPoint.php": "3ceb1c1fe4baef2503e0e456b7a136693fd5526369d3865101248ed9794dc95a",
+          "simplito/elliptic-php/lib/Curve/ShortCurve/Point.php": "d7eaecabbb4f14ea108193de18600dc2b75e9d79c55864424968dd0bb9823bcc",
+          "simplito/elliptic-php/lib/Curves.php": "1724eb75cc6230a3bc248e30e5ccec8d52ffdbce7b95a108bdd5d9dd904b5d9b",
+          "simplito/elliptic-php/lib/EC.php": "96a7d6a34c8b3a1ae27aa79835b8f06cfa55868fd1041140cdd5cf5fe0f70fb6",
+          "simplito/elliptic-php/lib/EC/KeyPair.php": "495594512524fb2591b629f1ecd9da8f61dd2eacc501d31c08bcec55e4923eed",
+          "simplito/elliptic-php/lib/Utils.php": "5739b8fd6ad02997f16e82d73ed6acfc98805dd833f61cfe3e121b3b55542b9b",
+          "tuupola/base58/src/Base58.php": "bc7f40b71b674b6a03dfb19b0a2fd7373f0b0df06ac217513bcd6789c3abe347",
+          "tuupola/base58/src/Base58/BaseEncoder.php": "77e2ac2588d99606131c7ae9c06a8f8f505feae171c3b156698770a5088c1bbe",
+          "tuupola/base58/src/Base58/PhpEncoder.php": "7c8029ce9156059658938d36464692ba070cc1a00538f52f3c39eb389cc4fccb"
+        }
+      }
+    },
+    "paragonie-cardano": {
+      "php": "8.5.12",
+      "integer_bytes": 8,
+      "lock_sha256": "c37a2596dd707a2cc594ae495c07ad95bd8a8708527c23eb1c875d932d18d746",
+      "installed_packages": [
+        {
+          "name": "cardano-php/bech32",
+          "version": "v1.1.0",
+          "source": "4d46b51f78a1968d7d0a0ddccf9595ac47294060"
+        },
+        {
+          "name": "genkgo/php-asn1",
+          "version": "v2.9.0",
+          "source": "dc535345d0ecc69181c6a1e17e57a625bd01f891"
+        },
+        {
+          "name": "paragonie/ecc",
+          "version": "v2.6.0",
+          "source": "1a49380410b8ce826bc7fd3de6324053e049205c"
+        },
+        {
+          "name": "paragonie/sodium_compat",
+          "version": "v2.5.2",
+          "source": "3246b36803c177847e677862fedeb7f937869adb"
+        },
+        {
+          "name": "tuupola/base58",
+          "version": "2.2.0",
+          "source": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        }
+      ],
+      "commands": [
+        {
+          "label": "platform",
+          "command": [
+            "composer",
+            "check-platform-reqs",
+            "--no-dev",
+            "--format=json"
+          ],
+          "exit": 0,
+          "stdout_sha256": "28186ffd914755dbfa9a6481d6ad82da1ec6f59f5c7a69babe830058e52bed64",
+          "stderr_sha256": "23be42d5d451773dfc5c957b7aef1c07cfc43631b1883649797ef72275a475e2"
+        },
+        {
+          "label": "graph",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M05/provider-graph-probe.php",
+            "paragonie",
+            "cardano"
+          ],
+          "exit": 0,
+          "stdout_sha256": "29244047075e8982d038da5c7acf4b2c85bdadf8a12186e0e9bf0dc5ed0ab4d3",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "parser-faults",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--parser-faults"
+          ],
+          "exit": 0,
+          "stdout_sha256": "52257f80877027ccb931b601f97101814d564a30448da858e90ef748a6568e9b",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "hash-faults",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--hash-faults"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8b1a294f3e9cad374317053ec06cca4686af384e886a5fd637922248d76f0950",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "common-mode",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--common-mode"
+          ],
+          "exit": 0,
+          "stdout_sha256": "424086c3c07c64f80d789e7a46aafcc820d3f395f542bf7505489ead8aaeb523",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "expect-disabled-hash",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "disable_functions=hash",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--expect-disabled-hash"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f5664da95e82e15b287c2415e9c07b2b749c817dd35e3f2660d6e75ee4b156d4",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "label": "expect-disabled-hmac",
+          "command": [
+            "php",
+            "-d",
+            "error_reporting=E_ALL",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "disable_functions=hash_hmac",
+            "/repo/docs/pips/PIP-0003/M03/ckdpub-composition-probe.php",
+            "paragonie",
+            "--expect-disabled-hmac"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b43b5ab5f70d93d5f30966155ba8bf899d77506ac7043a4ecfb36d09cb0967cf",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "graph_result": {
+        "php": "8.5.12",
+        "integer_bytes": 8,
+        "ecc": "paragonie",
+        "segwit": "cardano",
+        "ckdpub_matches_saved_common_result": true,
+        "published_and_differential_addresses": {
+          "bip173_mainnet": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+          "bip173_testnet": "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx",
+          "bip84_mainnet": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+          "bc_zeros": "bc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9e75rs",
+          "bc_ones": "bc1qllllllllllllllllllllllllllllllllfglmy6",
+          "bc_ascending": "bc1qqqqsyqcyq5rqwzqfpg9scrgwpugpzysn4v0345",
+          "tb_zeros": "tb1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq0l98cr",
+          "tb_ones": "tb1qllllllllllllllllllllllllllllllllrwyglf",
+          "tb_ascending": "tb1qqqqsyqcyq5rqwzqfpg9scrgwpugpzysnl25zw8"
+        },
+        "six_public_versions": {
+          "0488b21e": "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
+          "049d7cb2": "ypub6QqdH2c5z7967BioGSfAWFHM1EHzHPBZK7wrND3ZpEWFtzmCqvsD1bgpaE6pSAPkiSKhkuWPCJV6mZTSNMd2tK8xYTcJ48585pZecmSUzWp",
+          "04b24746": "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL",
+          "043587cf": "tpubD6NzVbkrYhZ4XgiXtGrdW5XDAPFCL9h7we1vwNCpn8tGbBcgfVYjXyhWo4E1xkh56hjod1RhGjxbaTLV3X4FyWuejifB9jusQ46QzG87VKp",
+          "044a5262": "upub57Wa4MvRPNyAhzxKw1WfftuLKMiCWuDZefryEdU2JCzjgbWHqJCxXM4GVQGUSXn55srUm189Mf4uER1BVZxyhNQZ56pbiUoAzvK54VEYrWu",
+          "045f1cf6": "vpub5SLqN2bLY4WeZJ9SmNJHsyzqVKreTXD4ZnPC22MugDNcjhKX5xNX9QiQWcE4SSRzVWyHWUihpKRT7hckDGNzVc69wSX2JPcfGeNiT5c2XZy"
+        },
+        "bip49_address": "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2",
+        "faults": {
+          "program_0": "invalid_witness",
+          "program_19": "invalid_witness",
+          "program_21": "invalid_witness",
+          "program_32": "invalid_witness",
+          "encode_empty": "provider_failure",
+          "encode_wrong_type": "provider_failure",
+          "encode_uppercase": "provider_failure",
+          "encode_exception": "provider_failure",
+          "encode_wrong_valid_address": "accepted"
+        },
+        "cardano_conversion_faults": {
+          "exception": "provider_failure",
+          "wrong_type": "provider_failure",
+          "short": "provider_failure",
+          "non_list": "provider_failure",
+          "float": "provider_failure",
+          "out_of_range": "provider_failure"
+        },
+        "installed_package_references": {
+          "cardano-php/bech32": "4d46b51f78a1968d7d0a0ddccf9595ac47294060",
+          "genkgo/php-asn1": "dc535345d0ecc69181c6a1e17e57a625bd01f891",
+          "paragonie/ecc": "1a49380410b8ce826bc7fd3de6324053e049205c",
+          "paragonie/sodium_compat": "3246b36803c177847e677862fedeb7f937869adb",
+          "tuupola/base58": "a2fac671f14890c8fa62ac081eeeb90f42839637"
+        },
+        "loaded_vendor_files_sha256": {
+          "autoload.php": "622e5731abccd44e617323f2b58901c155c7764f973fe87deb58b8efa90c9974",
+          "cardano-php/bech32/src/Bech32.php": "a79c8bce628066f53f26602ff971ad326ca2aa774e673db37b401d42589154dc",
+          "paragonie/ecc/src/Curves/BrainpoolCurve.php": "c3ad76605a61bcf7d7252cae41b5326a8f7cf2d0148c26a87aee6e228fed2c3e",
+          "paragonie/ecc/src/Curves/NamedCurveFp.php": "0ce973172d2e7ac0d34be49d2b0b022007c10c804e0a484448a32a31678d57cd",
+          "paragonie/ecc/src/Curves/NistCurve.php": "a00f21137a30701bbb50715a62b3115c70269029172a62817a37a8af946899de",
+          "paragonie/ecc/src/Curves/OpensslTrait.php": "e0f4015ec990815076862374b9161e81df0b835df781a5c1160a94b1a2d9a505",
+          "paragonie/ecc/src/Curves/SecgCurve.php": "f07da8450bce3f50da3d48934c8c1146605ef5ba86d061059b27f4040c8806fd",
+          "paragonie/ecc/src/Exception/NumberTheoryException.php": "b71e4835238006086443de86bf0df96a064e25700d8782f116b2d8b37df02420",
+          "paragonie/ecc/src/Exception/PointException.php": "f1545dc30601cd7eb38acbdbf1cceb6dbadcf6bd2f6da73e0d8287c30bff7b52",
+          "paragonie/ecc/src/Exception/PointRecoveryException.php": "2a2d5fd1823363e9e729ce594b4bd5dc5d636139a7cb40621a3a7e31eed66750",
+          "paragonie/ecc/src/Exception/SquareRootException.php": "633c58ad927570c8a45f8c51a99df5fb6c7515d9202df1dfb042affe90b1f344",
+          "paragonie/ecc/src/Math/ConstantTimeMath.php": "4a1f98f1d6b948b616bbebbad47519a7fd22988640445218d52b9909f2621aa3",
+          "paragonie/ecc/src/Math/GmpMath.php": "f3b2d07d2f98f858808f5a66d0cc3db5ceb640a062eb0657167d1aa36100b2a7",
+          "paragonie/ecc/src/Math/GmpMathInterface.php": "1879e849e00b80de298becc9b73a43369eca6e6548f6c499cdc59a94bd7b642f",
+          "paragonie/ecc/src/Math/MathAdapterFactory.php": "6b7ebfa9f373ce525c8ea7fdecd14497ef684e1bca2522b3f302eb0cc182765d",
+          "paragonie/ecc/src/Math/ModularArithmetic.php": "3627c301ed7964c56f24986f626bf40ee4e1a6328f6b1e0c03c48e0684bd6c07",
+          "paragonie/ecc/src/Math/NumberTheory.php": "692c19c48c621ef681cdced81ae936ebf7a16ab65af831dca4170f6841fa51af",
+          "paragonie/ecc/src/OpensslFallbackTrait.php": "be7fa7172ed1248501c38cff7a66316a665833ec100482fe39f33a385ba5041e",
+          "paragonie/ecc/src/Primitives/CurveFp.php": "2c6e2b261268ff6c2ff94cc2a2e65887aff59c148a29867d2164dca70f5e8f91",
+          "paragonie/ecc/src/Primitives/CurveFpInterface.php": "46f026e930c7860b4df2e14f685bc1a83c53e2bf7fd25a44a54e15405850465d",
+          "paragonie/ecc/src/Primitives/CurveParameters.php": "1fe08708eea6a92ca665153759ed6f3e37bb565bb3403a78b7eaac27a529f46c",
+          "paragonie/ecc/src/Primitives/GeneratorPoint.php": "d98b0552a31d8a19b8223e2e8089697de1967726b01180c2db55b2ebf657bd83",
+          "paragonie/ecc/src/Primitives/Point.php": "bcac7c29964bcb900c09bf05cd007ddc832cb689fc62f9da4e81cd27cb984673",
+          "paragonie/ecc/src/Primitives/PointInterface.php": "db3c264b28b5c7c7a841a73f70efdd87bc97dd322a0af90b3d0d2fcbda97efef",
+          "paragonie/ecc/src/Random/RandomGeneratorFactory.php": "d7f6ef9eca422e1cffd33d32048daccc8478be281035227810a5060e197b762b",
+          "paragonie/ecc/src/Random/RandomNumberGenerator.php": "6a056424d01dd57760728c11676c47deed0ae1b5e9bc27f63e2f8e9c06699987",
+          "paragonie/ecc/src/Random/RandomNumberGeneratorInterface.php": "2fb2da568bfb88f08e34490e239bbc57f0d500716206f69036bcd2c2d6196aa0",
+          "paragonie/ecc/src/Serializer/Point/CompressedPointSerializer.php": "10dcf81f2e27567ae8d369673b340081857c7f4f0ddf0581a496de136d1648ff",
+          "paragonie/ecc/src/Serializer/Point/PointSerializerInterface.php": "873fb83cd78359fde0229954d81bd7bc5501a8d07bbfcb50f40c12ce4890b6d7",
+          "paragonie/ecc/src/Serializer/Util/CurveOidMapper.php": "aa809afffc3671115f1bff5109516b0f1838e8a0d6ff323f12f1f6c1ce90a4d8",
+          "paragonie/ecc/src/Util/BinaryString.php": "571f13be431320198861c81cc5fc96fc2951dedbba9510cb988bbe8f08cf0e72",
+          "paragonie/sodium_compat/autoload.php": "25215d2d3078f9a18500b76fb0653fdf2abb8bc9f5bf9cd845aed33511b8057c",
+          "paragonie/sodium_compat/lib/php84compat_const.php": "c775d52838278ab3f8d739d16c1350223038c69e3a98503066d7c6b022fffbd6",
+          "paragonie/sodium_compat/lib/ristretto255.php": "6039658ad533e245a956c6603dfe3b1d1ced63b0a3f2352f1fb2ea871352b843",
+          "paragonie/sodium_compat/lib/stream-xchacha20.php": "5f0f7d2ed757d5f2d55d205e160a10c4d113f33cc8ae05e315771cc12a7e5c54",
+          "paragonie/sodium_compat/src/Compat.php": "00464b60ae939bcda1a163b86b6426ce20451c3601662947152ffc737251a588",
+          "paragonie/sodium_compat/src/Core/Util.php": "d12fb000527782595df61ec2794d2bc8c32d8bdd5291eb2d90af64dbe4ec4821",
+          "paragonie/sodium_compat/src/File.php": "dddfcd5672b060e2d1bd1a40e492446e93a3d3ad5541d5b10715771d37db3135",
+          "tuupola/base58/src/Base58.php": "bc7f40b71b674b6a03dfb19b0a2fd7373f0b0df06ac217513bcd6789c3abe347",
+          "tuupola/base58/src/Base58/BaseEncoder.php": "77e2ac2588d99606131c7ae9c06a8f8f505feae171c3b156698770a5088c1bbe",
+          "tuupola/base58/src/Base58/PhpEncoder.php": "7c8029ce9156059658938d36464692ba070cc1a00538f52f3c39eb389cc4fccb"
+        }
+      }
+    }
+  },
+  "cross_graph_address_agreement": true
+}

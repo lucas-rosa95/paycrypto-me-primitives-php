@@ -1,0 +1,22 @@
+{
+  "name": "paycrypto-me/m05-simplito-cjpgdk-trial",
+  "description": "Isolated M05 candidate graph; not production selection.",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "cjpgdk/bech32": "0.1.2",
+    "ext-ctype": "*",
+    "ext-gmp": "*",
+    "ext-hash": "*",
+    "php": "^8.1",
+    "php-64bit": "*",
+    "simplito/elliptic-php": "1.0.12",
+    "tuupola/base58": "2.2.0"
+  },
+  "config": {
+    "platform": {
+      "php": "8.1.0"
+    },
+    "sort-packages": true
+  }
+}
