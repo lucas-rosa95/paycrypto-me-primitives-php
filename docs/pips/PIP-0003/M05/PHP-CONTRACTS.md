@@ -25,7 +25,7 @@ the draft is not agreement with the executor's proposed choices.**
 |---|---|
 | Referenced M02 decisions and approved PIPs | Existing boundaries. This draft does not amend them. |
 | [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. Its schema obligations constrain the proposal, without selecting a representation or executor. |
-| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **New executor proposal, advanced before joint discussion. Not agreed, frozen, implemented or qualified.** Alternatives and unresolved costs are explicit. |
+| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **Executor proposal under joint discussion; not frozen, implemented or qualified.** Declared execution order and inspectable output-to-input connections are jointly affirmed. The example source grammar, representation and remaining C1–C6 choices are not thereby approved. |
 | Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
 | Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
 
@@ -180,8 +180,8 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | Ordered, acyclic declarations with named connections, reusable subcompositions and slots resolved at assembly. Execute synchronously in the declared order. This makes failure precedence and selected work inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by our agreement. |
-| C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | Typed builders could improve authoring feedback if they retain duplicate detection and yield the same inspectable data. Pair lists are verbose; whether their ergonomics justify them for repository-owned declarations is still open. |
+| C1 — Execution model | **Jointly affirmed:** execute declared steps in order and preserve inspectable connections from a producer's output to a consumer's required input. **Still proposed:** the exact naming and structure of the cycle-rejecting declarations, reusable subcompositions, slots resolved at assembly and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. |
+| C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
 | C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |
 | C5 — Ownership and extension | Ship a closed composition catalogue. Consumers provision admitted network/account data; provider wiring is explicit and separate. No public arbitrary composition-loader API in this slice. | A public extension registry introduces compatibility, validation and support commitments beyond the current operations. Internal data still must undergo validation; being repository-owned is not proof of correctness. Future extension remains a separate design question. |
@@ -238,7 +238,18 @@ are resolved before traversal, so they cannot conceal a cycle. Declaration
 order is execution order; the loader does not repair or topologically reorder
 a rejected declaration. Record-field order is immaterial; step order is not.
 
-Here is one complete **source-shape example**, not executable implementation:
+For human review, the HASH160 connections can be read conceptually as:
+
+```text
+input.bytes -> sha.bytes
+sha.digest -> ripe.bytes
+ripe.digest -> composition.digest
+```
+
+This is a view of the agreed output-to-input relationships, not a source syntax.
+The following complete **source-shape example** is one preliminary C2 candidate,
+not the definition of C1 or an executable implementation. Its verbosity is an
+open design concern; it may be refactored or replaced during joint review:
 
 ```php
 [
