@@ -59,7 +59,10 @@ The C1 discussion has affirmed execution in declared order and inspectable
 producer-output-to-consumer-input connections. Neutral subcompositions may be
 shared when they have cohesive, candidate-independent contracts; ordinary
 internal helpers and context-specific components need not become shared steps.
-Concrete resource qualification and the slot design remain open. Its verbose
+The three delivered Bitcoin policies share their ordered route through
+derived-key HASH160 and diverge only into the explicitly selected terminal.
+Other protocol candidates retain their own flow declarations. Concrete resource
+qualification and the slot representation remain open. Its verbose
 pair-list example is a preliminary C2 representation, not the agreed concept;
 the remaining C1–C6 choices and concrete exception-chain design remain open.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
