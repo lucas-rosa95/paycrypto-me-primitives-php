@@ -499,6 +499,30 @@ executor must demonstrate in addition to the existing acceptance list.
 | Return a plausible but wrong digest/address from a provider | May pass runtime shape checks; independently anchored qualification must expose it. Do not claim static schema validation catches it. |
 | Supply equivalent reordered definitions, then mutate the caller's source arrays | Equivalent bindings and results, with no retained alias changing the admitted plan. Reordering steps remains a different declaration and is checked separately. |
 
+### Exploratory reuse fitness challenges — outside PIP-0003 delivery
+
+These are **synthetic design challenges for joint review**, not admitted intents,
+provider selections, executable fixtures or evidence that another protocol is
+supported. They test whether the proposed C1 slot and composition boundaries
+expose real reuse without forcing incompatible flows through one interface.
+The current Bitcoin key-admission allowlist is not expanded by either case.
+
+| Challenge | Conceptual connections | What the proposal must explain |
+|---|---|---|
+| Bitcoin Cash P2KH CashAddr | An appropriately admitted, derived public key supplies a key hash; a CashAddr P2KH terminal receives that semantic hash and validated Bitcoin Cash address parameters. CashAddr encoding is delegated. | Can the key-hash-producing behavior and terminal contract be reused while keeping Bitcoin Cash intent and parameter definitions distinct from Bitcoin's? No prefix-based intent inference, fabricated Bitcoin definition fields or coin-specific executor branch is allowed. A mock terminal may test assembly and abort behavior, but cannot establish CashAddr correctness. |
+| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No HASH160/key-hash port lies on this route. Cryptography and encoding remain delegated. | The current `keyHash`-input `terminal` slot is local to the three delivered policies, not a universal address interface. Can declarations reuse only the genuinely shared derivation portion and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
+
+The [CashAddr specification](https://github.com/bitcoincashorg/bitcoincash.org/blob/3e2e6da8c38dab7ba12149d327bc4b259aaad684/spec/cashaddr.md)
+defines a distinct address prefix, type and checksum format. [BIP341](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0341.mediawiki)
+defines the Taproot output-key construction and witness-v1/32 output;
+[BIP350](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0350.mediawiki)
+assigns Bech32m to witness versions 1 and higher. These sources motivate the
+shape of the challenges, not a claim that the proposed composition satisfies
+them. A successful conceptual fit would not approve these features or establish
+provider correctness. If either challenge requires misleading port roles,
+irrelevant definition fields or hidden conditional execution, revise the C1
+boundary before freezing it.
+
 Before joint freeze, resolve C1–C6 against the actual PHP interfaces, including
 the prelude/body selection boundary, terminal parameter exposure, unexpected
 owned-code failure classification and how
