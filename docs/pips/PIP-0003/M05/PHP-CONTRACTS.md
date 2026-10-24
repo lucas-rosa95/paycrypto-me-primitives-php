@@ -49,8 +49,7 @@ add supported networks, policies or operations.
   declarations may reference the same reusable resources where contracts match;
   each may choose different resources or connections at any position. One
   candidate cannot run through, alias or mutate another candidate's declaration
-  to impersonate its flow. Which neutral subcompositions qualify as shared
-  resources remains a C1/C3 question. Equivalent network/parameter variants
+  to impersonate its flow. Equivalent network/parameter variants
   within one candidate reuse its declaration with validated parameter data.
   Do not hide a flow in a specialized function, method or composition class
   for each coin/network.
@@ -59,6 +58,18 @@ add supported networks, policies or operations.
   semantic input contract, not merely match a PHP type or byte length.
 - Capabilities retain cohesive behavior and their own invariants. Declaring
   composition does not require turning every internal instruction into data.
+- Reusable resources include owned capabilities and neutral subcompositions
+  with cohesive contracts and semantics independent of any candidate's flow.
+  `HASH160` is a candidate for the latter: each declaration connects it using
+  its own semantically valid inputs and retains the origin of the resulting
+  digest. Shared lower algorithms remain delegated to qualified providers.
+  An internal helper need not become a declared step merely because code is
+  reused; a context-specific component need not become a resource shared by
+  other candidates merely because it was separated for cohesion. Extract and
+  share by responsibility and actual compatible use, not by a reuse quota.
+  This agreement does not select a public resource or extension API; which
+  concrete subcompositions qualify and how their contracts are checked remain
+  C1/C3 design and validation questions.
 - An exception aborts the whole operation. No subsequent stage, substitute
   result, alternate provider, policy, key or index is attempted.
 
@@ -189,7 +200,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections; give distinct protocol candidates their own flow declarations while reusing compatible resources. **Still proposed:** the exact naming and structure of the cycle-rejecting declarations, reusable subcompositions, slots resolved at assembly and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. |
+| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections; give distinct protocol candidates their own flow declarations while reusing compatible resources. A neutral subcomposition may itself be a reusable resource when it has a cohesive, candidate-independent contract; internal helpers and context-specific components need not be promoted into shared declared steps. **Still proposed:** the exact naming and structure of cycle-rejecting declarations, qualification of concrete subcompositions, slots resolved at assembly and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
 | C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |
@@ -519,7 +530,9 @@ The distinct Bitcoin Cash protocol candidate must have its own complete flow
 declaration and semantic inputs and outputs. It may independently reference
 the same reusable capabilities and qualified provider boundaries as Bitcoin
 where contracts match; it cannot run as a modified Bitcoin declaration.
-Whether a neutral subcomposition is itself a reusable resource remains open.
+Neutral subcompositions can be shared resources when their contracts and
+connections are genuinely compatible; whether a specific candidate such as
+`HASH160` qualifies in each route still requires semantic validation.
 Within one candidate, equivalent network variants may still reuse one
 declaration with different validated parameters. The Taproot case tests
 policy-route divergence; this challenge does not preselect its declaration or
