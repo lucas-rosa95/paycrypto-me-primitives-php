@@ -60,21 +60,22 @@ producer-output-to-consumer-input connections. Neutral subcompositions may be
 shared when they have cohesive, candidate-independent contracts; ordinary
 internal helpers and context-specific components need not become shared steps.
 The three delivered Bitcoin policies share their ordered route through
-derived-key HASH160 and diverge only into the explicitly selected terminal.
-Other protocol candidates retain their own flow declarations. Concrete resource
-qualification and the slot representation remain open. Its verbose
+derived-key HASH160 and bind the explicitly selected terminal directly to the
+declared `encode` step. Other protocol candidates retain their own flow
+declarations. Concrete resource qualification and exact C2 syntax remain open. Its verbose
 pair-list example is a preliminary C2 representation, not the agreed concept;
 the remaining C1–C6 choices and concrete exception-chain design remain open.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before C1 freeze. They add no admitted intent, implementation or
 protocol-qualification evidence.
-The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--open-c1c2-choice)
+The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
 now applies one runnable symbolic probe to the named-slot and direct-step
 binding candidates. Both pass the same six-intent, rejection and abort cases;
-direct binding is the executor's simpler **provisional** representation because
-the slot has not shown an extra local guarantee. The joint choice is still open,
-and this probe does not validate a production loader or address behavior.
+the joint C1 choice is direct binding at this local step because the slot adds
+an identifier without an extra demonstrated guarantee. Exact source syntax and
+other design choices stay open; this probe does not validate a production loader
+or address behavior.
 Concrete choices, including admission/body separation and owned-code failure
 classification, remain open alongside provider/runtime selection. This is a
 reviewable design proposal, not an implementation handoff; it adds no runtime
@@ -266,7 +267,7 @@ review them and assign their affected acceptance cases before the M06 handoff:
 | Public request/result | Freeze concrete signatures and immutable representations for serialized key, nonempty integer path, validated network and explicit policy; return address plus exact network/policy/path context. Keep generic derivation distinct from receiving account/index. |
 | Integer ingress | Reject booleans, numeric strings and integral floats **before coercion**. PHP parameter types plus callee `strict_types` do not suffice when the caller is weakly typed. Use explicit original-value validation at the admission boundary; later callers consume admitted semantic values. Test both caller modes. |
 | Definitions | Choose a concrete immutable schema and construction boundary that cannot bypass validation, rejects unknown/duplicate data and preserves order-independent equivalence. Test-only Signet data variation must not become public network support. `testnet` describes encoding parameters and does not authenticate testnet3/testnet4/Signet chain identity. |
-| Composition and execution | Review the explicitly preliminary C1–C6 choices: ordered declarations and slots, pair-list source, role/lineage validation, operation prelude/body boundary, terminal parameter exposure and explicit provider assembly. Resolve representation feasibility and unexpected owned-code failure handling before freeze; no validator or executor has been qualified. |
+| Composition and execution | Retain the agreed ordered declarations and direct intent binding at the delivered Bitcoin `encode` step. Review the still preliminary C1–C6 choices: pair-list source, role/lineage validation, operation prelude/body boundary, terminal parameter exposure and explicit provider assembly. Resolve representation feasibility and unexpected owned-code failure handling before freeze; no production validator or executor has been qualified. |
 | Receiving source | Freeze duplicate-safe provisioning, validation timing and missing/malformed/incompatible mapping failures. Select exactly by network/policy/account; provisioning binds ancestry, which serialized metadata cannot prove. Invoke generic `[0, index]` without advancement or fallback; return logical account/branch/index. |
 | Lower capabilities | Name only boundaries with real protocol responsibility and replacement evidence. Preserve zero-tweak identity, distinguish confirmed infinity from provider malfunction, and define the meaning of every nullable/boolean/outcome return. No vendor objects or generic buffer/crypto framework in public contracts. |
 | Failures and precedence | Choose owned exception classes/categories, safe messages and previous-chain rules; preserve corrected M02 validation stages and exact-index failure without partial success. Verify absent facilities, wrong provider types/widths and thrown faults through the eventual public operation. Do not expose raw vendor messages or exception chains. |

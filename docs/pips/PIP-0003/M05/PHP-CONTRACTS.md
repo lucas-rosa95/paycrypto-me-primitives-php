@@ -24,8 +24,8 @@ the draft is not agreement with the executor's proposed choices.**
 | Material | Status and how to read it |
 |---|---|
 | Referenced M02 decisions and approved PIPs | Existing boundaries. This draft does not amend them. |
-| [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. Its schema obligations constrain the proposal, without selecting a representation or executor. |
-| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **Executor proposal under joint discussion; not frozen, implemented or qualified.** Declared execution order and inspectable output-to-input connections are jointly affirmed. The example source grammar, representation and remaining C1–C6 choices are not thereby approved. |
+| [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. For the three delivered Bitcoin policies, the selected terminal binds directly to the declared `encode` step under its required contract. Exact C2 source syntax and executor remain open. |
+| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **Executor proposal under joint discussion; not frozen, implemented or qualified.** Declared execution order, inspectable output-to-input connections and direct binding at the delivered Bitcoin terminal step are jointly affirmed. The example source grammar and remaining C1–C6 choices are not thereby approved. |
 | Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
 | Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
 
@@ -62,8 +62,9 @@ add supported networks, policies or operations.
   payload and encoding connections. This is one Bitcoin flow with a visible
   policy junction, not three copies of its common route. It does not make the
   key-hash junction universal for later policies or other protocol candidates.
-  The concrete selection record and whether to represent the junction as a
-  `terminal` slot remain C1/C2 design questions.
+  For this local junction, each admitted intent binds its terminal directly to
+  the declared `encode` step, whose required contract is checked at setup.
+  The exact source syntax and executor remain design questions.
 - Capabilities retain cohesive behavior and their own invariants. Declaring
   composition does not require turning every internal instruction into data.
 - Reusable resources include owned capabilities and neutral subcompositions
@@ -208,7 +209,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections; give distinct protocol candidates their own flow declarations while reusing compatible resources. A neutral subcomposition may itself be a reusable resource when it has a cohesive, candidate-independent contract; internal helpers and context-specific components need not be promoted into shared declared steps. The three delivered Bitcoin policies share their actual common route and diverge into only the selected terminal route. **Still proposed:** the exact naming and structure of cycle-rejecting declarations, qualification of concrete subcompositions, `terminal` slot representation and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. |
+| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections; give distinct protocol candidates their own flow declarations while reusing compatible resources. A neutral subcomposition may itself be a reusable resource when it has a cohesive, candidate-independent contract; internal helpers and context-specific components need not be promoted into shared declared steps. The three delivered Bitcoin policies share their actual common route and bind only the selected terminal directly to their declared `encode` step, with its required contract checked at setup. **Still proposed:** exact naming and structure of cycle-rejecting declarations, qualification of concrete subcompositions and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. The local decision does not prohibit a future slot with a demonstrated independent purpose. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
 | C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |
@@ -218,7 +219,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 These choices are separable. Agreeing with ordered execution, for example, does
 not automatically approve pair-list authoring, the names below or a public API.
 
-### Synthetic terminal-junction comparison — open C1/C2 choice
+### Synthetic terminal-junction comparison — C1 decision evidence
 
 The runnable [junction probe](probe-terminal-junction.php) compares the two
 representations recorded as interim candidates in
@@ -275,15 +276,14 @@ lineage, that provider exceptions are sanitized, or that address outputs are
 correct. The probe deliberately fixes the agreed Bitcoin route and terminal
 contracts; changing those rules requires more than swapping the binding form.
 
-**Provisional assessment for joint discussion:** with one variable `encode`
-step, the slot record has not demonstrated an additional validation guarantee.
+**Joint C1 decision following the comparison:** with one variable `encode`
+step, the slot record did not demonstrate an additional validation guarantee.
 It adds a second identifier (`terminal`) for the same junction already located
-by `encode`. Direct binding is currently the simpler concrete representation,
-provided the step's required contract and per-intent binding remain inspectable
-and validated. A named slot might earn its separate identity where a reusable
-composition contract needs to expose an independently meaningful variation
-point, but that benefit has not been established for this local terminal. This
-assessment is **not a joint C1/C2 decision** and does not discard the slot.
+by `encode`. Use a direct per-intent binding to that declared step, with its
+required contract and connection semantics inspectable and validated. This
+settles the local **C1 junction representation**, not the exact C2 PHP source
+syntax, loader or public API. A named slot may be evaluated for a future
+independently meaningful variation point; this decision adds no general ban.
 The exploratory Bitcoin Cash and Taproot cases below challenge *where* a
 candidate's own declaration diverges; neither must be forced through this
 Bitcoin post-HASH160 junction.
@@ -300,12 +300,12 @@ file loader is part of this proposal; assembly receives data already in memory.
 
 | Record | Exact fields and constraints |
 |---|---|
-| Composition | `id`: unique identifier; `contract`: owned catalogue identifier; `inputs`: port records; `parameters`: port records; `slots`: slot records; `steps`: nonempty ordered step records; `outputs`: binding records. Contract input/parameter/output names must match exactly. |
+| Composition | `id`: unique identifier; `contract`: owned catalogue identifier; `inputs`: port records; `parameters`: port records; `steps`: nonempty ordered step records; `outputs`: binding records. Contract input/parameter/output names must match exactly. |
 | Port | `name`, `type`: identifiers. The type must exist in the owned catalogue and match the composition contract. A source cannot define new types or change their meaning. |
-| Slot | `name`, `contract`: identifiers. A slot names one required subcomposition contract; assembly must bind it exactly once. It has no default. |
-| Step | `id`; `target`: exact `[kind, identifier]`; `inputs`, `parameters`: binding-record lists. Kinds are `capability`, `composition`, `slot`, or `operation`. The last kind permits only the receiving-to-generic call in this slice. |
+| Step | `id`; `target`: exact `[kind, identifier]`; `inputs`, `parameters`: binding-record lists. Kinds are `capability`, `composition`, `intent`, or `operation`. For `intent`, the identifier is the required owned subcomposition contract and the intent row must bind this step exactly once. The last kind permits only the receiving-to-generic call in this slice. |
 | Binding | `port`: destination name; `source`: one reference below. Bind every required destination exactly once; reject extras. Output bindings use this same record and the composition's declared result ports. |
-| Intent binding | `network`, `policy`, `composition`: identifiers; `slots`: records with `name`, `composition`; `parameters`: binding-record list. Exactly one row per admitted network/policy tuple, with no duplicate rows even if identical. |
+| Intent target | `step`, `composition`: identifiers. The named step must have an `intent` target, and the selected composition must satisfy its required contract. |
+| Intent binding | `network`, `policy`, `composition`: identifiers; `targets`: list of intent-target records; `parameters`: binding-record list. Exactly one row per admitted network/policy tuple, with no duplicate rows even if identical. Each intent-target step binds exactly once; unknown, duplicate and absent targets fail. |
 
 Source references have only these exact tuple forms:
 
@@ -331,7 +331,7 @@ not to changeable literals in composition data.
 Each step can consume only declared inputs/parameters and outputs of earlier
 steps in the same composition. Subcompositions have isolated names and receive
 only their declared ports. Reject recursive composition/operation references,
-self references, forward references and unknown fields/ports. Slot bindings
+self references, forward references and unknown fields/ports. Intent targets
 are resolved before traversal, so they cannot conceal a cycle. Declaration
 order is execution order; the loader does not repair or topologically reorder
 a rejected declaration. Record-field order is immaterial; step order is not.
@@ -355,7 +355,6 @@ open design concern; it may be refactored or replaced during joint review:
     ['contract', 'hash160'],
     ['inputs', [[['name', 'bytes'], ['type', 'binary-bytes']]]],
     ['parameters', []],
-    ['slots', []],
     ['steps', [
         [
             ['id', 'sha'],
@@ -383,7 +382,7 @@ an unrelated declaration. The semantic check inspects its resolved steps.
 
 The loaded form would contain private immutable `Composition`, `Step`,
 `PortBinding` and `IntentBinding` records (names provisional), with references
-resolved to owned catalogue entries and slot/frame positions. Their constructors
+resolved to owned catalogue entries and intent-target/frame positions. Their constructors
 are not a public bypass around admission. Rebuild scalar leaves before retaining
 them; reject mutable objects in source data. Provider instances occupy a
 separate explicit assembly, not these data records. No universal public
@@ -396,7 +395,7 @@ The following tables specify the other declarations at port level. They are
 readable expansions of the grammar, **not additional approved PHP APIs**.
 `$name` denotes an input, `@name` a parameter and `step.port` an earlier output;
 `derive.node.publicKey` abbreviates the permitted `field` reference. Every
-unlisted parameter/slot list is explicitly empty when encoded. Each table row
+unlisted parameter/target list is explicitly empty when encoded. Each table row
 is one step in execution order.
 
 Ports name semantic connections, not new overloads of the PHP signatures
@@ -408,8 +407,10 @@ mapping supplies `CkdPublicDerivation` with the complete node and checked path.
 Concrete internal helper names remain part of C4 review.
 
 The proposed `public-address` declaration takes one `request` input of type
-`admitted-public-request`, has a `terminal` slot with contract `key-hash-address`,
-and a `network` parameter of type `network-definition`. The operation's raw
+`admitted-public-request`, has an `encode` step requiring the
+`key-hash-address` subcomposition contract, and a `network` parameter of type
+`network-definition`. Each admitted intent binds this step directly to one
+terminal composition. The operation's raw
 request capture preserves original argument types; it performs no decoding
 or coercion.
 The public method cannot look up a plan using unvalidated caller values.
@@ -423,7 +424,7 @@ and execute this shared body, whose input is the admitted `request`:
 | `depth` / capability `remaining-depth` | `node = admit.node`, `request = $request` | `path`: the unchanged request path, checked against this imported node's remaining depth. No HMAC or ECC derivation. |
 | `derive` / capability `ckd-public-path` | `parent = admit.node`, `path = depth.path` | `node`: complete final node from exactly that parent and path. No nullable/partial node. |
 | `keyhash` / composition `hash160` | `bytes = derive.node.publicKey` | `digest`: HASH160 of that derived compressed public key. |
-| `encode` / slot `terminal` | `keyHash = keyhash.digest`; `network = @network` | `address`: selected policy's complete address under the same network binding. |
+| `encode` / intent-bound `key-hash-address` | `keyHash = keyhash.digest`; `network = @network` | `address`: selected policy's complete address under the same network binding. |
 | `result` / capability `public-address-result` | `request = $request`, `address = encode.address` | `result`: the complete immutable public result; output binding is `result.result`. |
 
 **Representation detail still preliminary:** represent the fixed raw admission
@@ -442,7 +443,7 @@ only the parameter roles it needs. Here `@network.p2pkhVersion` abbreviates
 `['field', ['parameter', 'network'], 'p2pkhVersion']`; the other fields follow
 the same rule. The catalogue distinguishes `p2pkh-version`, `p2sh-version` and
 `segwit-hrp` by role and origin, not merely PHP string shape. Passing the whole
-semantic definition keeps the slot interface uniform but exposes more parameters
+semantic definition keeps the terminal-step contract uniform but exposes more parameters
 than each terminal needs; narrower role-specific bundles are an alternative
 to discuss under C3. Neither choice permits an arbitrary parameter bag.
 
@@ -461,7 +462,7 @@ not permission to accept arbitrary 20-byte values as the derived key hash.
 
 Proposed intent-binding data, with no implicit rows or policy inference:
 
-| Network | Policy | Shared composition | `terminal` slot | Parameter projected inside terminal |
+| Network | Policy | Shared composition | `encode` step target | Parameter projected inside terminal |
 |---|---|---|---|---|
 | `mainnet` | `p2pkh` | `public-address` | `p2pkh-address` | `version <- network.p2pkhVersion` |
 | `testnet` | `p2pkh` | `public-address` | `p2pkh-address` | `version <- network.p2pkhVersion` |
@@ -469,6 +470,13 @@ Proposed intent-binding data, with no implicit rows or policy inference:
 | `testnet` | `p2sh-p2wpkh` | `public-address` | `nested-witness-address` | `version <- network.p2shVersion` |
 | `mainnet` | `p2wpkh` | `public-address` | `native-witness-address` | `hrp <- network.segwitHrp` |
 | `testnet` | `p2wpkh` | `public-address` | `native-witness-address` | `hrp <- network.segwitHrp` |
+
+In the preliminary pair-list notation, the shared `encode` step has
+`['target', ['intent', 'key-hash-address']]`. A P2PKH intent row binds it with
+`['targets', [[['step', 'encode'], ['composition', 'p2pkh-address']]]]`.
+The step ID identifies the existing junction; no separately declared slot or
+default target is involved. These tuples illustrate the agreed relationship,
+not an accepted C2 authoring syntax.
 
 Every intent row supplies the shared composition's `network` parameter using
 the binding record `[['port', 'network'], ['source', ['network']]]`.
@@ -490,7 +498,7 @@ a runtime fallback or a change to the target semantics.
 
 Receiving has its own raw admission prelude (network, account, index, policy)
 and one admitted body, bound to the immutable source and generic operation
-at assembly. It has no terminal slot and takes no caller branch parameter:
+at assembly. It has no intent-bound terminal step and takes no caller branch parameter:
 
 | Step / target | Named connections | Output and required meaning |
 |---|---|---|
@@ -510,7 +518,7 @@ instructions or arbitrary operation calls.
 Propose three admission passes followed by one execution rule:
 
 1. **Source shape and references:** validate all records and duplicates before
-   normalization; resolve catalogue references and slot bindings, reject cycles,
+   normalization; resolve catalogue references and intent-target bindings, reject cycles,
    missing/extra ports, forward references and unavailable required bindings.
    No cryptographic/codec work occurs. Check every shipped intent binding,
    not merely the first request's branch.
@@ -590,7 +598,7 @@ executor must demonstrate in addition to the existing acceptance list.
 | Bind P2SH payload's `scriptHash` directly to `keyhash.digest` | Setup semantic rejection despite both being 20 bytes. |
 | Hash `admit.node.publicKey` instead of `derive.node.publicKey` | Setup lineage rejection; a valid hash of the wrong key cannot satisfy the operation. |
 | Use the P2PKH network field for the P2SH terminal | Setup role rejection even in a fixture with equal byte values. |
-| Duplicate an intent row, give a slot an incompatible terminal, or create a recursive subcomposition | Setup rejection before provider work; no first-row-wins or lazy repair. |
+| Duplicate an intent row, bind an incompatible terminal to `encode`, or create a recursive subcomposition | Setup rejection before provider work; no first-row-wins or lazy repair. |
 | Add an unused step that executes another policy or validates the point before version eligibility | Reject extra execution or the broken admission contract. Internal key-admission order also needs mixed-invalid runtime tests; the loader cannot prove adapter code from a label. |
 | Fail key admission, depth, a first/middle/final CKDpub edge, hash or encoder | Preserve the documented reason; observe no later stage, other policy/provider/index, or result construction. Instrument inside cohesive capabilities as well as at composition steps. |
 | Fail exact receiving lookup or the generic call | No alternate tuple/key; generic admission never runs after failed lookup, and receiving result construction never runs after failed generic derivation. |
@@ -601,7 +609,7 @@ executor must demonstrate in addition to the existing acceptance list.
 
 These are **synthetic design challenges for joint review**, not admitted intents,
 provider selections, executable fixtures or evidence that another protocol is
-supported. They test whether the proposed C1 slot and composition boundaries
+supported. They test whether the agreed C1 junction and composition boundaries
 expose real reuse without forcing incompatible flows through one interface.
 The current Bitcoin key-admission allowlist is not expanded by either case.
 The distinct Bitcoin Cash protocol candidate must have its own complete flow
@@ -614,12 +622,12 @@ connections are genuinely compatible; whether a specific candidate such as
 Within one candidate, equivalent network variants may still reuse one
 declaration with different validated parameters. The Taproot case tests
 policy-route divergence; this challenge does not preselect its declaration or
-slot structure.
+step-binding structure.
 
 | Challenge | Conceptual connections | What the proposal must explain |
 |---|---|---|
 | Bitcoin Cash P2KH CashAddr | An appropriately admitted, derived public key supplies a key hash; a CashAddr P2KH terminal receives that semantic hash and validated Bitcoin Cash address parameters. CashAddr encoding is delegated. | Can the key-hash-producing behavior and terminal contract be reused while keeping Bitcoin Cash intent and parameter definitions distinct from Bitcoin's? No prefix-based intent inference, fabricated Bitcoin definition fields or coin-specific executor branch is allowed. A mock terminal may test assembly and abort behavior, but cannot establish CashAddr correctness. |
-| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No HASH160/key-hash port lies on this route. Cryptography and encoding remain delegated. | The current `keyHash`-input `terminal` slot is local to the three delivered policies, not a universal address interface. Can a Taproot policy route reference compatible admission/derivation resources and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
+| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No HASH160/key-hash port lies on this route. Cryptography and encoding remain delegated. | The current `keyHash`-input `encode` step is local to the three delivered policies, not a universal address interface. Can a Taproot policy route reference compatible admission/derivation resources and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
 
 The [CashAddr specification](https://github.com/bitcoincashorg/bitcoincash.org/blob/3e2e6da8c38dab7ba12149d327bc4b259aaad684/spec/cashaddr.md)
 defines a distinct address prefix, type and checksum format. [BIP341](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0341.mediawiki)
