@@ -44,9 +44,16 @@ It applies the accepted M02 O05/O06 decisions and the
 The exploratory cross-protocol examples inform design fitness; they do not
 add supported networks, policies or operations.
 
-- Equivalent behavior reuses one composition declaration; parameter differences
-  enter as validated data. Do not hide the entire flow in a specialized
-  function, method or composition class for each coin/network.
+- Distinct protocol candidates have independent flow declarations: each states
+  its own semantic intent, inputs, ordered connections and outputs. The
+  declarations may reference the same reusable resources where contracts match;
+  each may choose different resources or connections at any position. One
+  candidate cannot run through, alias or mutate another candidate's declaration
+  to impersonate its flow. Which neutral subcompositions qualify as shared
+  resources remains a C1/C3 question. Equivalent network/parameter variants
+  within one candidate reuse its declaration with validated parameter data.
+  Do not hide a flow in a specialized function, method or composition class
+  for each coin/network.
 - A composition is inspectable data describing capability connections and
   parameter bindings. Each connection must satisfy the next capability's
   semantic input contract, not merely match a PHP type or byte length.
@@ -87,9 +94,10 @@ declaration to a pointer to a coin-specific implementation.
 
 ### Concrete flow and semantic connections
 
-The shared public flow has ordered request/definition admission, extended-key
-admission, remaining-depth validation, exact-path public derivation and key
-HASH160 before the selected terminal composition. Extended-key admission
+For the delivered Bitcoin policies, the shared public flow has ordered
+request/definition admission, extended-key admission, remaining-depth
+validation, exact-path public derivation and key HASH160 before the selected
+terminal composition. Extended-key admission
 retains the visible substeps in [validation order](#failure-contract-and-validation-order):
 checked decoding and common metadata, version eligibility, point validation,
 then intent compatibility. Neither a graph scheduler nor a builder may reorder
@@ -144,8 +152,9 @@ bindings. Exact PHP field names and syntax are not frozen by this list.
    may skip validation, convert a script hash into a key hash by relabeling,
    introduce an extra executable branch or change exact-path semantics.
 3. Freeze the fully validated composition before serving requests. Bind one
-   provider per required contract explicitly. Parameter-only changes reuse
-   the same declaration; provider replacement leaves its semantics unchanged.
+   provider per required contract explicitly. Equivalent parameter variants
+   within one protocol candidate reuse its declaration; provider replacement
+   leaves its semantics unchanged.
 4. At execution, enforce actual value contracts at the capability boundaries.
    Static connection validation is not proof that a provider returned correct
    bytes. Independently anchored qualification still detects plausible wrong
@@ -180,7 +189,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | **Jointly affirmed:** execute declared steps in order and preserve inspectable connections from a producer's output to a consumer's required input. **Still proposed:** the exact naming and structure of the cycle-rejecting declarations, reusable subcompositions, slots resolved at assembly and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. |
+| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections; give distinct protocol candidates their own flow declarations while reusing compatible resources. **Still proposed:** the exact naming and structure of the cycle-rejecting declarations, reusable subcompositions, slots resolved at assembly and synchronous execution mechanism. Declared order makes failure precedence inspectable. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
 | C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |
@@ -506,11 +515,20 @@ provider selections, executable fixtures or evidence that another protocol is
 supported. They test whether the proposed C1 slot and composition boundaries
 expose real reuse without forcing incompatible flows through one interface.
 The current Bitcoin key-admission allowlist is not expanded by either case.
+The distinct Bitcoin Cash protocol candidate must have its own complete flow
+declaration and semantic inputs and outputs. It may independently reference
+the same reusable capabilities and qualified provider boundaries as Bitcoin
+where contracts match; it cannot run as a modified Bitcoin declaration.
+Whether a neutral subcomposition is itself a reusable resource remains open.
+Within one candidate, equivalent network variants may still reuse one
+declaration with different validated parameters. The Taproot case tests
+policy-route divergence; this challenge does not preselect its declaration or
+slot structure.
 
 | Challenge | Conceptual connections | What the proposal must explain |
 |---|---|---|
 | Bitcoin Cash P2KH CashAddr | An appropriately admitted, derived public key supplies a key hash; a CashAddr P2KH terminal receives that semantic hash and validated Bitcoin Cash address parameters. CashAddr encoding is delegated. | Can the key-hash-producing behavior and terminal contract be reused while keeping Bitcoin Cash intent and parameter definitions distinct from Bitcoin's? No prefix-based intent inference, fabricated Bitcoin definition fields or coin-specific executor branch is allowed. A mock terminal may test assembly and abort behavior, but cannot establish CashAddr correctness. |
-| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No HASH160/key-hash port lies on this route. Cryptography and encoding remain delegated. | The current `keyHash`-input `terminal` slot is local to the three delivered policies, not a universal address interface. Can declarations reuse only the genuinely shared derivation portion and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
+| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No HASH160/key-hash port lies on this route. Cryptography and encoding remain delegated. | The current `keyHash`-input `terminal` slot is local to the three delivered policies, not a universal address interface. Can a Taproot policy route reference compatible admission/derivation resources and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
 
 The [CashAddr specification](https://github.com/bitcoincashorg/bitcoincash.org/blob/3e2e6da8c38dab7ba12149d327bc4b259aaad684/spec/cashaddr.md)
 defines a distinct address prefix, type and checksum format. [BIP341](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0341.mediawiki)
@@ -885,7 +903,8 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
   Tests must verify exactly one tuple and `[0, index]`, with no fallback.
 
 The [preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal)
-makes concrete choices available for joint discussion; C1–C6 remain unaccepted.
+makes concrete choices available for joint discussion; C1 is partially agreed,
+while its remaining details and the other C2–C6 choices remain unaccepted.
 No schema validator or executor has been implemented or qualified by this
 document. M06 applies the assigned cases to
 the first complete branch; M07 extends them to all policies and receiving.

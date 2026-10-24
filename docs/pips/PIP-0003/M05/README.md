@@ -40,12 +40,15 @@ chosen implementation per boundary in production, with explicit wiring and
 no runtime fallback or backend autodetection.
 
 The [composition direction](PHP-CONTRACTS.md#agreed-composition-direction)
-was agreed in the joint design discussion on 2026-10-22: inspectable composition
-data, parameter-only reuse, semantic compatibility between connections and
-immediate abort on failure. Names such as `BitcoinDefinition` are assessed by
-responsibility; the constraint concerns hidden or duplicated behavior, not a
-naming ban. The proposal now maps the three approved policy flows, distinguishes
-parameter data, composition declarations and provider wiring, and assigns
+began in the joint design discussion on 2026-10-22: inspectable composition
+data, semantic compatibility between connections and immediate abort on failure.
+The later C1 clarification gives distinct protocol candidates their own flow
+declarations, while compatible resources are shared; equivalent network or
+parameter variants within one candidate reuse its declaration. Names such as
+`BitcoinDefinition` are assessed by responsibility; the constraint concerns
+hidden or duplicated behavior, not a naming ban. The proposal now maps the
+three approved policy flows, distinguishes parameter data, composition
+declarations and provider wiring, and assigns
 schema/abort acceptance cases to M06/M07. The new
 [preliminary schema and execution proposal](PHP-CONTRACTS.md#preliminary-schema-and-execution-proposal)
 advances C1–C6 for joint discussion: ordered declarations, duplicate-observable
