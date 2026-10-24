@@ -218,6 +218,76 @@ The section ends at [Entry points and results](#entry-points-and-results).
 These choices are separable. Agreeing with ordered execution, for example, does
 not automatically approve pair-list authoring, the names below or a public API.
 
+### Synthetic terminal-junction comparison — open C1/C2 choice
+
+The runnable [junction probe](probe-terminal-junction.php) compares the two
+representations recorded as interim candidates in
+[Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41#issuecomment-6390789895).
+It uses readable in-memory PHP arrays and symbolic stage outputs. It does not
+implement a production loader, cryptography, encoders or the public operation.
+This source shape is a probe convenience, **not approval of C2 syntax**.
+
+Both forms keep the *same* `bitcoin-public-address` declaration, with the
+ordered steps `admit -> depth -> derive -> keyhash -> encode -> result`.
+`encode` consumes `keyhash.digest` as a **derived-public-key hash**, receives
+the admitted network definition and yields an address for that admitted intent.
+Both forms reference the same three policy-specific terminal compositions and
+reuse each one for mainnet and testnet. The relevant source difference is:
+
+```text
+                            Named slot                     Direct step binding
+Shared declaration          slots: terminal requires      encode requires
+                            key-hash-address               key-hash-address
+encode target               slot:terminal                  intent-step:encode
+P2PKH intent binding        slot terminal ->               step encode ->
+                            p2pkh-address                  p2pkh-address
+```
+
+The slot form gives the variable position its own `terminal` identifier and
+contract declaration. The direct form identifies the already declared `encode`
+step and carries the **same required contract there**. Its intent row binds
+that step directly to `p2pkh-address`, `nested-witness-address` or
+`native-witness-address`. This is still a declared, validated connection; it
+is not an executor switch on a coin name or a bypass around semantic checking.
+In the probe, binding lists preserve duplicate records until validation. The
+selected network/policy row is resolved before symbolic execution; no request
+value selects a terminal by prefix, and there is no default terminal.
+
+| Counter-probe, applied to both forms | Observed synthetic result |
+|---|---|
+| Six explicit mainnet/testnet policy rows; invoke testnet P2SH-P2WPKH | The trace includes the common steps, only `nested-witness-address`, then `result`. |
+| Remove a row; duplicate an intent; omit, duplicate or reference an absent terminal binding | Assembly rejects before execution. The duplicate is observable because bindings are list entries. |
+| Bind P2PKH to the nested-witness terminal; alter its input contract or network parameter role | Assembly rejects the wrong policy, incompatible input or wrong `p2pkh-version` role. Equal byte lengths cannot establish compatibility. |
+| Relabel the HASH160 output as an unqualified digest; bypass `keyhash.digest`; weaken the junction contract | Assembly rejects the lost origin, broken connection or weakened contract. |
+| Inject a failure at `keyhash` or the selected terminal | The symbolic trace ends there: no result, other terminal or alternate attempt. |
+
+Run from the repository root with PHP 8.3 or later:
+
+```sh
+php docs/pips/PIP-0003/M05/probe-terminal-junction.php
+```
+
+On PHP 8.3.36, each form admitted six intents, produced the selected-route and
+abort traces, and rejected **11 invalid fixtures**. These are bounded checks of
+the *junction representation*. They do not prove the eventual loader rejects
+every malformed PHP field or graph, that runtime values satisfy semantic
+lineage, that provider exceptions are sanitized, or that address outputs are
+correct. The probe deliberately fixes the agreed Bitcoin route and terminal
+contracts; changing those rules requires more than swapping the binding form.
+
+**Provisional assessment for joint discussion:** with one variable `encode`
+step, the slot record has not demonstrated an additional validation guarantee.
+It adds a second identifier (`terminal`) for the same junction already located
+by `encode`. Direct binding is currently the simpler concrete representation,
+provided the step's required contract and per-intent binding remain inspectable
+and validated. A named slot might earn its separate identity where a reusable
+composition contract needs to expose an independently meaningful variation
+point, but that benefit has not been established for this local terminal. This
+assessment is **not a joint C1/C2 decision** and does not discard the slot.
+The exploratory Bitcoin Cash and Taproot cases below challenge *where* a
+candidate's own declaration diverges; neither must be forced through this
+Bitcoin post-HASH160 junction.
+
 ### Preliminary source schema and immutable form — C1/C2/C5
 
 Propose the following **internal** source grammar. `Record` means a PHP list

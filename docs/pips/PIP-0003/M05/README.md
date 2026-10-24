@@ -69,6 +69,12 @@ The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fi
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before C1 freeze. They add no admitted intent, implementation or
 protocol-qualification evidence.
+The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--open-c1c2-choice)
+now applies one runnable symbolic probe to the named-slot and direct-step
+binding candidates. Both pass the same six-intent, rejection and abort cases;
+direct binding is the executor's simpler **provisional** representation because
+the slot has not shown an extra local guarantee. The joint choice is still open,
+and this probe does not validate a production loader or address behavior.
 Concrete choices, including admission/body separation and owned-code failure
 classification, remain open alongside provider/runtime selection. This is a
 reviewable design proposal, not an implementation handoff; it adds no runtime

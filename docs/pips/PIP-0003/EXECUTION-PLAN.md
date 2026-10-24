@@ -17,6 +17,10 @@ the proposal maps the three policy flows and assigns schema/abort acceptance
 cases to M06/M07. The [preliminary schema/execution design](M05/PHP-CONTRACTS.md#preliminary-schema-and-execution-proposal)
 now supplies C1–C6 choices, source grammar, complete flow/binding tables and
 semantic admission/execution rules, explicitly advanced before joint discussion.
+The [symbolic terminal-junction probe](M05/PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--open-c1c2-choice)
+compares named-slot and direct-step binding under the same six-intent and abort
+cases; its provisional assessment awaits joint selection and adds no address
+qualification or production loader.
 These choices are unaccepted and unimplemented; provider/runtime selection,
 affected feasibility/contract qualification and the freeze remain open.
 Development/setup/CI/release image pins were refreshed to PHP 8.3.36/8.4.27
