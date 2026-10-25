@@ -256,10 +256,15 @@ reproduction, down to relevant component contracts and connections. The
 requires independently checkable protocol behavior. For this M05 design, the
 concrete audit surface is still open: what an external verifier must be able to
 inspect or reproduce, whether any runtime evidence is needed, and which
-component boundaries should expose it. A checksum could attest the identity of
-a declaration or artifact, but by itself would not prove that its semantics or
-provider outputs are correct. No public introspection API, execution trace,
-checksum scheme or additional coupling is selected by this review criterion.
+component boundaries should expose it. In counter-proof evidence, a checksum
+can pin the exact external specification/vector snapshot or test artifact used,
+detect later alteration and help another reviewer reproduce the comparison.
+Together with source provenance and independently justified expected results,
+this supports the [canonical CP-11 independent-evidence gate](../../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md#cp-11----independent-evidence-and-verification).
+The checksum authenticates neither the source's authority nor the protocol
+meaning of an output on its own. No public introspection API, execution trace,
+mandatory checksum scheme or additional coupling is selected by this review
+criterion.
 
 ### Synthetic terminal-junction comparison — C1 decision evidence
 
