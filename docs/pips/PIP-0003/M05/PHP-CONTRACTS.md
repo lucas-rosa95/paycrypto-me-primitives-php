@@ -253,9 +253,14 @@ preserve this clarity; no blanket prohibition is decided here.
 The whole chain must also be open to inspection, independent validation and
 reproduction, down to relevant component contracts and connections. The
 [repository audit principle](../../../README.md#auditable-by-design) already
-requires independently checkable protocol behavior. For this M05 design, the
-concrete audit surface is still open: what an external verifier must be able to
-inspect or reproduce, whether any runtime evidence is needed, and which
+requires independently checkable protocol behavior. **Joint C1 boundary:**
+independent auditors can examine and reproduce the behavior; ordinary consumers
+are not required to collect or interpret evidence from each invocation to use
+the documented result or owned failure. This does not weaken the operation's
+complete, atomic caller-facing outcome or preclude a separately justified
+diagnostic facility. For this M05 design, the concrete auditor-facing surface
+is still open: what an external verifier must be able to inspect or reproduce,
+whether execution-specific evidence is needed for qualification, and which
 component boundaries should expose it. In counter-proof evidence, a checksum
 can pin the exact external specification/vector snapshot or test artifact used,
 detect later alteration and help another reviewer reproduce the comparison.

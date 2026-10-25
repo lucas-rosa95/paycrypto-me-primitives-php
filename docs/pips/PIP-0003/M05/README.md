@@ -77,6 +77,9 @@ deterministic, unambiguous stage contracts and a chain that can be inspected,
 independently validated and reproduced, with a stable, complete and atomic
 caller-facing outcome. Its concrete audit surface, point
 infinity representation and executor mechanism are not yet selected.
+Independent auditors, rather than ordinary consumers, own verification of the
+chain; a consumer is not required to collect per-invocation evidence to use its
+documented result or failure. The auditor-facing mechanism remains open.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before C1 freeze. They add no admitted intent, implementation or
