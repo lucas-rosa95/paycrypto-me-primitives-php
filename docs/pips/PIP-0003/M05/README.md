@@ -56,7 +56,10 @@ source records, semantic lineage, explicit intent bindings and execution/failure
 boundaries. Its [reading guide](PHP-CONTRACTS.md#reading-and-decision-status)
 distinguishes accepted constraints, agreed direction and unaccepted proposals.
 The C1 discussion has affirmed execution in declared order and inspectable
-producer-output-to-consumer-input connections. Neutral subcompositions may be
+producer-output-to-consumer-input connections. Each step consumes only declared
+inputs/parameters or earlier outputs; setup resolves all admitted intent bindings
+and rejects circular dependencies among declarations. This does not constrain
+internal capability recursion or bounded iteration. Neutral subcompositions may be
 shared when they have cohesive, candidate-independent contracts; ordinary
 internal helpers and context-specific components need not become shared steps.
 The three delivered Bitcoin policies share their ordered route through
