@@ -27,7 +27,10 @@ at setup, without restricting capability internals.
 Resource scope now follows responsibility and semantic contract: a general
 resource may start shared on its first concrete use; a context-specific one
 stays local until compatible new use warrants promotion. Specific component
-boundaries and contract-checking mechanisms remain open. The remaining choices
+boundaries and contract-checking mechanisms remain open. Joint review must also
+resolve the C1 criterion for deterministic, unambiguous stage contracts and a
+chain that can be inspected, independently validated and reproduced; its audit
+surface and executor mechanism are not yet selected. The remaining choices
 are unaccepted and unimplemented; provider/runtime selection,
 affected feasibility/contract qualification and the freeze remain open.
 Development/setup/CI/release image pins were refreshed to PHP 8.3.36/8.4.27

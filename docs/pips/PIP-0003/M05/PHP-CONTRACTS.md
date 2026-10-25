@@ -230,6 +230,28 @@ The section ends at [Entry points and results](#entry-points-and-results).
 These choices are separable. Agreeing with ordered execution, for example, does
 not automatically approve pair-list authoring, the names below or a public API.
 
+**Additional C1 review criterion raised for joint discussion:** the complete
+selected chain must be deterministic for admitted inputs, definitions and bound
+capabilities. Each stage must have unambiguous, semantically named inputs and
+outputs and a documented failure meaning; an unconstrained `mixed -> mixed`
+stage or a heterogeneous return that makes success, absence and failure
+indistinguishable would defeat connection validation. This does not yet settle
+the concrete PHP signatures. The `mixed` values proposed at raw public ingress
+preserve original types for admission; the proposed point capability's `?string`
+has one documented internal infinity outcome. Whether that outcome is clearer as
+an explicit type remains open for joint review.
+
+The whole chain must also be open to inspection, independent validation and
+reproduction, down to relevant component contracts and connections. The
+[repository audit principle](../../../README.md#auditable-by-design) already
+requires independently checkable protocol behavior. For this M05 design, the
+concrete audit surface is still open: what an external verifier must be able to
+inspect or reproduce, whether any runtime evidence is needed, and which
+component boundaries should expose it. A checksum could attest the identity of
+a declaration or artifact, but by itself would not prove that its semantics or
+provider outputs are correct. No public introspection API, execution trace,
+checksum scheme or additional coupling is selected by this review criterion.
+
 ### Synthetic terminal-junction comparison — C1 decision evidence
 
 The runnable [junction probe](probe-terminal-junction.php) compares the two

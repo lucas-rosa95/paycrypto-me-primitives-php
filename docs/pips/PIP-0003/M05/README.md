@@ -72,6 +72,10 @@ declarations. Specific subcomposition boundaries, their contract checks and
 exact C2 syntax remain open. The draft's verbose pair-list example is a
 preliminary C2 representation, not the agreed concept;
 the remaining C1–C6 choices and concrete exception-chain design remain open.
+Joint review also needs to resolve the newly raised C1 criterion for
+deterministic, unambiguous stage contracts and a chain that can be inspected,
+independently validated and reproduced. Its concrete audit surface, point
+infinity representation and executor mechanism are not yet selected.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before C1 freeze. They add no admitted intent, implementation or
