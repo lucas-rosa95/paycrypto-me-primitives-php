@@ -65,6 +65,10 @@ internal helpers and context-specific components need not become shared steps.
 Resource scope follows responsibility and semantics, not a consumer count:
 general resources may start shared on their first concrete use, while local
 components can be promoted when a compatible new use appears.
+Each capability is a complete unit within its enclosing composition, with
+documented inputs, outcome and failure; its implementation remains open to
+inspection and tests at relevant lower boundaries. This does not promise
+rollback or settle the exact capability/subcomposition boundaries.
 The three delivered Bitcoin policies share their ordered route through
 derived-key HASH160 and bind the explicitly selected terminal directly to the
 declared `encode` step. Other protocol candidates retain their own flow

@@ -26,8 +26,11 @@ and earlier outputs and rejects circular dependencies among resolved declaration
 at setup, without restricting capability internals.
 Resource scope now follows responsibility and semantic contract: a general
 resource may start shared on its first concrete use; a context-specific one
-stays local until compatible new use warrants promotion. Specific component
-boundaries and contract-checking mechanisms remain open. Joint C1 direction
+stays local until compatible new use warrants promotion. A capability is a
+complete contract unit within its enclosing composition, while its internals
+remain inspectable and testable; no rollback of provider side effects is
+implied. Specific component boundaries and contract-checking mechanisms remain
+open. Joint C1 direction
 requires deterministic, unambiguous stage contracts and a chain that can be
 inspected, independently validated and reproduced, with a stable, complete and
 atomic caller-facing outcome; its concrete audit surface and executor
