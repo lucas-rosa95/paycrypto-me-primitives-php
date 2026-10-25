@@ -62,11 +62,15 @@ and rejects circular dependencies among declarations. This does not constrain
 internal capability recursion or bounded iteration. Neutral subcompositions may be
 shared when they have cohesive, candidate-independent contracts; ordinary
 internal helpers and context-specific components need not become shared steps.
+Resource scope follows responsibility and semantics, not a consumer count:
+general resources may start shared on their first concrete use, while local
+components can be promoted when a compatible new use appears.
 The three delivered Bitcoin policies share their ordered route through
 derived-key HASH160 and bind the explicitly selected terminal directly to the
 declared `encode` step. Other protocol candidates retain their own flow
-declarations. Concrete resource qualification and exact C2 syntax remain open. Its verbose
-pair-list example is a preliminary C2 representation, not the agreed concept;
+declarations. Specific subcomposition boundaries, their contract checks and
+exact C2 syntax remain open. The draft's verbose pair-list example is a
+preliminary C2 representation, not the agreed concept;
 the remaining C1–C6 choices and concrete exception-chain design remain open.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these

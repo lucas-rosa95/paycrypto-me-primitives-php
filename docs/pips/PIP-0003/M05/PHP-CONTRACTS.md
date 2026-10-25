@@ -79,13 +79,17 @@ add supported networks, policies or operations.
   `HASH160` is a candidate for the latter: each declaration connects it using
   its own semantically valid inputs and retains the origin of the resulting
   digest. Shared lower algorithms remain delegated to qualified providers.
-  An internal helper need not become a declared step merely because code is
-  reused; a context-specific component need not become a resource shared by
-  other candidates merely because it was separated for cohesion. Extract and
-  share by responsibility and actual compatible use, not by a reuse quota.
-  This agreement does not select a public resource or extension API; which
-  concrete subcompositions qualify and how their contracts are checked remain
-  C1/C3 design and validation questions.
+  Scope follows responsibility and semantic contract, not a minimum consumer
+  count. A cohesive, candidate-independent resource may start shared when its
+  first concrete use already establishes a general contract; a second consumer
+  is not required. Keep a component local when its purpose or invariants belong
+  to a specific flow. When a later concrete use has compatible semantics,
+  promote it to a shared resource and update the consuming declarations; do
+  not force either candidate through the other's flow. An internal helper need
+  not become a declared step merely because code is reused or might be reused.
+  This agreement does not select a public resource or extension API. The
+  boundaries of specific components and the mechanism for checking their
+  contracts remain C1/C3 design and validation questions.
 - An exception aborts the whole operation. No subsequent stage, substitute
   result, alternate provider, policy, key or index is attempted.
 
@@ -216,7 +220,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections, with a step consuming only declared inputs/parameters or earlier outputs. Resolve all admitted intent bindings and reject circular composition/operation dependencies at setup. Give distinct protocol candidates their own flow declarations while reusing compatible resources. A neutral subcomposition may itself be a reusable resource when it has a cohesive, candidate-independent contract; internal helpers and context-specific components need not be promoted into shared declared steps. The three delivered Bitcoin policies share their actual common route and bind only the selected terminal directly to their declared `encode` step, with its required contract checked at setup. **Still proposed:** qualification of concrete subcompositions and synchronous execution mechanism. Declared order makes failure precedence inspectable. Exact record names and source syntax belong to C2. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. The local decision does not prohibit a future slot with a demonstrated independent purpose. Rejection of circular *declaration* dependencies does not ban recursion or iteration inside a capability. |
+| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections, with a step consuming only declared inputs/parameters or earlier outputs. Resolve all admitted intent bindings and reject circular composition/operation dependencies at setup. Give distinct protocol candidates their own flow declarations while reusing compatible resources. Resource scope follows responsibility and semantic contract: a cohesive, candidate-independent resource may start shared on its first concrete use, while a context-specific component stays local until a compatible new use justifies promotion. Neither a reuse quota nor speculative extraction decides scope. The three delivered Bitcoin policies share their actual common route and bind only the selected terminal directly to their declared `encode` step, with its required contract checked at setup. **Still proposed:** boundaries of specific subcompositions, their contract-checking mechanism and the synchronous execution mechanism. Declared order makes failure precedence inspectable. Exact record names and source syntax belong to C2. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. The local decision does not prohibit a future slot with a demonstrated independent purpose. Rejection of circular *declaration* dependencies does not ban recursion or iteration inside a capability. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
 | C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |

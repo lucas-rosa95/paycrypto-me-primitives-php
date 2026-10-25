@@ -13,6 +13,21 @@ simple they appear. Research and validate suitable libraries or runtime
 facilities before selecting implementations. Reference implementation internals
 are evidence to study, not code or architecture to reproduce.
 
+# Resource scope and reuse
+
+Choose a component's scope from its responsibility and semantic contract, not
+from a required number of consumers. A cohesive, candidate-independent
+capability or composition may be shared from its first concrete use; it does
+not need a second consumer to prove that its contract is general. Keep a
+component local when its purpose or invariants belong to a specific flow.
+When a new concrete use reveals genuinely compatible semantics, promote the
+local component to a shared resource and update its consumers without making
+one protocol candidate impersonate another. Do not extract helpers into shared
+declared steps merely to anticipate reuse. This refines the existing
+evidence-driven composition guidance in the root README and canonical
+architecture; it does not make cryptographic algorithms or standardized codecs
+Primitives-owned implementations.
+
 # Operation results and failures
 
 Give each Primitives-owned operation a documented meaning for its return values
