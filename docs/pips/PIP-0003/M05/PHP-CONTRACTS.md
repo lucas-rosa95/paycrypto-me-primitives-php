@@ -261,8 +261,10 @@ complete, atomic caller-facing outcome or preclude a separately justified
 diagnostic facility.
 
 **Joint C1 audit direction:** an external reviewer must be able to inspect the
-source declarations, resolved connections and owned contracts; reproduce
-behavior from a pinned code revision, dependency/runtime environment, inputs,
+source declarations, resolved connections, owned contracts and the mapping from
+each declared step to the capability and selected implementation/dependency
+used by the assembled operation; reproduce behavior from a pinned code
+revision, dependency/runtime environment, inputs,
 commands and independently justified expected outputs; and challenge
 selection, ordering, connection validation and failure abort by substituting
 test capabilities at the contract's existing boundaries. These challenges
@@ -270,6 +272,15 @@ must exercise the same validator and executor used for the operation, not a
 second audit-only implementation. Separate tests of cohesive capability
 internals and independent protocol vectors or differential references check
 behavior that an instrumented composition test or a static schema cannot prove.
+The reviewer may choose any component boundary for deeper inspection, whether
+Primitives-owned, native to the runtime or supplied by a dependency. The
+architecture must not obstruct that choice or make risk ranking an execution
+rule. Trust in a native algorithm does not establish that the operation passes
+the correct bytes, chooses the correct facility or connects its result to the
+right consumer. Provenance and reproducible-build evidence identify what was
+examined; they do not establish protocol correctness by themselves. No fixed
+audit priority, per-component audit label or mandatory review technique is
+selected here.
 The independent review records its scope, reproduced evidence, challenges and
 limits in the existing durable Issue/PR/CI trail where sufficient. Test doubles
 do not qualify production providers or authorize runtime provider fallback.

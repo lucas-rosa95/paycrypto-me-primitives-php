@@ -72,20 +72,25 @@ declarations. Specific subcomposition boundaries, their contract checks and
 exact C2 syntax remain open. The draft's verbose pair-list example is a
 preliminary C2 representation, not the agreed concept;
 the remaining C1–C6 choices and concrete exception-chain design remain open.
-Joint review also needs to resolve the newly raised C1 criterion for
-deterministic, unambiguous stage contracts and a chain that can be inspected,
-independently validated and reproduced, with a stable, complete and atomic
-caller-facing outcome. Its concrete audit surface, point
-infinity representation and executor mechanism are not yet selected.
+Joint C1 direction requires deterministic, unambiguous stage contracts and a
+chain that can be inspected, independently validated and reproduced, with a
+stable, complete and atomic caller-facing outcome. Its concrete audit surface,
+point infinity representation and executor mechanism are not yet selected.
 Independent auditors, rather than ordinary consumers, own verification of the
 chain; a consumer is not required to collect per-invocation evidence to use its
 documented result or failure. The joint C1 audit direction is to inspect
-declarations, resolved connections and contracts; reproduce pinned code,
+declarations, resolved connections, contracts and the assembled mapping from
+steps to capabilities and selected implementations; reproduce pinned code,
 environment, inputs and independently anchored outputs; and challenge routing,
 order and abort behavior with substitutable test capabilities at existing
-contract boundaries through the same validator and executor. Independent
-review findings belong in the existing durable Issue/PR/CI trail when
-sufficient. Specific contract boundaries still need M05 joint review; the exact
+contract boundaries through the same validator and executor. Auditors choose
+which owned, native or third-party component boundaries merit deeper review;
+no fixed risk ranking governs execution. Native-algorithm trust does not
+replace review of our invocation, input bytes and output connections.
+Provenance and reproducibility help identify the examined artifact, not prove
+its protocol behavior. Independent review findings belong in the existing
+durable Issue/PR/CI trail when sufficient. Specific contract boundaries still
+need M05 joint review; the exact
 auditor-facing mechanism remains for M06/M07. These are not assembled-chain
 verification results.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
