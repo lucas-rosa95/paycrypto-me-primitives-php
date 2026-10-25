@@ -68,12 +68,17 @@ components can be promoted when a compatible new use appears.
 Each capability is a complete unit within its enclosing composition, with
 documented inputs, outcome and failure; its implementation remains open to
 inspection and tests at relevant lower boundaries. This does not promise
-rollback or settle the exact capability/subcomposition boundaries.
+rollback or settle the remaining capability/subcomposition boundaries.
 The three delivered Bitcoin policies share their ordered route through
 derived-key HASH160 and bind the explicitly selected terminal directly to the
 declared `encode` step. Other protocol candidates retain their own flow
-declarations. Specific subcomposition boundaries, their contract checks and
-exact C2 syntax remain open. The draft's verbose pair-list example is a
+declarations. The jointly accepted terminal split keeps P2PKH payload/encoder
+steps, P2SH-P2WPKH script/HASH160/payload/encoder steps, and only a SegWit-v0
+encoder step for P2WPKH. Its derived key hash reaches the encoder's program
+input through a checked semantic connection, not a pass-through `program`
+execution step; the selected definition supplies the HRP. Remaining
+subcomposition boundaries, their contract checks and exact C2 syntax remain
+open. The draft's verbose pair-list example is a
 preliminary C2 representation, not the agreed concept;
 the remaining C1–C6 choices and concrete exception-chain design remain open.
 Joint C1 direction requires deterministic, unambiguous stage contracts and a

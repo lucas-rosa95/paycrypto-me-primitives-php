@@ -25,7 +25,7 @@ the draft is not agreement with the executor's proposed choices.**
 |---|---|
 | Referenced M02 decisions and approved PIPs | Existing boundaries. This draft does not amend them. |
 | [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. For the three delivered Bitcoin policies, the selected terminal binds directly to the declared `encode` step under its required contract. Exact C2 source syntax and executor remain open. |
-| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **Executor proposal under joint discussion; not frozen, implemented or qualified.** Declared execution order, inspectable output-to-input connections and direct binding at the delivered Bitcoin terminal step are jointly affirmed. The example source grammar and remaining C1–C6 choices are not thereby approved. |
+| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **Executor proposal under joint discussion; not frozen, implemented or qualified.** Declared execution order, inspectable output-to-input connections, direct binding at the delivered Bitcoin terminal step and the terminal step split marked in C4 are jointly affirmed. The example source grammar and remaining C1–C6 choices are not thereby approved. |
 | Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
 | Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
 
@@ -65,13 +65,24 @@ add supported networks, policies or operations.
   technique of a cohesive capability or its bounded iteration.
 - The three delivered Bitcoin address policies share one ordered route through
   admission, exact-path derivation and derived-key HASH160, then take only the
-  explicitly selected policy's terminal route. Each terminal declares its own
-  payload and encoding connections. This is one Bitcoin flow with a visible
-  policy junction, not three copies of its common route. It does not make the
+  explicitly selected policy's terminal route. Each terminal declares its
+  policy-specific semantic connections and encoding boundary. This is one
+  Bitcoin flow with a visible policy junction, not three copies of its common
+  route. It does not make the
   key-hash junction universal for later policies or other protocol candidates.
   For this local junction, each admitted intent binds its terminal directly to
   the declared `encode` step, whose required contract is checked at setup.
   The exact source syntax and executor remain design questions.
+- For the delivered terminals, P2PKH declares payload construction then
+  Base58Check encoding; P2SH-P2WPKH declares witness-v0 redeem-script
+  construction, script HASH160, P2SH payload construction and Base58Check
+  encoding. P2WPKH declares one executable SegWit-v0 key-hash encoding step.
+  Its derived-key HASH160 output binds directly to the encoder's program input
+  under a checked semantic connection, with the selected network's HRP. A
+  pass-through capability that merely renames those bytes adds no behavior or
+  independent validation guarantee. This does not make arbitrary 20-byte
+  values interchangeable with the derived key hash. The exact C2 syntax and
+  C3 checking mechanism remain open.
 - Capabilities retain cohesive behavior and their own invariants. Declaring
   composition does not require turning every internal instruction into data.
   Each capability is a complete unit for its enclosing composition: it has a
@@ -217,10 +228,11 @@ stage. Zero tweak remains a valid input with complete child metadata updates.
 
 ## Preliminary schema and execution proposal
 
-**Everything in this section is an executor proposal for discussion.** It was
-advanced at the user's request before joint alignment on the concrete design.
-The agreed requirements above remain constraints; the representation, mechanism,
-identifiers and responsibility splits below are not additional agreed decisions.
+**This section retains executor proposals for discussion.** It was advanced at
+the user's request before joint alignment on the concrete design. The agreed
+requirements above and choices explicitly marked as joint decisions remain
+constraints; the other representation, mechanism, identifier and responsibility
+choices below are not additional agreed decisions.
 The section ends at [Entry points and results](#entry-points-and-results).
 
 ### Preliminary choices for joint discussion
@@ -230,7 +242,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 | C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections, with a step consuming only declared inputs/parameters or earlier outputs. Resolve all admitted intent bindings and reject circular composition/operation dependencies at setup. Give distinct protocol candidates their own flow declarations while reusing compatible resources. Resource scope follows responsibility and semantic contract: a cohesive, candidate-independent resource may start shared on its first concrete use, while a context-specific component stays local until a compatible new use justifies promotion. Neither a reuse quota nor speculative extraction decides scope. A cohesive capability is a complete unit for its enclosing composition, with a documented outcome/failure contract; its internals remain auditable. The three delivered Bitcoin policies share their actual common route and bind only the selected terminal directly to their declared `encode` step, with its required contract checked at setup. **Still proposed:** boundaries of specific subcompositions, their contract-checking mechanism and the synchronous execution mechanism. Declared order makes failure precedence inspectable. Exact record names and source syntax belong to C2. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. The local decision does not prohibit a future slot with a demonstrated independent purpose. Rejection of circular *declaration* dependencies does not ban recursion or iteration inside a capability. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
-| C4 — Composition granularity | Keep key admission and exact-path CKDpub cohesive; expose their ordered invariants in contracts. Declare HASH160, shared address derivation, three terminals and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. Review the proposed boundaries against actual adapter code before freezing them. |
+| C4 — Composition granularity | **Joint terminal direction:** P2PKH declares payload construction then Base58Check; P2SH-P2WPKH declares redeem-script construction, script HASH160, P2SH payload construction then Base58Check; P2WPKH binds the derived key hash directly to one SegWit-v0 encoder step with the correct HRP, without a pass-through `program` step. **Still proposed:** keep key admission and exact-path CKDpub cohesive with ordered invariants in their contracts, and declare HASH160, shared address derivation and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. The P2WPKH connection still needs semantic-lineage and runtime-shape checks; exact C2 syntax and C3 mechanism remain open. Review the remaining proposed boundaries against actual adapter code before freezing them. |
 | C5 — Ownership and extension | Ship a closed composition catalogue. Consumers provision admitted network/account data; provider wiring is explicit and separate. No public arbitrary composition-loader API in this slice. | A public extension registry introduces compatibility, validation and support commitments beyond the current operations. Internal data still must undergo validation; being repository-owned is not proof of correctness. Future extension remains a separate design question. |
 | C6 — Setup and runtime | Validate and resolve a complete assembly once; keep request values in a fresh invocation frame. Execute only the plan selected by explicit network/policy intent, with no fallback. | Interpretation adds dispatch and frame costs. No benchmark or working executor establishes those costs yet. Compilation and caching remain possible optimizations, not prohibited techniques. Before adopting either, evaluate its benefit and verify that it preserves admission order, explicit selection, contract checks and failure behavior. The optimization choice remains open for joint review. |
 
@@ -537,14 +549,17 @@ to discuss under C3. Neither choice permits an arbitrary parameter bag.
 |---|---|
 | `p2pkh-address` | `payload`: owned `p2pkh-payload(keyHash = $keyHash; version = @network.p2pkhVersion)` returns the 21-byte P2PKH payload. `encode`: delegated `base58check-encode(payload = payload.payload)` returns `address`; export `encode.address`. |
 | `nested-witness-address` | `script`: owned `witness-v0-keyhash-script(keyHash = $keyHash)` returns the 22-byte `0014` redeem script. `scripthash`: composition `hash160(bytes = script.script)` returns `digest`. `payload`: owned `p2sh-payload(scriptHash = scripthash.digest; version = @network.p2shVersion)` returns the 21-byte P2SH payload. `encode`: the same `base58check-encode(payload = payload.payload)`; export `encode.address`. |
-| `native-witness-address` | `program`: owned `witness-v0-keyhash-program(keyHash = $keyHash)` admits the key hash's witness-program role without changing its bytes. `encode`: delegated `segwit-v0-keyhash-encode(program = program.program; hrp = @network.segwitHrp)` returns `address`; export `encode.address`. |
+| `native-witness-address` | `encode`: delegated `segwit-v0-keyhash-encode(program = $keyHash; hrp = @network.segwitHrp)` returns `address`; export `encode.address`. The direct `keyHash -> program` connection is valid only for the selected P2WPKH terminal and the derived-key HASH160 lineage. |
 
 The payload/script constructors own protocol meaning and fixed layout; they
 are not configurable byte concatenators or reimplementations of codecs.
-The witness-program role can be a checked connection in the loaded form
-instead of a standalone runtime object/call, if qualification proves equivalent
-admission and failure order. This is an unresolved implementation economy,
-not permission to accept arbitrary 20-byte values as the derived key hash.
+The witness-program role is a checked connection, not a standalone executable
+conversion. Setup must verify that the source is the derived-key HASH160 bound
+to the selected P2WPKH intent, and that the HRP comes from the selected
+definition's SegWit role. Runtime checks still reject an invalid digest shape
+at the HASH160/encoder boundaries. No extra failure or successful output is
+introduced between those boundaries; M06/M07 must challenge this preserved
+admission and failure order through the actual validator and executor.
 
 Proposed intent-binding data, with no implicit rows or policy inference:
 
@@ -684,6 +699,7 @@ executor must demonstrate in addition to the existing acceptance list.
 | Bind P2SH payload's `scriptHash` directly to `keyhash.digest` | Setup semantic rejection despite both being 20 bytes. |
 | Hash `admit.node.publicKey` instead of `derive.node.publicKey` | Setup lineage rejection; a valid hash of the wrong key cannot satisfy the operation. |
 | Use the P2PKH network field for the P2SH terminal | Setup role rejection even in a fixture with equal byte values. |
+| Bind P2WPKH's program input to an unrelated 20-byte digest or wrong-HRP role, or insert a pass-through `program` execution step | Setup semantic/role or extra-step rejection; the direct connection is restricted to the derived-key HASH160 and selected SegWit HRP. |
 | Duplicate an intent row, bind an incompatible terminal to `encode`, or create a recursive subcomposition | Setup rejection before provider work; no first-row-wins or lazy repair. |
 | Add an unused step that executes another policy or validates the point before version eligibility | Reject extra execution or the broken admission contract. Internal key-admission order also needs mixed-invalid runtime tests; the loader cannot prove adapter code from a label. |
 | Fail key admission, depth, a first/middle/final CKDpub edge, hash or encoder | Preserve the documented reason; observe no later stage, other policy/provider/index, or result construction. Instrument inside cohesive capabilities as well as at composition steps. |

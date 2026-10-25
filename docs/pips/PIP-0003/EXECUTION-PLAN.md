@@ -43,9 +43,13 @@ recorded in existing durable evidence. The assembled step-to-capability and
 implementation mapping must be inspectable; auditors choose which owned,
 native or third-party component boundaries warrant deeper review. No fixed
 risk ranking controls execution, and native-algorithm trust does not qualify
-our invocation or connections. Specific contract boundaries remain for
-M05 joint review; the inspection/instrumentation mechanism remains for M06/M07
-feasibility and acceptance. The remaining choices
+our invocation or connections. Joint C4 terminal review retains the distinct
+P2PKH payload/encoder and P2SH-P2WPKH script/HASH160/payload/encoder steps;
+P2WPKH uses one SegWit-v0 encoder step with a checked derived-key-HASH160-to-
+program connection and selected HRP, without a pass-through execution step.
+Other specific contract boundaries remain for M05 joint review; the
+inspection/instrumentation mechanism remains for M06/M07 feasibility and
+acceptance. The remaining choices
 are unaccepted and unimplemented; provider/runtime selection,
 affected feasibility/contract qualification and the freeze remain open.
 Development/setup/CI/release image pins were refreshed to PHP 8.3.36/8.4.27
