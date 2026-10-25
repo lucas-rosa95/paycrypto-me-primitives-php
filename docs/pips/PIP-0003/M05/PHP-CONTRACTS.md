@@ -241,6 +241,15 @@ preserve original types for admission; the proposed point capability's `?string`
 has one documented internal infinity outcome. Whether that outcome is clearer as
 an explicit type remains open for joint review.
 
+The caller-facing outcome must be stable, complete and atomic for one admitted
+request: either the documented result with all its context, or a documented
+owned failure, never a partial value or an unresolved state that the consumer
+must interpret to discover what happened. A failed stage must not publish a
+later result or mutate an already returned result. This is an operation-result
+guarantee, not an unreviewed promise to roll back arbitrary external provider
+side effects. Review which internal outcome forms, including nullable ones,
+preserve this clarity; no blanket prohibition is decided here.
+
 The whole chain must also be open to inspection, independent validation and
 reproduction, down to relevant component contracts and connections. The
 [repository audit principle](../../../README.md#auditable-by-design) already
