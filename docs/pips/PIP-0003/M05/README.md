@@ -79,7 +79,15 @@ caller-facing outcome. Its concrete audit surface, point
 infinity representation and executor mechanism are not yet selected.
 Independent auditors, rather than ordinary consumers, own verification of the
 chain; a consumer is not required to collect per-invocation evidence to use its
-documented result or failure. The auditor-facing mechanism remains open.
+documented result or failure. The joint C1 audit direction is to inspect
+declarations, resolved connections and contracts; reproduce pinned code,
+environment, inputs and independently anchored outputs; and challenge routing,
+order and abort behavior with substitutable test capabilities at existing
+contract boundaries through the same validator and executor. Independent
+review findings belong in the existing durable Issue/PR/CI trail when
+sufficient. Specific contract boundaries still need M05 joint review; the exact
+auditor-facing mechanism remains for M06/M07. These are not assembled-chain
+verification results.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before C1 freeze. They add no admitted intent, implementation or

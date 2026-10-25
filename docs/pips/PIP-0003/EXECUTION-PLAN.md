@@ -33,7 +33,12 @@ chain that can be inspected, independently validated and reproduced, with a
 stable, complete and atomic caller-facing outcome; its audit
 surface and executor mechanism are not yet selected. Independent auditors must
 be able to verify the chain; consumers need no per-invocation audit evidence
-to use its documented result or failure. The remaining choices
+to use its documented result or failure. Joint C1 direction requires
+reproducible, independently anchored behavior and challenges at substitutable
+contract boundaries using the actual validator and executor, with findings
+recorded in existing durable evidence. Specific contract boundaries remain for
+M05 joint review; the inspection/instrumentation mechanism remains for M06/M07
+feasibility and acceptance. The remaining choices
 are unaccepted and unimplemented; provider/runtime selection,
 affected feasibility/contract qualification and the freeze remain open.
 Development/setup/CI/release image pins were refreshed to PHP 8.3.36/8.4.27

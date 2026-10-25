@@ -258,18 +258,34 @@ independent auditors can examine and reproduce the behavior; ordinary consumers
 are not required to collect or interpret evidence from each invocation to use
 the documented result or owned failure. This does not weaken the operation's
 complete, atomic caller-facing outcome or preclude a separately justified
-diagnostic facility. For this M05 design, the concrete auditor-facing surface
-is still open: what an external verifier must be able to inspect or reproduce,
-whether execution-specific evidence is needed for qualification, and which
-component boundaries should expose it. In counter-proof evidence, a checksum
-can pin the exact external specification/vector snapshot or test artifact used,
+diagnostic facility.
+
+**Joint C1 audit direction:** an external reviewer must be able to inspect the
+source declarations, resolved connections and owned contracts; reproduce
+behavior from a pinned code revision, dependency/runtime environment, inputs,
+commands and independently justified expected outputs; and challenge
+selection, ordering, connection validation and failure abort by substituting
+test capabilities at the contract's existing boundaries. These challenges
+must exercise the same validator and executor used for the operation, not a
+second audit-only implementation. Separate tests of cohesive capability
+internals and independent protocol vectors or differential references check
+behavior that an instrumented composition test or a static schema cannot prove.
+The independent review records its scope, reproduced evidence, challenges and
+limits in the existing durable Issue/PR/CI trail where sufficient. Test doubles
+do not qualify production providers or authorize runtime provider fallback.
+
+Specific subcomposition and contract boundaries still require M05 joint review.
+The exact PHP inspection/instrumentation mechanism and any need for
+execution-specific qualification evidence remain open for M06/M07 feasibility
+and acceptance review. No production audit mode or consumer-facing trace is
+required by this direction. In counter-proof evidence, a checksum can pin the
+exact external specification/vector snapshot or test artifact used,
 detect later alteration and help another reviewer reproduce the comparison.
 Together with source provenance and independently justified expected results,
 this supports the [canonical CP-11 independent-evidence gate](../../../canonicals/primitives/paycrypto-primitives-canonical-architecture-reference-v1.8.md#cp-11----independent-evidence-and-verification).
 The checksum authenticates neither the source's authority nor the protocol
-meaning of an output on its own. No public introspection API, execution trace,
-mandatory checksum scheme or additional coupling is selected by this review
-criterion.
+meaning of an output on its own. No public introspection API, mandatory
+checksum scheme or additional coupling is selected by this direction.
 
 ### Synthetic terminal-junction comparison — C1 decision evidence
 
