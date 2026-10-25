@@ -51,13 +51,13 @@ three approved policy flows, distinguishes parameter data, composition
 declarations and provider wiring, and assigns
 schema/abort acceptance cases to M06/M07. The new
 [preliminary schema and execution proposal](PHP-CONTRACTS.md#preliminary-schema-and-execution-proposal)
-advances C1–C6 for joint discussion: ordered declarations, duplicate-observable
+initially advanced C1–C6 for joint discussion: ordered declarations, duplicate-observable
 source records, semantic lineage, explicit intent bindings and execution/failure
 boundaries. Its [reading guide](PHP-CONTRACTS.md#reading-and-decision-status)
 distinguishes accepted constraints, agreed direction and unaccepted proposals.
-The C1 discussion has affirmed execution in declared order and inspectable
-producer-output-to-consumer-input connections. Each step consumes only declared
-inputs/parameters or earlier outputs; setup resolves all admitted intent bindings
+C1 is jointly closed at the architectural level: declared execution order and
+inspectable producer-output-to-consumer-input connections. Each step consumes
+only declared inputs/parameters or earlier outputs; setup resolves all admitted intent bindings
 and rejects circular dependencies among declarations. This does not constrain
 internal capability recursion or bounded iteration. Neutral subcompositions may be
 shared when they have cohesive, candidate-independent contracts; ordinary
@@ -80,11 +80,12 @@ execution step; the selected definition supplies the HRP. Remaining
 subcomposition boundaries, their contract checks and exact C2 syntax remain
 open. The draft's verbose pair-list example is a
 preliminary C2 representation, not the agreed concept;
-the remaining C1–C6 choices and concrete exception-chain design remain open.
-Joint C1 direction requires deterministic, unambiguous stage contracts and a
-chain that can be inspected, independently validated and reproduced, with a
-stable, complete and atomic caller-facing outcome. Its concrete audit surface,
-point infinity representation and executor mechanism are not yet selected.
+the remaining C2–C6 choices and concrete exception-chain design remain open.
+The closed C1 direction requires deterministic, unambiguous stage contracts and
+a chain that can be inspected, independently validated and reproduced, with a
+stable, complete and atomic caller-facing outcome. Concrete contract checking
+and the point-infinity outcome form remain under C3; the executor and auditor
+inspection mechanisms remain under C6.
 Independent auditors, rather than ordinary consumers, own verification of the
 chain; a consumer is not required to collect per-invocation evidence to use its
 documented result or failure. The joint C1 audit direction is to inspect
@@ -98,13 +99,12 @@ no fixed risk ranking governs execution. Native-algorithm trust does not
 replace review of our invocation, input bytes and output connections.
 Provenance and reproducibility help identify the examined artifact, not prove
 its protocol behavior. Independent review findings belong in the existing
-durable Issue/PR/CI trail when sufficient. Specific contract boundaries still
-need M05 joint review; the exact
-auditor-facing mechanism remains for M06/M07. These are not assembled-chain
-verification results.
+durable Issue/PR/CI trail when sufficient. Remaining component boundaries need
+C4 joint review; their checks remain under C3 and the auditor-facing mechanism
+under C6/M06–M07. These are not assembled-chain verification results.
 The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
-boundaries before C1 freeze. They add no admitted intent, implementation or
+boundaries before M05 freeze. They add no admitted intent, implementation or
 protocol-qualification evidence.
 The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
 now applies one runnable symbolic probe to the named-slot and direct-step
@@ -304,7 +304,7 @@ review them and assign their affected acceptance cases before the M06 handoff:
 | Public request/result | Freeze concrete signatures and immutable representations for serialized key, nonempty integer path, validated network and explicit policy; return address plus exact network/policy/path context. Keep generic derivation distinct from receiving account/index. |
 | Integer ingress | Reject booleans, numeric strings and integral floats **before coercion**. PHP parameter types plus callee `strict_types` do not suffice when the caller is weakly typed. Use explicit original-value validation at the admission boundary; later callers consume admitted semantic values. Test both caller modes. |
 | Definitions | Choose a concrete immutable schema and construction boundary that cannot bypass validation, rejects unknown/duplicate data and preserves order-independent equivalence. Test-only Signet data variation must not become public network support. `testnet` describes encoding parameters and does not authenticate testnet3/testnet4/Signet chain identity. |
-| Composition and execution | Retain the agreed ordered declarations and direct intent binding at the delivered Bitcoin `encode` step. Review the still preliminary C1–C6 choices: pair-list source, role/lineage validation, operation prelude/body boundary, terminal parameter exposure and explicit provider assembly. Resolve representation feasibility and unexpected owned-code failure handling before freeze; no production validator or executor has been qualified. |
+| Composition and execution | Preserve the closed C1 execution model and direct intent binding at the delivered Bitcoin `encode` step. Review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
 | Receiving source | Freeze duplicate-safe provisioning, validation timing and missing/malformed/incompatible mapping failures. Select exactly by network/policy/account; provisioning binds ancestry, which serialized metadata cannot prove. Invoke generic `[0, index]` without advancement or fallback; return logical account/branch/index. |
 | Lower capabilities | Name only boundaries with real protocol responsibility and replacement evidence. Preserve zero-tweak identity, distinguish confirmed infinity from provider malfunction, and define the meaning of every nullable/boolean/outcome return. No vendor objects or generic buffer/crypto framework in public contracts. |
 | Failures and precedence | Choose owned exception classes/categories, safe messages and previous-chain rules; preserve corrected M02 validation stages and exact-index failure without partial success. Verify absent facilities, wrong provider types/widths and thrown faults through the eventual public operation. Do not expose raw vendor messages or exception chains. |

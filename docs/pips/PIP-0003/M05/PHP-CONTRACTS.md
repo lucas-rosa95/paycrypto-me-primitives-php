@@ -25,7 +25,7 @@ the draft is not agreement with the executor's proposed choices.**
 |---|---|
 | Referenced M02 decisions and approved PIPs | Existing boundaries. This draft does not amend them. |
 | [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. For the three delivered Bitcoin policies, the selected terminal binds directly to the declared `encode` step under its required contract. Exact C2 source syntax and executor remain open. |
-| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **Executor proposal under joint discussion; not frozen, implemented or qualified.** Declared execution order, inspectable output-to-input connections, direct binding at the delivered Bitcoin terminal step and the terminal step split marked in C4 are jointly affirmed. The example source grammar and remaining C1–C6 choices are not thereby approved. |
+| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **C1 is jointly closed at the architectural level; the remaining C2–C6 choices are executor proposals under discussion, not frozen, implemented or qualified.** Declared execution order, inspectable output-to-input connections, direct binding at the delivered Bitcoin terminal step and the terminal step split marked in C4 are jointly affirmed. The example source grammar and concrete mechanisms are not thereby approved. |
 | Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
 | Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
 
@@ -106,8 +106,8 @@ add supported networks, policies or operations.
   not force either candidate through the other's flow. An internal helper need
   not become a declared step merely because code is reused or might be reused.
   This agreement does not select a public resource or extension API. The
-  boundaries of specific components and the mechanism for checking their
-  contracts remain C1/C3 design and validation questions.
+  remaining boundaries of specific components belong to C4; how their
+  contracts are checked belongs to C3.
 - An exception aborts the whole operation. No subsequent stage, substitute
   result, alternate provider, policy, key or index is attempted.
 
@@ -239,17 +239,17 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | **Jointly affirmed:** execute declared steps in order; preserve inspectable producer-output-to-consumer-input connections, with a step consuming only declared inputs/parameters or earlier outputs. Resolve all admitted intent bindings and reject circular composition/operation dependencies at setup. Give distinct protocol candidates their own flow declarations while reusing compatible resources. Resource scope follows responsibility and semantic contract: a cohesive, candidate-independent resource may start shared on its first concrete use, while a context-specific component stays local until a compatible new use justifies promotion. Neither a reuse quota nor speculative extraction decides scope. A cohesive capability is a complete unit for its enclosing composition, with a documented outcome/failure contract; its internals remain auditable. The three delivered Bitcoin policies share their actual common route and bind only the selected terminal directly to their declared `encode` step, with its required contract checked at setup. **Still proposed:** boundaries of specific subcompositions, their contract-checking mechanism and the synchronous execution mechanism. Declared order makes failure precedence inspectable. Exact record names and source syntax belong to C2. | A dependency graph with a scheduler offers more freedom but requires an additional order model. Straight-line generated PHP could preserve declarations, but adds generated-code equivalence and tooling obligations. Neither alternative is ruled out by the partial agreement. The local decision does not prohibit a future slot with a demonstrated independent purpose. Rejection of circular *declaration* dependencies does not ban recursion or iteration inside a capability. |
+| C1 — Execution model | **Closed by joint M05 decision (2026-10-25):** distinct protocol candidates own distinct ordered flow declarations and may share compatible resources; within a candidate, equivalent parameter variants reuse the declaration. Steps consume declared inputs/parameters or earlier outputs, never future outputs. Resolve every admitted intent binding, reject circular declaration dependencies at setup, preserve semantically inspectable producer-to-consumer connections and stop the selected operation on failure without fallback or partial result. A cohesive capability is a complete contract unit without forcing its internals into declared steps. The three delivered Bitcoin policies share their actual common route and bind only the selected terminal directly at the declared `encode` step. Independent auditors can inspect the full chain and choose component boundaries for deeper review; ordinary consumers need no per-invocation audit evidence. | This closes the architectural execution model for the approved operations. C2 owns source syntax; C3 owns concrete compatibility checking and internal outcome forms; C4 owns remaining component splits; C6 owns the executor, assembly and inspection mechanisms and any reviewed optimization. A future independently justified slot or different protocol flow requires review, not mutation of this Bitcoin declaration. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
-| C3 — Semantic compatibility | A closed catalogue of owned contracts plus narrow lineage checks for this slice. Derive semantic roles from actual producers and bindings; never trust an arbitrary type label supplied by a declaration. | Shape-only validation is insufficient. A general refinement/type-expression language would need substantially more justification. The minimum useful internal value types versus metadata still needs a PHP feasibility check. |
+| C3 — Semantic compatibility | **Agreed requirement:** deterministic stage contracts with semantically unambiguous inputs, outputs and failures; connections must preserve actual producer lineage and parameter roles, not merely PHP shape or caller-written labels. **Still proposed:** a closed owned-contract catalogue with narrow lineage checks for this slice. | Shape-only validation is insufficient. The bounded contract metadata/checker design, minimum useful internal value types, point-infinity outcome form and runtime boundary checks need PHP feasibility and joint review. A general refinement/type-expression language needs separate justification. |
 | C4 — Composition granularity | **Joint terminal direction:** P2PKH declares payload construction then Base58Check; P2SH-P2WPKH declares redeem-script construction, script HASH160, P2SH payload construction then Base58Check; P2WPKH binds the derived key hash directly to one SegWit-v0 encoder step with the correct HRP, without a pass-through `program` step. **Still proposed:** keep key admission and exact-path CKDpub cohesive with ordered invariants in their contracts, and declare HASH160, shared address derivation and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. The P2WPKH connection still needs semantic-lineage and runtime-shape checks; exact C2 syntax and C3 mechanism remain open. Review the remaining proposed boundaries against actual adapter code before freezing them. |
 | C5 — Ownership and extension | Ship a closed composition catalogue. Consumers provision admitted network/account data; provider wiring is explicit and separate. No public arbitrary composition-loader API in this slice. | A public extension registry introduces compatibility, validation and support commitments beyond the current operations. Internal data still must undergo validation; being repository-owned is not proof of correctness. Future extension remains a separate design question. |
-| C6 — Setup and runtime | Validate and resolve a complete assembly once; keep request values in a fresh invocation frame. Execute only the plan selected by explicit network/policy intent, with no fallback. | Interpretation adds dispatch and frame costs. No benchmark or working executor establishes those costs yet. Compilation and caching remain possible optimizations, not prohibited techniques. Before adopting either, evaluate its benefit and verify that it preserves admission order, explicit selection, contract checks and failure behavior. The optimization choice remains open for joint review. |
+| C6 — Setup and runtime | **Agreed behavior from C1:** follow the declared order, execute only the selected route and abort without fallback, later stages or partial public results. **Still proposed:** validate and resolve a complete assembly once, use a fresh invocation frame and execute the selected plan synchronously through an interpreter. The concrete auditor inspection/instrumentation mechanism remains open. | A scheduler may not reorder or speculatively execute stages in violation of C1. Straight-line generated PHP, compilation and caching remain possible mechanisms or optimizations if they preserve the same validation, selection, failure and audit behavior; evaluate benefit and equivalence before adoption. No benchmark or working executor establishes a preference yet. |
 
-These choices are separable. Agreeing with ordered execution, for example, does
-not automatically approve pair-list authoring, the names below or a public API.
+These choices are separable. Closing C1 does not approve pair-list authoring,
+the concrete checker, remaining component splits, executor or public API.
 
-**Additional C1 review criterion raised for joint discussion:** the complete
+**Agreed C1 contract criterion; concrete forms remain under C3:** the complete
 selected chain must be deterministic for admitted inputs, definitions and bound
 capabilities. Each stage must have unambiguous, semantically named inputs and
 outputs and a documented failure meaning; an unconstrained `mixed -> mixed`
@@ -258,7 +258,7 @@ indistinguishable would defeat connection validation. This does not yet settle
 the concrete PHP signatures. The `mixed` values proposed at raw public ingress
 preserve original types for admission; the proposed point capability's `?string`
 has one documented internal infinity outcome. Whether that outcome is clearer as
-an explicit type remains open for joint review.
+an explicit type remains open under C3 and the lower PHP contract review.
 
 The caller-facing outcome must be stable, complete and atomic for one admitted
 request: either the documented result with all its context, or a documented
@@ -304,9 +304,10 @@ The independent review records its scope, reproduced evidence, challenges and
 limits in the existing durable Issue/PR/CI trail where sufficient. Test doubles
 do not qualify production providers or authorize runtime provider fallback.
 
-Specific subcomposition and contract boundaries still require M05 joint review.
-The exact PHP inspection/instrumentation mechanism and any need for
-execution-specific qualification evidence remain open for M06/M07 feasibility
+Remaining subcomposition boundaries require C4 joint review, while their
+contract-checking mechanism belongs to C3. The exact PHP auditor
+inspection/instrumentation mechanism belongs to C6; any need for
+execution-specific qualification evidence remains open for M06/M07 feasibility
 and acceptance review. No production audit mode or consumer-facing trace is
 required by this direction. In counter-proof evidence, a checksum can pin the
 exact external specification/vector snapshot or test artifact used,
@@ -388,6 +389,7 @@ Bitcoin post-HASH160 junction.
 
 ### Preliminary source schema and immutable form — C1/C2/C5
 
+The proposed C2/C5 source form must preserve the closed C1 constraints.
 Propose the following **internal** source grammar. `Record` means a PHP list
 of exact `[field, value]` pairs; every listed field is required exactly once,
 including empty lists where applicable. Unknown or duplicate fields fail.
@@ -739,10 +741,11 @@ assigns Bech32m to witness versions 1 and higher. These sources motivate the
 shape of the challenges, not a claim that the proposed composition satisfies
 them. A successful conceptual fit would not approve these features or establish
 provider correctness. If either challenge requires misleading port roles,
-irrelevant definition fields or hidden conditional execution, revise the C1
-boundary before freezing it.
+irrelevant definition fields or hidden conditional execution, reopen the agreed
+C1 boundary with that evidence before the M05 freeze.
 
-Before joint freeze, resolve C1–C6 against the actual PHP interfaces, including
+Before joint freeze, resolve the remaining C2–C6 choices against the closed C1
+constraints and actual PHP interfaces, including
 the prelude/body selection boundary, terminal parameter exposure, unexpected
 owned-code failure classification and how
 lineage is retained without a generic type framework. A bounded feasibility
@@ -1104,8 +1107,8 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
   Tests must verify exactly one tuple and `[0, index]`, with no fallback.
 
 The [preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal)
-makes concrete choices available for joint discussion; C1 is partially agreed,
-while its remaining details and the other C2–C6 choices remain unaccepted.
+makes concrete choices available for joint discussion; C1 is jointly closed at
+the architectural level, while the remaining C2–C6 choices are unaccepted.
 No schema validator or executor has been implemented or qualified by this
 document. M06 applies the assigned cases to
 the first complete branch; M07 extends them to all policies and receiving.
