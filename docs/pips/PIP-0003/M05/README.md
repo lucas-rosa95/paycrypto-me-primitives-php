@@ -55,7 +55,7 @@ initially advanced C1–C6 for joint discussion: ordered declarations, duplicate
 source records, semantic lineage, explicit intent bindings and execution/failure
 boundaries. Its [reading guide](PHP-CONTRACTS.md#reading-and-decision-status)
 distinguishes accepted constraints, agreed direction and unaccepted proposals.
-C1 is jointly closed at the architectural level: declared execution order and
+C1's agreed base remains in force: declared execution order and
 inspectable producer-output-to-consumer-input connections. Each step consumes
 only declared inputs/parameters or earlier outputs; setup resolves all admitted intent bindings
 and rejects circular dependencies among declarations. This does not constrain
@@ -81,7 +81,7 @@ subcomposition boundaries, their contract checks and exact C2 syntax remain
 open. The draft's verbose pair-list example is a
 preliminary C2 representation, not the agreed concept;
 the remaining C2–C6 choices and concrete exception-chain design remain open.
-The closed C1 direction requires deterministic, unambiguous stage contracts and
+The agreed C1 direction requires deterministic, unambiguous stage contracts and
 a chain that can be inspected, independently validated and reproduced, with a
 stable, complete and atomic caller-facing outcome. Concrete contract checking
 and the point-infinity outcome form remain under C3; the executor and auditor
@@ -111,9 +111,15 @@ now tests an earlier P2TR branch beside the three delivered policies' shared
 key-hash route. Its symbolic probe exercises selection, abort and invalid
 bindings, but does not implement the proposed executor. It also exposes a
 separate admission conflict: BIP86 uses `xpub` examples, while the accepted
-initial O02 mapping admits `xpub` only for P2PKH. The future admission contract
-and any C1 refinement remain open for joint review; C2 discussion is deferred
-until this fitness challenge is understood.
+initial O02 mapping admits `xpub` only for P2PKH. The user has approved the
+multi-junction criterion and reopened C1 extension
+review before C2. The [rigidity review and stronger symbolic probe](PHP-CONTRACTS.md#c1-extension-review--agreed-criterion-and-open-design)
+retain six baseline plans in an eight-intent extension, accept renamed steps
+and synthetic early/middle/late selections, reject fifteen invalid fixtures
+and stop at forty-eight exact injected-failure prefixes on PHP 8.3/8.4. This
+baseline already uses the exploratory earlier frontier; the old flat declaration
+is not thereby extensible unchanged. The particular decomposition and future
+admission/provenance contract remain open for joint review.
 The [visual counter-proofs](PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review)
 provide five synchronized Mermaid/SVG/PNG views of current Bitcoin policy flow,
 preliminary Taproot divergence, the admission conflict, independent Bitcoin Cash
@@ -128,8 +134,8 @@ other design choices stay open; this probe does not validate a production loader
 or address behavior.
 Concrete choices, including admission/body separation and owned-code failure
 classification, remain open alongside provider/runtime selection. This is a
-reviewable design proposal, not an implementation handoff; it adds no runtime
-evidence or implemented capability.
+reviewable design proposal, not an implementation handoff; it adds no provider
+or runtime qualification and no implemented public capability.
 
 ## Current package suitability
 
@@ -317,7 +323,7 @@ review them and assign their affected acceptance cases before the M06 handoff:
 | Public request/result | Freeze concrete signatures and immutable representations for serialized key, nonempty integer path, validated network and explicit policy; return address plus exact network/policy/path context. Keep generic derivation distinct from receiving account/index. |
 | Integer ingress | Reject booleans, numeric strings and integral floats **before coercion**. PHP parameter types plus callee `strict_types` do not suffice when the caller is weakly typed. Use explicit original-value validation at the admission boundary; later callers consume admitted semantic values. Test both caller modes. |
 | Definitions | Choose a concrete immutable schema and construction boundary that cannot bypass validation, rejects unknown/duplicate data and preserves order-independent equivalence. Test-only Signet data variation must not become public network support. `testnet` describes encoding parameters and does not authenticate testnet3/testnet4/Signet chain identity. |
-| Composition and execution | Preserve the closed C1 execution model and direct intent binding at the delivered Bitcoin `encode` step. Review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
+| Composition and execution | Preserve C1's agreed base and direct local binding while completing its reopened multi-junction extension review before C2. Assess the particular earlier policy frontier and scoped nested target identity; review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
 | Receiving source | Freeze duplicate-safe provisioning, validation timing and missing/malformed/incompatible mapping failures. Select exactly by network/policy/account; provisioning binds ancestry, which serialized metadata cannot prove. Invoke generic `[0, index]` without advancement or fallback; return logical account/branch/index. |
 | Lower capabilities | Name only boundaries with real protocol responsibility and replacement evidence. Preserve zero-tweak identity, distinguish confirmed infinity from provider malfunction, and define the meaning of every nullable/boolean/outcome return. No vendor objects or generic buffer/crypto framework in public contracts. |
 | Failures and precedence | Choose owned exception classes/categories, safe messages and previous-chain rules; preserve corrected M02 validation stages and exact-index failure without partial success. Verify absent facilities, wrong provider types/widths and thrown faults through the eventual public operation. Do not expose raw vendor messages or exception chains. |

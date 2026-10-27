@@ -3,240 +3,515 @@
 declare(strict_types=1);
 
 /**
- * Synthetic C1 fitness probe: two Bitcoin policy junctions, including P2TR.
- * Run with PHP 8.3+. No cryptography, codec, provider, production loader,
- * admission decision, or proposed C2 source format is implemented here.
+ * Synthetic C1 binding-mechanism probe for Issue #41. PHP 8.3+.
+ * Trusted in-memory fixture syntax, symbolic contracts and call traces only.
+ * No production C2 schema, C3 lineage proof, C6 executor, crypto or codec.
+ * The admission fixture is hypothetical: current O02 does not admit P2TR.
  */
 
-final class DivergenceProbeFailure extends RuntimeException {}
-
-function divergenceRequire(bool $condition, string $reason): void
+final class FitnessFailure extends RuntimeException
 {
-    if (!$condition) {
-        throw new DivergenceProbeFailure($reason);
+    public function __construct(string $reason, public readonly array $trace = [])
+    {
+        parent::__construct($reason);
     }
 }
 
-function divergenceFixture(): array
+function fitnessRequire(bool $condition, string $reason): void
 {
-    $policies = [
-        'p2pkh' => ['route' => 'keyhash-route', 'terminal' => 'p2pkh-address'],
-        'p2sh-p2wpkh' => ['route' => 'keyhash-route', 'terminal' => 'nested-address'],
-        'p2wpkh' => ['route' => 'keyhash-route', 'terminal' => 'witness-v0-address'],
-        'p2tr-keypath' => ['route' => 'taproot-route', 'terminal' => 'witness-v1-address'],
+    if (!$condition) {
+        throw new FitnessFailure($reason);
+    }
+}
+
+function fitnessContract(array $inputs, array $outputs, array $parameters = []): array
+{
+    return ['inputs' => $inputs, 'parameters' => $parameters, 'outputs' => $outputs];
+}
+
+function fitnessStep(string $id, string $kind, string $target,
+    array $inputs, array $parameters = []): array
+{
+    return compact('id', 'kind', 'target', 'inputs', 'parameters');
+}
+
+function fitnessFixture(bool $withTaproot): array
+{
+    $network = ['network' => 'network-definition'];
+    $contracts = [
+        'public-address' => fitnessContract(['request' => 'admitted-request'],
+            ['result' => 'public-result'], $network),
+        'admission' => fitnessContract(['request' => 'admitted-request'],
+            ['node' => 'admitted-public-node']),
+        'depth' => fitnessContract(['node' => 'admitted-public-node'],
+            ['path' => 'checked-relative-path']),
+        'derive' => fitnessContract(['node' => 'admitted-public-node',
+            'path' => 'checked-relative-path'], ['node' => 'derived-public-node']),
+        'derived-node-address' => fitnessContract(['node' => 'derived-public-node'],
+            ['address' => 'address-for-intent'], $network),
+        // Symbolic whole boundary only; not a proposed production hash capability.
+        'hash-fixture' => fitnessContract(['node' => 'derived-public-node'],
+            ['digest' => 'derived-key-hash']),
+        'key-hash-address' => fitnessContract(['hash' => 'derived-key-hash'],
+            ['address' => 'address-for-intent'], $network),
+        'make-result' => fitnessContract(['address' => 'address-for-intent'],
+            ['result' => 'public-result']),
     ];
-    $bindings = [];
-    foreach (['mainnet', 'testnet'] as $network) {
-        foreach ($policies as $policy => $selection) {
-            $bindings[] = ['network' => $network, 'policy' => $policy, ...$selection];
+    $capabilities = [];
+    foreach (['admission', 'depth', 'derive', 'hash-fixture', 'make-result'] as $id) {
+        $capabilities[$id] = ['contract' => $id];
+    }
+    $input = static fn(string $name): array => ['input', $name];
+    $output = static fn(string $step, string $port): array => ['output', $step, $port];
+    $params = ['network' => ['parameter', 'network']];
+    $compositions = [
+        'bitcoin-public-address' => [
+            'contract' => 'public-address',
+            'steps' => [
+                fitnessStep('admit', 'capability', 'admission', ['request' => $input('request')]),
+                fitnessStep('depth', 'capability', 'depth', ['node' => $output('admit', 'node')]),
+                fitnessStep('derive', 'capability', 'derive', [
+                    'node' => $output('admit', 'node'), 'path' => $output('depth', 'path')]),
+                fitnessStep('address', 'intent', 'derived-node-address',
+                    ['node' => $output('derive', 'node')], $params),
+                fitnessStep('result', 'capability', 'make-result',
+                    ['address' => $output('address', 'address')]),
+            ],
+            'outputs' => ['result' => $output('result', 'result')],
+        ],
+        'keyhash-route' => [
+            'contract' => 'derived-node-address',
+            'policies' => ['p2pkh', 'p2sh-p2wpkh', 'p2wpkh'],
+            'steps' => [
+                fitnessStep('keyhash', 'capability', 'hash-fixture', ['node' => $input('node')]),
+                fitnessStep('encode', 'intent', 'key-hash-address',
+                    ['hash' => $output('keyhash', 'digest')], $params),
+            ],
+            'outputs' => ['address' => $output('encode', 'address')],
+        ],
+    ];
+    $policies = [
+        'p2pkh' => ['keyhash-route', 'p2pkh-terminal'],
+        'p2sh-p2wpkh' => ['keyhash-route', 'nested-terminal'],
+        'p2wpkh' => ['keyhash-route', 'witness-v0-terminal'],
+    ];
+    foreach ($policies as $policy => [, $terminal]) {
+        $capabilities[$terminal] = ['contract' => 'key-hash-address', 'policies' => [$policy]];
+        $compositions[$terminal] = [
+            'contract' => 'key-hash-address', 'policies' => [$policy],
+            'steps' => [fitnessStep('encode', 'capability', $terminal,
+                ['hash' => $input('hash')], $params)],
+            'outputs' => ['address' => $output('encode', 'address')],
+        ];
+    }
+    if ($withTaproot) {
+        $contracts['taproot-output'] = fitnessContract(['node' => 'derived-public-node'],
+            ['key' => 'taproot-output-key']);
+        $contracts['taproot-key-address'] = fitnessContract(['key' => 'taproot-output-key'],
+            ['address' => 'address-for-intent'], $network);
+        $capabilities['taproot-output-fixture'] = ['contract' => 'taproot-output'];
+        $capabilities['witness-v1-fixture'] = [
+            'contract' => 'taproot-key-address', 'policies' => ['p2tr-keypath']];
+        $compositions['taproot-route'] = [
+            'contract' => 'derived-node-address', 'policies' => ['p2tr-keypath'],
+            'steps' => [
+                fitnessStep('output-key', 'capability', 'taproot-output-fixture',
+                    ['node' => $input('node')]),
+                fitnessStep('encode', 'intent', 'taproot-key-address',
+                    ['key' => $output('output-key', 'key')], $params),
+            ],
+            'outputs' => ['address' => $output('encode', 'address')],
+        ];
+        $compositions['witness-v1-terminal'] = [
+            'contract' => 'taproot-key-address', 'policies' => ['p2tr-keypath'],
+            'steps' => [fitnessStep('encode', 'capability', 'witness-v1-fixture',
+                ['key' => $input('key')], $params)],
+            'outputs' => ['address' => $output('encode', 'address')],
+        ];
+        $policies['p2tr-keypath'] = ['taproot-route', 'witness-v1-terminal'];
+    }
+    $intents = [];
+    foreach (['mainnet', 'testnet'] as $networkId) {
+        foreach ($policies as $policy => [$route, $terminal]) {
+            $intents[] = [
+                'network' => $networkId, 'policy' => $policy,
+                'root' => 'bitcoin-public-address',
+                'bindings' => [
+                    ['at' => ['address'], 'composition' => $route],
+                    ['at' => ['address', 'encode'], 'composition' => $terminal],
+                ],
+            ];
+        }
+    }
+    return compact('contracts', 'capabilities', 'compositions', 'intents');
+}
+
+/**
+ * A deliberately small compiler of trusted symbolic fixtures.
+ * Resolution uses target kind, local ports and scoped occurrence paths.
+ * No candidate, policy, stage name or fixed nesting depth is coded here.
+ * Occurrence-path authoring is a probe candidate, not an accepted C2 format.
+ */
+final class FitnessCompiler
+{
+    private array $bindings = [];
+    private array $used = [];
+    private array $plan = [];
+    private string $policy = '';
+
+    public function __construct(private readonly array $model) {}
+
+    public function compile(array $intent): array
+    {
+        $this->bindings = $this->used = $this->plan = [];
+        $this->policy = $intent['policy'];
+        foreach ($intent['bindings'] as $binding) {
+            $at = implode('/', $binding['at']);
+            fitnessRequire($at !== '' && !isset($this->bindings[$at]), 'duplicate-binding');
+            $this->bindings[$at] = $binding['composition'];
+        }
+        $root = $this->model['compositions'][$intent['root']] ?? null;
+        fitnessRequire(is_array($root), 'missing-reference');
+        $contract = $this->model['contracts'][$root['contract']];
+        $inputs = $parameters = [];
+        foreach ($contract['inputs'] as $port => $role) {
+            $inputs[$port] = ['role' => $role, 'origin' => '@input/' . $port];
+        }
+        foreach ($contract['parameters'] as $port => $role) {
+            $parameters[$port] = ['role' => $role, 'origin' => '@parameter/' . $port];
+        }
+        $outputs = $this->expand($intent['root'], '', $inputs, $parameters, []);
+        fitnessRequire(count($this->used) === count($this->bindings), 'unused-binding');
+        return ['steps' => $this->plan, 'outputs' => $outputs];
+    }
+
+    private function ports(array $values, array $expected): void
+    {
+        $actualNames = array_keys($values);
+        $expectedNames = array_keys($expected);
+        sort($actualNames);
+        sort($expectedNames);
+        fitnessRequire($actualNames === $expectedNames, 'ports');
+        foreach ($expected as $port => $role) {
+            fitnessRequire($values[$port]['role'] === $role, 'incompatible-port');
         }
     }
 
-    return [
-        'candidate' => 'bitcoin',
-        'shared' => [
-            ['id' => 'admit', 'output' => 'admitted-public-node'],
-            ['id' => 'depth', 'input' => 'admit.node'],
-            ['id' => 'derive', 'input' => 'admit.node', 'output' => 'derived-public-node'],
-            ['id' => 'address', 'input' => 'derive.node',
-                'requires' => 'derived-node-address', 'target' => 'intent:route'],
-            ['id' => 'result', 'input' => 'address.address'],
-        ],
-        'routes' => [
-            'keyhash-route' => [
-                'input' => 'derived-public-node', 'contract' => 'derived-node-address',
-                'steps' => [
-                    ['id' => 'keyhash', 'input' => 'node.publicKey',
-                        'output' => 'derived-public-key-hash'],
-                    ['id' => 'encode', 'input' => 'keyhash.digest',
-                        'requires' => 'key-hash-address', 'target' => 'intent:terminal'],
-                ],
-                'output' => 'address-for-admitted-intent',
-            ],
-            'taproot-route' => [
-                'input' => 'derived-public-node', 'contract' => 'derived-node-address',
-                'steps' => [
-                    ['id' => 'output-key', 'input' => 'node.publicKey',
-                        'output' => 'taproot-output-key'],
-                    ['id' => 'encode', 'input' => 'output-key.key',
-                        'requires' => 'taproot-output-key-address',
-                        'target' => 'intent:terminal'],
-                ],
-                'output' => 'address-for-admitted-intent',
-            ],
-        ],
-        'terminals' => [
-            'p2pkh-address' => ['contract' => 'key-hash-address',
-                'input' => 'derived-public-key-hash', 'parameter' => 'p2pkh-version',
-                'output' => 'address-for-admitted-intent'],
-            'nested-address' => ['contract' => 'key-hash-address',
-                'input' => 'derived-public-key-hash', 'parameter' => 'p2sh-version',
-                'output' => 'address-for-admitted-intent'],
-            'witness-v0-address' => ['contract' => 'key-hash-address',
-                'input' => 'derived-public-key-hash', 'parameter' => 'segwit-hrp',
-                'output' => 'address-for-admitted-intent'],
-            'witness-v1-address' => ['contract' => 'taproot-output-key-address',
-                'input' => 'taproot-output-key', 'parameter' => 'segwit-hrp',
-                'output' => 'address-for-admitted-intent'],
-        ],
-        'policies' => $policies,
-        'bindings' => $bindings,
-        // The current O02 allowlist has xpub/tpub only for P2PKH. A future
-        // BIP86 profile would add an overlapping version/policy relation.
-        'currentAdmission' => [
-            'mainnet' => ['xpub' => ['p2pkh']],
-            'testnet' => ['tpub' => ['p2pkh']],
-        ],
-    ];
+    private function sources(array $references, array $inputs,
+        array $parameters, array $earlier): array
+    {
+        $values = [];
+        foreach ($references as $port => $reference) {
+            $value = match ($reference[0]) {
+                'input' => $inputs[$reference[1]] ?? null,
+                'parameter' => $parameters[$reference[1]] ?? null,
+                'output' => $earlier[$reference[1]][$reference[2]] ?? null,
+                default => null,
+            };
+            fitnessRequire(is_array($value), 'invalid-source');
+            $values[$port] = $value;
+        }
+        return $values;
+    }
+
+    private function expand(string $id, string $path, array $inputs,
+        array $parameters, array $stack): array
+    {
+        fitnessRequire(!in_array($id, $stack, true), 'cycle');
+        $composition = $this->model['compositions'][$id] ?? null;
+        fitnessRequire(is_array($composition), 'missing-reference');
+        fitnessRequire(!isset($composition['policies'])
+            || in_array($this->policy, $composition['policies'], true), 'incompatible-policy');
+        $contract = $this->model['contracts'][$composition['contract']];
+        $this->ports($inputs, $contract['inputs']);
+        $this->ports($parameters, $contract['parameters']);
+        $earlier = [];
+        foreach ($composition['steps'] as $step) {
+            $local = $step['id'];
+            fitnessRequire($local !== '' && !str_contains($local, '/')
+                && !isset($earlier[$local]), 'duplicate-step');
+            $at = $path === '' ? $local : $path . '/' . $local;
+            $arguments = $this->sources($step['inputs'], $inputs, $parameters, $earlier);
+            $params = $this->sources($step['parameters'], $inputs, $parameters, $earlier);
+            $kind = $step['kind'];
+            if ($kind === 'intent') {
+                fitnessRequire(isset($this->bindings[$at]), 'missing-binding');
+                $target = $this->bindings[$at];
+                $selected = $this->model['compositions'][$target] ?? null;
+                fitnessRequire(is_array($selected), 'missing-reference');
+                fitnessRequire($selected['contract'] === $step['target'], 'target-contract');
+                $this->used[$at] = true;
+            } else {
+                $target = $step['target'];
+            }
+            if ($kind === 'composition' || $kind === 'intent') {
+                $earlier[$local] = $this->expand($target, $at, $arguments, $params, [...$stack, $id]);
+                continue;
+            }
+            fitnessRequire($kind === 'capability', 'target-kind');
+            $capability = $this->model['capabilities'][$target] ?? null;
+            fitnessRequire(is_array($capability), 'missing-reference');
+            fitnessRequire(!isset($capability['policies'])
+                || in_array($this->policy, $capability['policies'], true), 'incompatible-policy');
+            $capContract = $this->model['contracts'][$capability['contract']];
+            $this->ports($arguments, $capContract['inputs']);
+            $this->ports($params, $capContract['parameters']);
+            $produced = [];
+            foreach ($capContract['outputs'] as $port => $role) {
+                $produced[$port] = ['role' => $role, 'origin' => $at . ':' . $port];
+            }
+            $this->plan[] = [
+                'at' => $at, 'capability' => $target, 'inputs' => $arguments,
+                'parameters' => $params, 'outputs' => $produced,
+            ];
+            $earlier[$local] = $produced;
+        }
+        $outputs = $this->sources($composition['outputs'], $inputs, $parameters, $earlier);
+        $this->ports($outputs, $contract['outputs']);
+        return $outputs;
+    }
 }
 
-/** Bounded checks of this fixture, not a general declaration validator. */
-function divergenceAssemble(array $model): array
+function fitnessAssemble(array $model): array
 {
-    divergenceRequire($model['candidate'] === 'bitcoin', 'candidate');
-    $shared = $model['shared'];
-    divergenceRequire(array_column($shared, 'id') ===
-        ['admit', 'depth', 'derive', 'address', 'result'], 'shared-order');
-    divergenceRequire($shared[3]['input'] === 'derive.node'
-        && $shared[3]['requires'] === 'derived-node-address'
-        && $shared[3]['target'] === 'intent:route'
-        && $shared[4]['input'] === 'address.address', 'shared-junction');
-
-    $routeInputs = [
-        'keyhash-route' => ['keyhash', 'derived-public-key-hash',
-            'keyhash.digest', 'key-hash-address'],
-        'taproot-route' => ['output-key', 'taproot-output-key',
-            'output-key.key', 'taproot-output-key-address'],
-    ];
-    foreach ($routeInputs as $id => [$firstStep, $firstOutput, $secondInput, $contract]) {
-        $route = $model['routes'][$id] ?? null;
-        divergenceRequire(is_array($route)
-            && $route['input'] === 'derived-public-node'
-            && $route['contract'] === $shared[3]['requires']
-            && $route['output'] === 'address-for-admitted-intent', 'route-contract');
-        divergenceRequire(array_column($route['steps'], 'id') === [$firstStep, 'encode']
-            && $route['steps'][0]['input'] === 'node.publicKey'
-            && $route['steps'][0]['output'] === $firstOutput
-            && $route['steps'][1]['input'] === $secondInput
-            && $route['steps'][1]['requires'] === $contract
-            && $route['steps'][1]['target'] === 'intent:terminal', 'route-connection');
-    }
-    divergenceRequire(count($model['routes']) === 2, 'route-catalogue');
-
     $plans = [];
-    foreach ($model['bindings'] as $binding) {
-        $network = $binding['network'] ?? null;
-        $policy = $binding['policy'] ?? null;
-        $expected = $model['policies'][$policy] ?? null;
-        divergenceRequire(in_array($network, ['mainnet', 'testnet'], true)
-            && is_array($expected), 'unknown-intent');
-        $key = $network . '/' . $policy;
-        divergenceRequire(!isset($plans[$key]), 'duplicate-intent');
-        divergenceRequire($binding['route'] === $expected['route']
-            && $binding['terminal'] === $expected['terminal'], 'wrong-policy-route');
-        $route = $model['routes'][$binding['route']] ?? null;
-        $terminal = $model['terminals'][$binding['terminal']] ?? null;
-        divergenceRequire(is_array($route) && is_array($terminal), 'missing-target');
-        divergenceRequire($terminal['contract'] === $route['steps'][1]['requires']
-            && $terminal['input'] === $route['steps'][0]['output']
-            && $terminal['output'] === $route['output'],
-            'incompatible-target');
-        $plans[$key] = [$binding['route'], $binding['terminal']];
+    $compiler = new FitnessCompiler($model);
+    foreach ($model['intents'] as $intent) {
+        $key = $intent['network'] . '/' . $intent['policy'];
+        fitnessRequire(!isset($plans[$key]), 'duplicate-intent');
+        $plans[$key] = $compiler->compile($intent);
     }
-    divergenceRequire(count($plans) === 8, 'incomplete-intents');
     return $plans;
 }
 
-/** Selection is data-driven at both junctions; no policy branch in execution. */
-function divergenceInvoke(array $model, array $plans, string $network,
-    string $policy, ?string $failAt = null): array
+function fitnessRun(array $plan, ?string $failAt = null): array
 {
-    $plan = $plans[$network . '/' . $policy] ?? null;
-    divergenceRequire(is_array($plan), 'unadmitted-intent');
-    [$routeId, $terminalId] = $plan;
     $trace = [];
-    foreach ($model['shared'] as $step) {
-        if ($step['id'] === 'address') {
-            foreach ($model['routes'][$routeId]['steps'] as $routeStep) {
-                $id = $routeStep['id'] === 'encode' ? $terminalId : $routeStep['id'];
-                $trace[] = $id;
-                if ($id === $failAt) {
-                    throw new DivergenceProbeFailure('abort:' . implode(',', $trace));
-                }
-            }
-            continue;
-        }
-        $trace[] = $step['id'];
-        if ($step['id'] === $failAt) {
-            throw new DivergenceProbeFailure('abort:' . implode(',', $trace));
+    foreach ($plan['steps'] as $step) {
+        $trace[] = $step['at'];
+        if ($step['at'] === $failAt) {
+            throw new FitnessFailure('injected', $trace);
         }
     }
-    return $trace;
+    return ['trace' => $trace, 'outputs' => $plan['outputs']];
 }
 
-function divergenceRejects(array $model, string $reason): void
+function fitnessReject(array $model, string $reason): void
 {
     try {
-        divergenceAssemble($model);
-    } catch (DivergenceProbeFailure $failure) {
-        divergenceRequire($failure->getMessage() === $reason,
+        fitnessAssemble($model);
+    } catch (FitnessFailure $failure) {
+        fitnessRequire($failure->getMessage() === $reason,
             'unexpected:' . $failure->getMessage() . ':expected:' . $reason);
         return;
     }
-    throw new DivergenceProbeFailure('accepted-invalid:' . $reason);
+    throw new FitnessFailure('accepted-invalid:' . $reason);
 }
 
-function divergenceAdmits(array $admission, string $network,
-    string $version, string $policy): bool
+function fitnessRenameReference(array $reference): array
 {
-    return in_array($policy, $admission[$network][$version] ?? [], true);
+    if ($reference[0] === 'output') {
+        $reference[1] = 'renamed-' . $reference[1];
+    }
+    return $reference;
 }
 
-$model = divergenceFixture();
-$plans = divergenceAssemble($model);
-divergenceRequire(divergenceInvoke($model, $plans, 'mainnet', 'p2wpkh') ===
-    ['admit', 'depth', 'derive', 'keyhash', 'witness-v0-address', 'result'],
-    'current-policy-trace');
-divergenceRequire(divergenceInvoke($model, $plans, 'mainnet', 'p2tr-keypath') ===
-    ['admit', 'depth', 'derive', 'output-key', 'witness-v1-address', 'result'],
-    'taproot-policy-trace');
-foreach (['derive', 'output-key', 'witness-v1-address'] as $failAt) {
-    try {
-        divergenceInvoke($model, $plans, 'mainnet', 'p2tr-keypath', $failAt);
-        throw new DivergenceProbeFailure('failure-did-not-abort');
-    } catch (DivergenceProbeFailure $failure) {
-        divergenceRequire(str_starts_with($failure->getMessage(), 'abort:')
-            && !str_contains($failure->getMessage(), ',result'), 'failure-continuation');
+$baseline = fitnessAssemble(fitnessFixture(false));
+$model = fitnessFixture(true);
+$plans = fitnessAssemble($model);
+fitnessRequire(count($baseline) === 6 && count($plans) === 8, 'intent-count');
+foreach ($baseline as $key => $plan) {
+    fitnessRequire($plans[$key] === $plan, 'existing-policy-changed');
+}
+
+$abortChecks = 0;
+foreach ($plans as $key => $plan) {
+    $calls = array_column($plan['steps'], 'capability');
+    $isTaproot = str_ends_with($key, '/p2tr-keypath');
+    fitnessRequire(in_array('taproot-output-fixture', $calls, true) === $isTaproot
+        && in_array('hash-fixture', $calls, true) === !$isTaproot, 'selected-route');
+    fitnessRequire(fitnessRun($plan)['outputs']['result']['role'] === 'public-result', 'complete-result');
+    foreach (array_column($plan['steps'], 'at') as $index => $failAt) {
+        try {
+            fitnessRun($plan, $failAt);
+            throw new FitnessFailure('failure-did-not-abort');
+        } catch (FitnessFailure $failure) {
+            fitnessRequire($failure->getMessage() === 'injected'
+                && $failure->trace === array_slice(array_column($plan['steps'], 'at'), 0, $index + 1),
+                'failure-continuation');
+            ++$abortChecks;
+        }
     }
 }
 
-$mutant = $model;
-$mutant['bindings'][3]['route'] = 'keyhash-route';
-divergenceRejects($mutant, 'wrong-policy-route');
-$mutant = $model;
-$mutant['routes']['taproot-route']['steps'][0]['id'] = 'keyhash';
-divergenceRejects($mutant, 'route-connection');
-$mutant = $model;
-$mutant['terminals']['witness-v1-address']['input'] = 'derived-public-key-hash';
-divergenceRejects($mutant, 'incompatible-target');
-$mutant = $model;
-$mutant['bindings'][] = $mutant['bindings'][0];
-divergenceRejects($mutant, 'duplicate-intent');
-$mutant = $model;
-array_pop($mutant['bindings']);
-divergenceRejects($mutant, 'incomplete-intents');
+// Rename every local step, source reference and selected occurrence path.
+$renamed = $model;
+foreach ($renamed['compositions'] as &$composition) {
+    foreach ($composition['steps'] as &$step) {
+        $step['id'] = 'renamed-' . $step['id'];
+        $step['inputs'] = array_map('fitnessRenameReference', $step['inputs']);
+        $step['parameters'] = array_map('fitnessRenameReference', $step['parameters']);
+    }
+    unset($step);
+    $composition['outputs'] = array_map('fitnessRenameReference', $composition['outputs']);
+}
+unset($composition);
+foreach ($renamed['intents'] as &$intent) {
+    foreach ($intent['bindings'] as &$binding) {
+        $binding['at'] = array_map(static fn(string $id): string => 'renamed-' . $id, $binding['at']);
+    }
+    unset($binding);
+}
+unset($intent);
+foreach (fitnessAssemble($renamed) as $key => $plan) {
+    fitnessRequire(array_column($plan['steps'], 'capability')
+        === array_column($plans[$key]['steps'], 'capability'), 'name-coupling');
+}
 
-divergenceRequire(divergenceAdmits($model['currentAdmission'],
-    'mainnet', 'xpub', 'p2pkh')
-    && !divergenceAdmits($model['currentAdmission'],
-        'mainnet', 'xpub', 'p2tr-keypath'), 'current-o02-rejection');
-$hypotheticalAdmission = $model['currentAdmission'];
-$hypotheticalAdmission['mainnet']['xpub'][] = 'p2tr-keypath';
-divergenceRequire(divergenceAdmits($hypotheticalAdmission,
-    'mainnet', 'xpub', 'p2tr-keypath')
-    && divergenceAdmits($hypotheticalAdmission,
-        'mainnet', 'xpub', 'p2pkh'),
-    'hypothetical-overlap');
+// Extra early and late selection layers stress the same compiler. These
+// neutral layers are synthetic, not recommended production wrappers or steps.
+$nested = $model;
+$nested['compositions']['test-outer'] = [
+    'contract' => 'public-address',
+    'steps' => [fitnessStep('begin', 'intent', 'public-address',
+        ['request' => ['input', 'request']], ['network' => ['parameter', 'network']])],
+    'outputs' => ['result' => ['output', 'begin', 'result']],
+];
+$nested['compositions']['test-finish'] = [
+    'contract' => 'make-result',
+    'steps' => [fitnessStep('end', 'intent', 'make-result', ['address' => ['input', 'address']])],
+    'outputs' => ['result' => ['output', 'end', 'result']],
+];
+$nested['compositions']['test-result'] = [
+    'contract' => 'make-result',
+    'steps' => [fitnessStep('emit', 'capability', 'make-result', ['address' => ['input', 'address']])],
+    'outputs' => ['result' => ['output', 'emit', 'result']],
+];
+$nested['compositions']['bitcoin-public-address']['steps'][4]['kind'] = 'composition';
+$nested['compositions']['bitcoin-public-address']['steps'][4]['target'] = 'test-finish';
+foreach ($nested['intents'] as &$intent) {
+    $intent['root'] = 'test-outer';
+    foreach ($intent['bindings'] as &$binding) {
+        array_unshift($binding['at'], 'begin');
+    }
+    unset($binding);
+    $intent['bindings'][] = ['at' => ['begin'], 'composition' => 'bitcoin-public-address'];
+    $intent['bindings'][] = ['at' => ['begin', 'result', 'end'], 'composition' => 'test-result'];
+}
+unset($intent);
+foreach (fitnessAssemble($nested) as $key => $plan) {
+    fitnessRequire(array_column($plan['steps'], 'capability')
+        === array_column($plans[$key]['steps'], 'capability'), 'fixed-depth-coupling');
+    fitnessRun($plan);
+}
 
-echo "bitcoin: two nested policy junctions; current and Taproot traces, abort and five invalid fixtures checked\n";
-echo "admission: current O02 xpub/P2TR rejection; hypothetical overlapping version/policy relation only\n";
+// The same reusable declaration occurs twice, with distinct local bindings.
+// Both results are exported; these are not unused Bitcoin-policy branches.
+$repeated = $nested;
+$repeated['contracts']['two-results'] = fitnessContract(
+    ['address' => 'address-for-intent'], ['first' => 'public-result', 'second' => 'public-result']);
+$repeated['capabilities']['second-result-fixture'] = ['contract' => 'make-result'];
+$repeated['compositions']['test-second-result'] = [
+    'contract' => 'make-result',
+    'steps' => [fitnessStep('emit', 'capability', 'second-result-fixture',
+        ['address' => ['input', 'address']])],
+    'outputs' => ['result' => ['output', 'emit', 'result']],
+];
+$repeated['compositions']['test-pair'] = [
+    'contract' => 'two-results',
+    'steps' => [
+        fitnessStep('left', 'composition', 'test-finish', ['address' => ['input', 'address']]),
+        fitnessStep('right', 'composition', 'test-finish', ['address' => ['input', 'address']]),
+    ],
+    'outputs' => ['first' => ['output', 'left', 'result'], 'second' => ['output', 'right', 'result']],
+];
+$repeated['intents'] = [[
+    'network' => 'synthetic', 'policy' => 'synthetic', 'root' => 'test-pair',
+    'bindings' => [
+        ['at' => ['left', 'end'], 'composition' => 'test-result'],
+        ['at' => ['right', 'end'], 'composition' => 'test-second-result'],
+    ],
+]];
+$pair = fitnessAssemble($repeated)['synthetic/synthetic'];
+fitnessRequire(array_column($pair['steps'], 'capability')
+    === ['make-result', 'second-result-fixture'], 'occurrence-capture');
+fitnessRequire($pair['outputs']['first']['origin'] !== $pair['outputs']['second']['origin'],
+    'output-capture');
+fitnessRun($pair);
+$missingSibling = $repeated;
+array_pop($missingSibling['intents'][0]['bindings']);
+fitnessReject($missingSibling, 'missing-binding');
+
+$cases = [
+    'duplicate-intent' => static function (array &$m): void { $m['intents'][] = $m['intents'][0]; },
+    'duplicate-binding' => static function (array &$m): void {
+        $m['intents'][0]['bindings'][] = $m['intents'][0]['bindings'][0];
+    },
+    'missing-binding' => static function (array &$m): void {
+        // Bare "encode" cannot identify the nested occurrence address/encode.
+        $m['intents'][0]['bindings'][1]['at'] = ['encode'];
+    },
+    'unused-binding' => static function (array &$m): void {
+        $m['intents'][0]['bindings'][] = ['at' => ['unused'], 'composition' => 'p2pkh-terminal'];
+    },
+    'missing-reference' => static function (array &$m): void {
+        $m['intents'][0]['bindings'][0]['composition'] = 'absent';
+    },
+    'target-contract' => static function (array &$m): void {
+        $m['intents'][3]['bindings'][1]['composition'] = 'p2pkh-terminal';
+    },
+    'incompatible-policy' => static function (array &$m): void {
+        $m['intents'][3]['bindings'][0]['composition'] = 'keyhash-route';
+    },
+    'ports' => static function (array &$m): void {
+        unset($m['compositions']['bitcoin-public-address']['steps'][2]['inputs']['path']);
+    },
+    'incompatible-port' => static function (array &$m): void {
+        $m['compositions']['bitcoin-public-address']['steps'][2]['inputs']['node']
+            = ['output', 'depth', 'path'];
+    },
+    'invalid-source' => static function (array &$m): void {
+        $m['compositions']['bitcoin-public-address']['steps'][1]['inputs']['node']
+            = ['output', 'derive', 'node'];
+    },
+    'duplicate-step' => static function (array &$m): void {
+        $m['compositions']['bitcoin-public-address']['steps'][2]['id'] = 'depth';
+    },
+    'cycle' => static function (array &$m): void {
+        // An intent-bound cycle exists only in the last advertised profile.
+        $m['compositions']['test-cycle'] = [
+            'contract' => 'derived-node-address',
+            'steps' => [fitnessStep('again', 'intent', 'derived-node-address',
+                ['node' => ['input', 'node']], ['network' => ['parameter', 'network']])],
+            'outputs' => ['address' => ['output', 'again', 'address']],
+        ];
+        $m['intents'][7]['bindings'][0]['composition'] = 'test-cycle';
+        $m['intents'][7]['bindings'][1] = [
+            'at' => ['address', 'again'], 'composition' => 'test-cycle'];
+    },
+];
+foreach ($cases as $reason => $change) {
+    $mutant = $model;
+    $change($mutant);
+    fitnessReject($mutant, $reason);
+}
+// Export and lexical-scope checks share the same errors as ordinary ports/sources.
+$mutant = $model;
+$mutant['compositions']['bitcoin-public-address']['outputs']['result'] = ['output', 'derive', 'node'];
+fitnessReject($mutant, 'incompatible-port');
+$mutant = $model;
+$mutant['compositions']['keyhash-route']['steps'][0]['inputs']['node'] = ['output', 'derive', 'node'];
+fitnessReject($mutant, 'invalid-source');
+
+// This relation is not exercised by the admission trace fixture above.
+$currentMainnetXpubPolicies = ['p2pkh'];
+fitnessRequire(!in_array('p2tr-keypath', $currentMainnetXpubPolicies, true), 'current-o02');
+$hypotheticalMainnetXpubPolicies = [...$currentMainnetXpubPolicies, 'p2tr-keypath'];
+fitnessRequire(in_array('p2pkh', $hypotheticalMainnetXpubPolicies, true)
+    && in_array('p2tr-keypath', $hypotheticalMainnetXpubPolicies, true), 'hypothetical-relation');
+
+echo "binding mechanism: 6 baseline plans preserved in 8-intent extension; renamed steps and early/middle/late selections pass\n";
+echo 'failures: ' . $abortChecks . ' exact-prefix aborts; '
+    . (count($cases) + 3) . " invalid fixtures rejected before execution\n";
+echo "scope: repeated declaration occurrences retain independent bindings and exported origins\n";
+echo "limits: symbolic role catalogue and hypothetical admission only; O02 still rejects P2TR; no Taproot correctness claim\n";
