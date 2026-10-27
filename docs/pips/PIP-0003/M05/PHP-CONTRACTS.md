@@ -28,6 +28,7 @@ the draft is not agreement with the executor's proposed choices.**
 | [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **C1 is jointly closed at the architectural level; the remaining C2–C6 choices are executor proposals under discussion, not frozen, implemented or qualified.** Declared execution order, inspectable output-to-input connections, direct binding at the delivered Bitcoin terminal step and the terminal step split marked in C4 are jointly affirmed. The example source grammar and concrete mechanisms are not thereby approved. |
 | Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
 | Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
+| [Visual counter-proofs](#visual-counter-proofs-for-joint-review) | Guided comparison of the agreed current scope, the preliminary Taproot policy route and admission gap, independent Bitcoin Cash resource reuse, and test-only Signet parameter variation. Diagrams do not settle the open choices. |
 
 For the new material, start with the [choice table](#preliminary-choices-for-joint-discussion),
 then examine the schema, full flow and admission rules. A subsequent joint
@@ -712,8 +713,9 @@ executor must demonstrate in addition to the existing acceptance list.
 ### Exploratory reuse fitness challenges — outside PIP-0003 delivery
 
 These are **synthetic design challenges for joint review**, not admitted intents,
-provider selections, executable fixtures or evidence that another protocol is
-supported. They test whether the agreed C1 junction and composition boundaries
+provider selections or evidence that another protocol is supported. The runnable
+fixtures below exercise symbolic structure only. The challenges test whether
+the agreed C1 junction and composition boundaries
 expose real reuse without forcing incompatible flows through one interface.
 The current Bitcoin key-admission allowlist is not expanded by either case.
 The distinct Bitcoin Cash protocol candidate must have its own complete flow
@@ -755,15 +757,8 @@ has already passed the broader fitness challenge.
 
 The runnable [symbolic divergence probe](probe-bitcoin-policy-divergence.php)
 explores a second, earlier Bitcoin policy junction without adding a protocol
-candidate or selecting a C2 source grammar:
-
-```text
-Bitcoin request -> admit -> depth -> derive -> selected address route -> result
-                                         |-> three current policies: key HASH160
-                                         |   -> selected existing terminal
-                                         |-> P2TR key path: Taproot output key
-                                             -> witness-v1/32 Bech32m terminal
-```
+candidate or selecting a C2 source grammar. The [Taproot route diagram](#taproot-policy-route--exploratory)
+shows this shape alongside the current three-policy route.
 
 The outer selected route has a derived-public-node input and a complete-address
 output. The three current policies reuse one inner key-hash route and still
@@ -795,13 +790,133 @@ probe hard-codes its small expected-role catalogue; it does not validate a
 general schema, provider behavior, Taproot cryptography, Bech32m output or
 the future admission policy. No P2TR intent is admitted by PIP-0003.
 
+#### Visual counter-proofs for joint review
+
+Read the five views in order. Blue identifies agreed responsibilities or existing
+source evidence, amber identifies exploratory or test-only material, green
+identifies a complete outcome, and red identifies rejection or failure. The
+written status takes precedence over color. A box may group several operations;
+it does not prescribe a PHP class, capability boundary or extra executable step.
+
+In the execution views, a fork shows alternative **intent bindings resolved at
+setup**. Each invocation follows only its selected ordered route. Converging
+arrows mean that alternatives satisfy the same output contract; they do not
+mean concurrent execution, waiting for sibling policies or merging their data.
+Any executed stage throwing aborts the operation without later work, fallback
+or partial results. These views do not select an arbitrary workflow engine.
+
+| View | Question and status | Editable source | Detailed SVG | PNG |
+|---|---|---|---|---|
+| 1. Current Bitcoin policies | What did C1 agree for the three delivered policies? Architectural direction, not a working public API. | [MMD](diagrams/bitcoin-current-policy-flow.mmd) | [SVG](diagrams/bitcoin-current-policy-flow.svg) | [PNG](diagrams/bitcoin-current-policy-flow.png) |
+| 2. Taproot policy route | Can one Bitcoin candidate express an earlier policy divergence? Exploratory shape from the symbolic probe; pending joint review. | [MMD](diagrams/taproot-policy-divergence.mmd) | [SVG](diagrams/taproot-policy-divergence.svg) | [PNG](diagrams/taproot-policy-divergence.png) |
+| 3. Taproot admission | Why does a correct route not establish a compatible whole operation? Current O02 rejects P2TR; the future contract remains open. | [MMD](diagrams/taproot-admission-counterexample.mmd) | [SVG](diagrams/taproot-admission-counterexample.svg) | [PNG](diagrams/taproot-admission-counterexample.png) |
+| 4. Independent candidates | Can Bitcoin Cash reuse resources without running through Bitcoin's declaration? Conceptual fitness, not CashAddr qualification. | [MMD](diagrams/independent-candidate-resource-reuse.mmd) | [SVG](diagrams/independent-candidate-resource-reuse.svg) | [PNG](diagrams/independent-candidate-resource-reuse.png) |
+| 5. Parameter variation | Can testnet and a test-only Signet profile reuse one declaration while retaining their identifiers? Existing M02/M04 counter-proof scope; no public Signet admission. | [MMD](diagrams/parameter-variation-fitness.mmd) | [SVG](diagrams/parameter-variation-fitness.svg) | [PNG](diagrams/parameter-variation-fitness.png) |
+
+##### Current Bitcoin scope — agreed direction
+
+![Agreed Bitcoin policy flow: shared derivation and key HASH160, then only the selected terminal](diagrams/bitcoin-current-policy-flow.png)
+
+This is the local junction compared by the [existing probe](probe-terminal-junction.php).
+The three terminal boxes summarize the accepted C4 split; the P2WPKH connection
+does not introduce a pass-through program-construction step. The fixed shared
+HASH160 is appropriate for these three policies and cannot be presumed universal.
+
+##### Taproot policy route — exploratory
+
+![Exploratory Bitcoin policy route with an earlier Taproot divergence before HASH160 and the existing inner policy junction](diagrams/taproot-policy-divergence.png)
+
+This explains the [new symbolic probe](probe-bitcoin-policy-divergence.php),
+including its hypothetical compatible admission. Taproot remains a Bitcoin
+policy in this fitness case; it is not a separate candidate like Bitcoin Cash.
+The earlier route binding is an unaccepted proposal. It challenges whether the
+eventual mechanism can support another justified junction without policy-specific
+executor code or fabricated key-hash data. The shared address outcome does not
+make the distinct terminal input contracts interchangeable.
+
+##### Taproot admission — current rejection and open future contract
+
+![BIP86 xpub example versus the current strict O02 admission rule, with a separately reviewed future compatibility contract](diagrams/taproot-admission-counterexample.png)
+
+The evidence and rule are those [discussed above](#bitcoin-policy-divergence-counter-proof--pending-joint-review).
+Current P2TR requests are rejected during request admission; this drawing does
+not propose moving that rejection later or inferring policy from a version.
+It distinguishes a deliberate future compatibility decision from a composition
+mechanism that would require structural repair whenever a route changes.
+
+##### Bitcoin Cash — independent declaration and compatible resources
+
+![Independent Bitcoin and Bitcoin Cash flow declarations referencing compatible derivation and HASH160 resources](diagrams/independent-candidate-resource-reuse.png)
+
+Here solid arrows describe each declaration's own ordered connections; dashed
+arrows describe **resource references**, not execution transfer between candidates.
+Each declaration retains its intent, admission and result context. Shared-resource
+eligibility still requires compatible contracts; Bitcoin Cash must not alias,
+mutate or execute as Bitcoin. This is the conceptual [CashAddr fitness](#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery),
+not a new executable CashAddr probe or a provider selection.
+
+##### Signet — parameter variation without behavior duplication
+
+![Testnet and test-only Signet use one unchanged composition with equal encoding inputs and distinct result context](diagrams/parameter-variation-fitness.png)
+
+This view explains the accepted [M02 O02 future-profile counter-proof](../M02/M02-PROTOCOL.md#o02--version-network-and-policy-compatibility)
+and the bounded [M04 definition research](../M04/README.md). These are separate
+invocations through one declaration, not two profiles combined into one request.
+With the same key, path, policy and encoding parameters, the expected address text
+matches; the context identifier remains the explicitly admitted profile. Equal
+address text never authenticates chain provenance or expands public support.
+
+<details>
+<summary>Diagram rendering and reproducible artifacts</summary>
+
+All five adjacent MMD/SVG/PNG sets were generated from the same source revisions
+on 2026-10-27 using the available local `mermaid` MCP tool
+`generate_mermaid_diagram`, `theme: default`, `backgroundColor: white` and
+`outputType: svg`. The configured server image is pinned at
+`sha256:8f1217b11502db25c34b05633bf9e338764f99724536ef5e3e49541a73e853c1`;
+its package version is 0.2.1 and Mermaid is 11.12.0.
+
+Sources disable HTML labels. The repository's
+[artifact exporter](../../../../tools/skills/mermaid-diagram-artifacts/scripts/export_artifacts.py)
+finalized native-text SVGs with explicit dimensions, preserved spacing and a
+white canvas, then rasterized them using `rsvg-convert` 2.63.2 at 1280 pixels
+wide. `pngquant` 3.0.3 used quality 90–100, speed 1, no dithering, stripped
+metadata and skip-if-larger. Palette quantization is lossy; SVG and MMD retain
+the detailed representation. Each final PNG was visually inspected after
+independent librsvg rendering for labels, arrowheads, grouping and correspondence
+with its source. These tools are documentation facilities, not consumer
+dependencies. Rendering success does not establish protocol correctness.
+
+| Diagram basename | PNG dimensions | Fresh raster to optimized PNG |
+|---|---|---|
+| `bitcoin-current-policy-flow` | 1280 × 2031 | 250.7 → 75.0 KiB |
+| `taproot-policy-divergence` | 1280 × 1954 | 225.0 → 66.9 KiB |
+| `taproot-admission-counterexample` | 1280 × 1414 | 247.4 → 74.9 KiB |
+| `independent-candidate-resource-reuse` | 1280 × 696 | 126.2 → 39.2 KiB |
+| `parameter-variation-fitness` | 1280 × 1800 | 277.7 → 85.8 KiB |
+
+To regenerate, send an entire adjacent `.mmd` source to the same MCP tool,
+save its returned native-text SVG outside the repository as a raw export,
+then run from the repository root:
+
+```sh
+python3 tools/skills/mermaid-diagram-artifacts/scripts/export_artifacts.py \
+  /tmp/diagram-raw.svg --output-dir docs/pips/PIP-0003/M05/diagrams \
+  --stem diagram-basename
+```
+
+Use the exact source basename and repeat visual inspection. Historical M01
+diagrams describe their original draft and were not modified by this increment.
+
+</details>
+
 Before joint freeze, resolve the remaining C2–C6 choices against the closed C1
 constraints and actual PHP interfaces, including
 the prelude/body selection boundary, terminal parameter exposure, unexpected
 owned-code failure classification and how
-lineage is retained without a generic type framework. A bounded feasibility
-probe may be appropriate after choosing which model to challenge; this document
-does not supply one. M06/M07 implement and test the selected design, not an
+lineage is retained without a generic type framework. The symbolic probes above
+do not settle those feasibility questions; the actual proposed PHP mechanisms
+still require focused review and evidence. M06/M07 implement and test the selected design, not an
 automatic mandate to build this interpreter. Provider/runtime selection and
 earlier signature/provisioning proposals also remain open. **This section is
 ready for discussion, not an implementation handoff or a favorable independent

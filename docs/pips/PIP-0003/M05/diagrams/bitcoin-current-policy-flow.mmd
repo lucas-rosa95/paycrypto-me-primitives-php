@@ -1,0 +1,31 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TD
+    request["Explicit Bitcoin request<br/>Extended public key, exact relative path<br/>Validated network and selected policy"]
+    admit["Ordered request and key admission<br/>Depth-capacity check"]
+    derive["Exact-path public derivation<br/>Complete derived public node"]
+    hash["HASH160 of the derived compressed key<br/>Semantic origin retained"]
+    binding{"Direct binding at encode<br/>Only the selected terminal runs"}
+    pkh["P2PKH<br/>P2PKH payload construction<br/>Delegated Base58Check"]
+    nested["P2SH-P2WPKH<br/>Redeem script, script HASH160<br/>P2SH payload, delegated Base58Check"]
+    native["P2WPKH<br/>Key hash binds directly as program<br/>Delegated SegWit-v0 encoder + HRP"]
+    result["Complete address result<br/>Same admitted network, policy and path"]
+    stop["Failure invariant at every executed stage<br/>Throw aborts the operation<br/>No later stage, fallback or partial result"]
+    request --> admit --> derive --> hash --> binding
+    binding -->|p2pkh| pkh
+    binding -->|p2sh-p2wpkh| nested
+    binding -->|p2wpkh| native
+    pkh --> result
+    nested --> result
+    native --> result
+    result ~~~ stop
+    classDef agreed fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef outcome fill:#eaf7ed,stroke:#28783b,color:#173b20
+    classDef error fill:#fff0ee,stroke:#b33d32,color:#57231e
+    class request,admit,derive,hash,binding,pkh,nested,native agreed
+    class result outcome
+    class stop error

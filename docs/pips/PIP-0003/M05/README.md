@@ -114,6 +114,11 @@ separate admission conflict: BIP86 uses `xpub` examples, while the accepted
 initial O02 mapping admits `xpub` only for P2PKH. The future admission contract
 and any C1 refinement remain open for joint review; C2 discussion is deferred
 until this fitness challenge is understood.
+The [visual counter-proofs](PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review)
+provide five synchronized Mermaid/SVG/PNG views of current Bitcoin policy flow,
+preliminary Taproot divergence, the admission conflict, independent Bitcoin Cash
+resource reuse and test-only Signet parameter variation. They distinguish agreed
+direction, open proposals and research limits without selecting new contracts.
 The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
 now applies one runnable symbolic probe to the named-slot and direct-step
 binding candidates. Both pass the same six-intent, rejection and abort cases;

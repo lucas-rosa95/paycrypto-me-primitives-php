@@ -1,0 +1,35 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TD
+    subgraph BTC["Bitcoin declaration"]
+        ba["Bitcoin intent and admission"]
+        bd["Own derivation connection"]
+        bh["Own key-hash connection"]
+        bt["Own selected Bitcoin terminal"]
+        br["Bitcoin result and context"]
+        ba --> bd --> bh --> bt --> br
+    end
+    subgraph BCH["Bitcoin Cash fitness only"]
+        ca["Bitcoin Cash intent and admission"]
+        cd["Own derivation connection"]
+        ch["Own key-hash connection"]
+        ct["Own CashAddr P2KH terminal<br/>Delegated encoding"]
+        cr["Bitcoin Cash result and context"]
+        ca --> cd --> ch --> ct --> cr
+    end
+    derivation["Potential shared resource<br/>Public derivation with a compatible contract"]
+    hash["Potential shared resource<br/>HASH160 composition<br/>Delegated SHA-256 + RIPEMD-160"]
+    bd -. Reference if compatible .-> derivation
+    cd -. Reference if compatible .-> derivation
+    bh -. Reference if compatible .-> hash
+    ch -. Reference if compatible .-> hash
+    classDef agreed fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef open fill:#fff8df,stroke:#98751c,color:#47380e
+    class ba,bd,bh,bt,br,derivation,hash agreed
+    class ca,cd,ch,ct,cr open
+    style BTC fill:#f7faff,stroke:#2456a6,color:#14233b
+    style BCH fill:#fffdf3,stroke:#98751c,color:#47380e

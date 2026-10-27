@@ -1,0 +1,26 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TD
+    testnet["Admitted testnet profile<br/>Identifier: testnet"]
+    signet["Signet TEST-ONLY profile<br/>Separate identifier: signet<br/>Not admitted by the shipped public catalogue"]
+    params["Equal address parameters and version-policy relation<br/>Same supplied key, relative path and selected policy<br/>These inputs do not authenticate chain provenance"]
+    declaration["One unchanged Bitcoin composition declaration<br/>Same capability resources and provider bindings<br/>One invocation per explicitly selected profile"]
+    result["Complete result per invocation"]
+    tresult["Address text A<br/>Context: testnet"]
+    sresult["Same address text A<br/>Context: signet in the test-only assembly"]
+    testnet --> params
+    signet --> params
+    params --> declaration --> result
+    result -->|testnet invocation| tresult
+    result -->|test-only signet invocation| sresult
+    classDef agreed fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef open fill:#fff8df,stroke:#98751c,color:#47380e
+    classDef outcome fill:#eaf7ed,stroke:#28783b,color:#173b20
+    class testnet,params,declaration agreed
+    class signet open
+    class result,tresult outcome
+    class sresult open
