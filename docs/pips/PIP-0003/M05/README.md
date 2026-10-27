@@ -106,6 +106,14 @@ The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fi
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before M05 freeze. They add no admitted intent, implementation or
 protocol-qualification evidence.
+The [Bitcoin policy divergence counter-proof](PHP-CONTRACTS.md#bitcoin-policy-divergence-counter-proof--pending-joint-review)
+now tests an earlier P2TR branch beside the three delivered policies' shared
+key-hash route. Its symbolic probe exercises selection, abort and invalid
+bindings, but does not implement the proposed executor. It also exposes a
+separate admission conflict: BIP86 uses `xpub` examples, while the accepted
+initial O02 mapping admits `xpub` only for P2PKH. The future admission contract
+and any C1 refinement remain open for joint review; C2 discussion is deferred
+until this fitness challenge is understood.
 The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
 now applies one runnable symbolic probe to the named-slot and direct-step
 binding candidates. Both pass the same six-intent, rejection and abort cases;

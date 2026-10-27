@@ -744,6 +744,57 @@ provider correctness. If either challenge requires misleading port roles,
 irrelevant definition fields or hidden conditional execution, reopen the agreed
 C1 boundary with that evidence before the M05 freeze.
 
+#### Bitcoin policy divergence counter-proof — pending joint review
+
+The existing [terminal-junction probe](probe-terminal-junction.php) fixes
+`keyhash` before its only variable `encode` step. It therefore **cannot**
+represent P2TR at that junction: the Taproot key-path address consumes a
+Taproot output key, not the derived-key HASH160. This is a limit of the local
+fixture, not evidence that every Bitcoin policy must share HASH160 or that C1
+has already passed the broader fitness challenge.
+
+The runnable [symbolic divergence probe](probe-bitcoin-policy-divergence.php)
+explores a second, earlier Bitcoin policy junction without adding a protocol
+candidate or selecting a C2 source grammar:
+
+```text
+Bitcoin request -> admit -> depth -> derive -> selected address route -> result
+                                         |-> three current policies: key HASH160
+                                         |   -> selected existing terminal
+                                         |-> P2TR key path: Taproot output key
+                                             -> witness-v1/32 Bech32m terminal
+```
+
+The outer selected route has a derived-public-node input and a complete-address
+output. The three current policies reuse one inner key-hash route and still
+select their terminal directly at its `encode` step; P2TR selects a different
+route before HASH160. Both junctions use explicit intent bindings. The symbolic
+trace reaches only the selected route, stops on an injected failure and rejects
+five deliberately invalid fixtures. This is **one exploratory shape**, not an
+agreed extra layer, a production validator/executor or a claim that policy
+selection may happen at arbitrary unvalidated points. A future implementation
+must prove the same behavior through its real assembly and execution mechanism.
+
+There is also an **admission counterexample before this junction**. [BIP86's
+published account and child vectors](https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki#test-vectors)
+serialize the corresponding Taproot public nodes as `xpub`; the accepted
+[M02 O02 initial rule](../M02/M02-PROTOCOL.md#o02--version-network-and-policy-compatibility)
+admits mainnet `xpub` only for P2PKH and testnet `tpub` only for P2PKH. The
+current operation must therefore reject an explicit P2TR request using such a
+key. The probe checks that rejection and shows a *hypothetical* overlapping
+version/policy relation as data, not as an approved change. A future Taproot
+feature must jointly decide its admission/provenance contract and any revision
+to O02; version bytes alone cannot attest BIP86 account ancestry. Simply
+adding the P2TR route would leave the full operation incompatible.
+
+The pending C1 fitness question is whether the eventual composition mechanism
+can express an additional, semantically justified junction and nested selected
+route **without a policy-specific executor branch or a fake key-hash input**.
+C2/C3/C6 must retain that testable property if jointly accepted. The symbolic
+probe hard-codes its small expected-role catalogue; it does not validate a
+general schema, provider behavior, Taproot cryptography, Bech32m output or
+the future admission policy. No P2TR intent is admitted by PIP-0003.
+
 Before joint freeze, resolve the remaining C2–C6 choices against the closed C1
 constraints and actual PHP interfaces, including
 the prelude/body selection boundary, terminal parameter exposure, unexpected
