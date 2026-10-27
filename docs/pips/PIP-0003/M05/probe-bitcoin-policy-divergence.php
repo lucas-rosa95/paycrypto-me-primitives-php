@@ -117,29 +117,25 @@ function fitnessFixture(bool $withTaproot): array
             'steps' => [
                 fitnessStep('output-key', 'capability', 'taproot-output-fixture',
                     ['node' => $input('node')]),
-                fitnessStep('encode', 'intent', 'taproot-key-address',
+                fitnessStep('encode', 'capability', 'witness-v1-fixture',
                     ['key' => $output('output-key', 'key')], $params),
             ],
             'outputs' => ['address' => $output('encode', 'address')],
         ];
-        $compositions['witness-v1-terminal'] = [
-            'contract' => 'taproot-key-address', 'policies' => ['p2tr-keypath'],
-            'steps' => [fitnessStep('encode', 'capability', 'witness-v1-fixture',
-                ['key' => $input('key')], $params)],
-            'outputs' => ['address' => $output('encode', 'address')],
-        ];
-        $policies['p2tr-keypath'] = ['taproot-route', 'witness-v1-terminal'];
+        // A fixed single encoder needs no extra selectable junction or wrapper.
+        $policies['p2tr-keypath'] = ['taproot-route', null];
     }
     $intents = [];
     foreach (['mainnet', 'testnet'] as $networkId) {
         foreach ($policies as $policy => [$route, $terminal]) {
+            $bindings = [['at' => ['address'], 'composition' => $route]];
+            if ($terminal !== null) {
+                $bindings[] = ['at' => ['address', 'encode'], 'composition' => $terminal];
+            }
             $intents[] = [
                 'network' => $networkId, 'policy' => $policy,
                 'root' => 'bitcoin-public-address',
-                'bindings' => [
-                    ['at' => ['address'], 'composition' => $route],
-                    ['at' => ['address', 'encode'], 'composition' => $terminal],
-                ],
+                'bindings' => $bindings,
             ];
         }
     }
@@ -286,14 +282,89 @@ function fitnessAssemble(array $model): array
 
 function fitnessRun(array $plan, ?string $failAt = null): array
 {
-    $trace = [];
+    $trace = $values = [];
+    // Deterministic test tokens, not runtime protocol values or default results.
+    // A declared external origin receives a fixture token; missing internal
+    // producers are errors. No cryptography or provider behavior is simulated.
+    foreach ($plan['steps'] as $step) {
+        foreach ([...$step['inputs'], ...$step['parameters']] as $source) {
+            if (str_starts_with($source['origin'], '@')) {
+                $values[$source['origin']] = ['fixture-input' => $source['origin']];
+            }
+        }
+    }
     foreach ($plan['steps'] as $step) {
         $trace[] = $step['at'];
         if ($step['at'] === $failAt) {
             throw new FitnessFailure('injected', $trace);
         }
+        $resolve = static function (array $source) use (&$values): array {
+            fitnessRequire(isset($values[$source['origin']]), 'missing-producer');
+            return $values[$source['origin']];
+        };
+        $inputs = array_map($resolve, $step['inputs']);
+        $parameters = array_map($resolve, $step['parameters']);
+        foreach ($step['outputs'] as $port => $output) {
+            $values[$output['origin']] = [
+                'capability' => $step['capability'], 'port' => $port,
+                'inputs' => $inputs, 'parameters' => $parameters,
+            ];
+        }
     }
-    return ['trace' => $trace, 'outputs' => $plan['outputs']];
+    $results = [];
+    foreach ($plan['outputs'] as $port => $source) {
+        fitnessRequire(isset($values[$source['origin']]), 'missing-producer');
+        $results[$port] = $values[$source['origin']];
+    }
+    return ['trace' => $trace, 'outputs' => $plan['outputs'], 'values' => $results];
+}
+
+/** Reconstruct the old flat, three-policy declaration in the same fixture grammar. */
+function fitnessFlatFixture(): array
+{
+    $model = fitnessFixture(false);
+    $root = &$model['compositions']['bitcoin-public-address'];
+    array_splice($root['steps'], 3, 1, [
+        fitnessStep('keyhash', 'capability', 'hash-fixture', ['node' => ['output', 'derive', 'node']]),
+        fitnessStep('encode', 'intent', 'key-hash-address',
+            ['hash' => ['output', 'keyhash', 'digest']], ['network' => ['parameter', 'network']]),
+    ]);
+    $root['steps'][5]['inputs']['address'] = ['output', 'encode', 'address'];
+    unset($root, $model['compositions']['keyhash-route']);
+    foreach ($model['intents'] as &$intent) {
+        $intent['bindings'] = [[
+            'at' => ['encode'], 'composition' => $intent['bindings'][1]['composition'],
+        ]];
+    }
+    unset($intent);
+    return $model;
+}
+
+/** Compare the complete producer graph independently of composition-local names. */
+function fitnessNormalizedPlan(array $plan): array
+{
+    $origins = [];
+    foreach ($plan['steps'] as $index => $step) {
+        foreach ($step['outputs'] as $port => $source) {
+            $origins[$source['origin']] = $index . ':' . $port;
+        }
+    }
+    $normalize = static function (array $source) use ($origins): array {
+        if (!str_starts_with($source['origin'], '@')) {
+            fitnessRequire(isset($origins[$source['origin']]), 'missing-producer');
+            $source['origin'] = $origins[$source['origin']];
+        }
+        return $source;
+    };
+    $steps = [];
+    foreach ($plan['steps'] as $step) {
+        unset($step['at']);
+        foreach (['inputs', 'parameters', 'outputs'] as $field) {
+            $step[$field] = array_map($normalize, $step[$field]);
+        }
+        $steps[] = $step;
+    }
+    return ['steps' => $steps, 'outputs' => array_map($normalize, $plan['outputs'])];
 }
 
 function fitnessReject(array $model, string $reason): void
@@ -317,6 +388,13 @@ function fitnessRenameReference(array $reference): array
 }
 
 $baseline = fitnessAssemble(fitnessFixture(false));
+$flat = fitnessAssemble(fitnessFlatFixture());
+foreach ($flat as $key => $plan) {
+    fitnessRequire(fitnessNormalizedPlan($plan) === fitnessNormalizedPlan($baseline[$key]),
+        'flat-migration-connections');
+    fitnessRequire(fitnessRun($plan)['values'] === fitnessRun($baseline[$key])['values'],
+        'flat-migration-values');
+}
 $model = fitnessFixture(true);
 $plans = fitnessAssemble($model);
 fitnessRequire(count($baseline) === 6 && count($plans) === 8, 'intent-count');
@@ -458,7 +536,7 @@ $cases = [
         $m['intents'][0]['bindings'][0]['composition'] = 'absent';
     },
     'target-contract' => static function (array &$m): void {
-        $m['intents'][3]['bindings'][1]['composition'] = 'p2pkh-terminal';
+        $m['intents'][0]['bindings'][0]['composition'] = 'p2pkh-terminal';
     },
     'incompatible-policy' => static function (array &$m): void {
         $m['intents'][3]['bindings'][0]['composition'] = 'keyhash-route';
@@ -503,6 +581,105 @@ $mutant = $model;
 $mutant['compositions']['keyhash-route']['steps'][0]['inputs']['node'] = ['output', 'derive', 'node'];
 fitnessReject($mutant, 'invalid-source');
 
+// User-diagram counter-proof: independent flows share a resource, diverge,
+// reuse another compatible resource, then finish in their own context.
+// Neutral domain contracts only: these are NOT Ethereum/Cardano/Solana models.
+$topology = ['contracts' => [], 'capabilities' => [], 'compositions' => [], 'intents' => []];
+foreach ([
+    'whole' => ['fixture-request', 'fixture-result'],
+    'prepare' => ['fixture-request', 'normalized-fixture'],
+    'common-a' => ['normalized-fixture', 'first-checkpoint'],
+    'middle' => ['first-checkpoint', 'resumed-fixture'],
+    'common-b' => ['resumed-fixture', 'finished-fixture'],
+    'finish' => ['finished-fixture', 'fixture-result'],
+] as $id => [$inputRole, $outputRole]) {
+    $topology['contracts'][$id] = fitnessContract(['value' => $inputRole], ['value' => $outputRole]);
+}
+foreach (['common-a', 'common-b'] as $id) {
+    $topology['capabilities'][$id] = ['contract' => $id];
+}
+foreach (['x', 'y', 'z'] as $id) {
+    $topology['capabilities']['middle-' . $id] = ['contract' => 'middle'];
+    $topology['compositions']['middle-' . $id] = [
+        'contract' => 'middle',
+        'steps' => [fitnessStep('work', 'capability', 'middle-' . $id, ['value' => ['input', 'value']])],
+        'outputs' => ['value' => ['output', 'work', 'value']],
+    ];
+}
+$topologyChecks = $topologyAborts = 0;
+foreach (['alpha' => ['x', 'y'], 'beta' => ['y'], 'gamma' => ['z']] as $candidate => $routes) {
+    $topology['capabilities'][$candidate . '-prepare'] = ['contract' => 'prepare'];
+    $topology['capabilities'][$candidate . '-finish'] = ['contract' => 'finish'];
+    $topology['compositions'][$candidate] = [
+        'contract' => 'whole',
+        'steps' => [
+            fitnessStep('prepare', 'capability', $candidate . '-prepare', ['value' => ['input', 'value']]),
+            fitnessStep('first', 'capability', 'common-a', ['value' => ['output', 'prepare', 'value']]),
+            fitnessStep('diverge', 'intent', 'middle', ['value' => ['output', 'first', 'value']]),
+            fitnessStep('resume', 'capability', 'common-b', ['value' => ['output', 'diverge', 'value']]),
+            fitnessStep('finish', 'capability', $candidate . '-finish', ['value' => ['output', 'resume', 'value']]),
+        ],
+        'outputs' => ['value' => ['output', 'finish', 'value']],
+    ];
+    // Each candidate assembles its own advertised intents; shared catalogue
+    // resources do not transfer execution or values between candidates.
+    $topology['intents'] = [];
+    foreach ($routes as $route) {
+        $topology['intents'][] = [
+            'network' => 'fixture-network', 'policy' => $route, 'root' => $candidate,
+            'bindings' => [['at' => ['diverge'], 'composition' => 'middle-' . $route]],
+        ];
+    }
+    foreach (fitnessAssemble($topology) as $key => $plan) {
+        $route = substr($key, strrpos($key, '/') + 1);
+        $expected = [$candidate . '-prepare', 'common-a', 'middle-' . $route,
+            'common-b', $candidate . '-finish'];
+        fitnessRequire(array_column($plan['steps'], 'capability') === $expected, 'topology-route');
+        $token = ['fixture-input' => '@input/value'];
+        foreach ($expected as $capability) {
+            $token = ['capability' => $capability, 'port' => 'value',
+                'inputs' => ['value' => $token], 'parameters' => []];
+        }
+        fitnessRequire(fitnessRun($plan)['values'] === ['value' => $token], 'topology-value-flow');
+        foreach (array_column($plan['steps'], 'at') as $index => $at) {
+            try {
+                fitnessRun($plan, $at);
+                throw new FitnessFailure('failure-did-not-abort');
+            } catch (FitnessFailure $failure) {
+                fitnessRequire($failure->getMessage() === 'injected'
+                    && $failure->trace === array_slice(array_column($plan['steps'], 'at'), 0, $index + 1),
+                    'topology-failure-continuation');
+                ++$topologyAborts;
+            }
+        }
+        ++$topologyChecks;
+    }
+}
+// A different operation can start and finish at compatible local contracts.
+// It needs no Bitcoin request, derivation, HASH160, network or public-result shell.
+$topology['compositions']['delta'] = [
+    'contract' => 'common-b',
+    'steps' => [fitnessStep('only', 'capability', 'common-b', ['value' => ['input', 'value']])],
+    'outputs' => ['value' => ['output', 'only', 'value']],
+];
+$topology['intents'] = [[
+    'network' => 'fixture-network', 'policy' => 'unrelated', 'root' => 'delta', 'bindings' => [],
+]];
+$delta = fitnessAssemble($topology)['fixture-network/unrelated'];
+fitnessRequire(array_column($delta['steps'], 'capability') === ['common-b']
+    && fitnessRun($delta)['outputs']['value']['role'] === 'finished-fixture', 'universal-root');
+++$topologyChecks;
+// Same nominal PHP representation cannot replace an incompatible semantic input.
+$wrongRoot = $topology;
+$wrongRoot['compositions']['delta']['contract'] = 'whole';
+fitnessReject($wrongRoot, 'incompatible-port');
+// A later common resource cannot silently bypass the selected middle producer.
+$wrongWire = $topology;
+$wrongWire['compositions']['delta'] = $topology['compositions']['gamma'];
+$wrongWire['compositions']['delta']['steps'][3]['inputs']['value'] = ['output', 'first', 'value'];
+$wrongWire['intents'][0]['bindings'] = [['at' => ['diverge'], 'composition' => 'middle-z']];
+fitnessReject($wrongWire, 'incompatible-port');
+
 // This relation is not exercised by the admission trace fixture above.
 $currentMainnetXpubPolicies = ['p2pkh'];
 fitnessRequire(!in_array('p2tr-keypath', $currentMainnetXpubPolicies, true), 'current-o02');
@@ -514,4 +691,7 @@ echo "binding mechanism: 6 baseline plans preserved in 8-intent extension; renam
 echo 'failures: ' . $abortChecks . ' exact-prefix aborts; '
     . (count($cases) + 3) . " invalid fixtures rejected before execution\n";
 echo "scope: repeated declaration occurrences retain independent bindings and exported origins\n";
+echo "migration: 6 reconstructed flat plans preserve normalized connections and deterministic token results\n";
+echo 'topology: ' . $topologyChecks . ' independent-root plans; ' . $topologyAborts
+    . " exact-prefix aborts; 2 incompatible semantic reuse fixtures rejected\n";
 echo "limits: symbolic role catalogue and hypothetical admission only; O02 still rejects P2TR; no Taproot correctness claim\n";
