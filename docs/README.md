@@ -49,74 +49,28 @@ tools/
 
 ## Authority and purpose
 
-The [approved PIP-0003 proposal](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md)
-defines the public address capability boundary. Its
-[Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md) is the
-current operational reference. Start with its Current state, Reading path and
-Execution roadmap; consult the linked M00–M05 records for the specific research,
-decisions, draft contract and assessment evidence.
+This map points to the owning records; it does not repeat their decision history.
+
+| Question | Owning record | Current scope |
+|---|---|---|
+| Approved capability and boundaries | [PIP-0003 at its approved revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md) and [receiving PIP00010](pips/PIP00010/PIP00010.md) | Public-only generic address derivation and the separately approved receiving entry point. |
+| Execution, reviewed milestones and next gate | [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md#current-state) | M00–M04 bounded research/reviews are recorded; M05 is in progress. M06–M09 implementation/assembled verification remain downstream. |
+| Accepted protocol semantics | [M02 O01–O06](pips/PIP-0003/M02/M02-PROTOCOL.md) | Exact path without index advancement, strict initial admission, complete nodes, receiving `[0, index]` and owned failures. |
+| Composition decisions and PHP proposals | [M05 contract record](pips/PIP-0003/M05/PHP-CONTRACTS.md#reading-and-decision-status) | **C1 architecture agreed; C2 next.** C2–C6 forms, public PHP contracts and qualification remain open. Independent flow declarations reuse compatible resources; no mandatory Bitcoin root. |
+| Provider/runtime comparison and reproduction | [M05 assessment](pips/PIP-0003/M05/README.md) | Three pinned graphs, 84 bounded graph commands and four language controls; provider/runtime selection and consumer constraints remain open. |
+| Visual explanations and fitness limits | [M05 visual index](pips/PIP-0003/M05/PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review) and [fitness evidence](pips/PIP-0003/M05/PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery) | Lifecycle, admission, policy flows and compatible reuse. Symbolic probes do not establish complete future Taproot/CashAddr support. |
+
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
-is its retrospective coordination anchor. A
-[present-day maintainer decision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3#issuecomment-6102704555)
-approved the exact proposal revision on 2026-10-10; the old package and M01
-draft did not establish that approval or verify the capability.
-The [M02 protocol record](pips/PIP-0003/M02/M02-PROTOCOL.md) contains accepted
-protocol decisions and a conditional provider qualification handoff; it was
-merged in [PR #9](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/9).
-Its [Issue #30 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30)
-has a focused precedence and research-probe correction [merged in PR #35 at `56d9116`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/56d9116ab41104486a24c208724f643af3a46ab9), [reviewed and accepted by the maintainer at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121). The earlier M03/M04 reviews did not cover this correction.
-The [M03 research handoff](pips/PIP-0003/M03/README.md) is complete, merged in
-[PR #12](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/12),
-and [independently reviewed](pips/PIP-0003/M03/cp-reviewer-2026-10-16-074200.md)
-within its bounded research scope.
-The [Issue #31 M03 correction](pips/PIP-0003/M03/README.md#issue-31-corrective-research--2026-10-19)
-at technical revision `85fdae1` [merged in PR #37 at `7696ba6`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/7696ba66a7fb328bb435b6cb45319b7ab2db3795).
-Its [separate independent check of `762ec02`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050)
-accepted the bounded corrected code and evidence. The status reconciliation
-followed the merge. The [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25#issuecomment-6279899487)
-is also complete within its bounded research scope.
-[M04 codec, admission and definition research](pips/PIP-0003/M04/README.md)
-has also [passed independent follow-up review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21#issuecomment-6243150128)
-within its stated limits and [merged in PR #21](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/21). A subsequent
-[corrective re-review in Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-and [PR #26, merged at `1c43efb`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/1c43efb4e98c1dac8c85c8cedc5c1c04bdab6511)
-correct research-probe classifications and assertions and separate terminal
-Base58Check and SegWit generation from decode-based qualification. Checked
-Base58Check decoding remains necessary for extended-key admission. The earlier
-blanket BitWasp selection block was overbroad for generation; its native
-exception ambiguity remains a gate for any decoder boundary. An independent
-check of PR #26 head `33a3294` reproduced its evidence but found a native
-cjpgdk exception-classification gap in the qualification decoder, which the
-address-generation adapter does not call. [PR #36](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/36)
-corrects that research boundary. The bounded independent
-[Issue #25](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25)
-check accepted its code and evidence at `fcd71d5`; [PR #36 merged at `2d00923`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/2d00923ef4a8d6025a6292fb253f325c7f3cc302). No provider is selected and production implementation remains open.
-The [Issue #29 M01 deep re-review](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/29#issuecomment-6254856342)
-examined the contract and diagrams at `de326cf` without confirming a draft defect;
-it did not verify provider or address behavior. The
-[M00 deep review](pips/PIP-0003/M00/reviews/issue-28-deep-review.md) found a
-low-severity Bech32 observation-check and wording gap. Its focused correction
-in [PR #34](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/34)
-preserves the issued probe and outputs. The [independent check of `0eb8cbe`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255021386)
-found no remaining defect, and the [shared Issue #28 disposition](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/28#issuecomment-6255212773)
-accepts a bounded favorable M00 conclusion. The [M02 correction was accepted at `fdb0a616`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/30#issuecomment-6278516121); the [M03 corrected-code check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/31#issuecomment-6279576050) is complete within its research scope, and the bounded [Issue #25 corrective check](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/25) accepted PR #36's code and evidence at `fcd71d5`. [M05 execution is coordinated in Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41), with the [M00–M04 resumption baseline revalidated](pips/PIP-0003/EXECUTION-PLAN.md#m05-resumption-checkpoint); the [M05 provider/runtime assessment](pips/PIP-0003/M05/README.md) adds refreshed suitability, three pinned graphs and 84 bounded commands on PHP 8.2–8.5 in [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44). The [concrete PHP proposal](pips/PIP-0003/M05/PHP-CONTRACTS.md) adds signatures, immutable provisioning and owned failure reasons, with four language controls exposing coercion, readonly-array aliasing and trace-redaction limits. The [agreed composition direction](pips/PIP-0003/M05/PHP-CONTRACTS.md#agreed-composition-direction) adds inspectable composition data, semantic connections, three policy flow mappings and failure-abort obligations; the new [preliminary schema/execution proposal](pips/PIP-0003/M05/PHP-CONTRACTS.md#preliminary-schema-and-execution-proposal) supplies C1–C6 choices, source grammar, complete flow/binding tables and semantic admission/execution rules. Its [reading guide](pips/PIP-0003/M05/PHP-CONTRACTS.md#reading-and-decision-status) separates existing decisions and agreed direction from proposals advanced before joint discussion. C1's agreed base remains in force: declared execution order, inspectable producer-output-to-consumer-input connections, independent declarations for distinct protocol candidates and compatible shared resources, including eligible neutral subcompositions. The three delivered Bitcoin policies also share one ordered route and directly bind the selected terminal at its declared `encode` step. Resource scope is now jointly guided by semantic responsibility: a general resource may start shared on its first concrete use, while a context-specific component stays local until compatible new use warrants promotion. Remaining component boundaries (C4), contract checking (C3), exact C2 syntax and the C6 executor remain open. The pair-list example remains a preliminary C2 representation; the remaining C2–C6 choices, including exception-chain design, stay open. The [synthetic CashAddr/Taproot fitness challenges](pips/PIP-0003/M05/PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery) test reuse boundaries without expanding the delivered capability. No production schema validator or executor is implemented or qualified. Provider/runtime selection, consumer constraints and contract qualification/freeze remain open. The configured PHP 8.3 minimum and 8.3/8.4 verification matrix are unchanged; the development/setup/CI/release patch pins are refreshed to 8.3.36/8.4.27, and the final graph evidence uses patched releases. See the [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md)
-for the current state. The [M05 visual counter-proofs](pips/PIP-0003/M05/PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review) now distinguish the agreed current flow from exploratory Taproot routing, its O02 admission conflict, independent CashAddr resource reuse and test-only Signet parameter variation. The [C1 extension review](pips/PIP-0003/M05/PHP-CONTRACTS.md#c1-extension-review--concluded-architectural-direction) is concluded at the architectural level on 2026-10-28; C2 is next. The [agreed independent-policy-flow direction](pips/PIP-0003/M05/PHP-CONTRACTS.md#independent-policy-flow-declarations--agreed-c1-direction) permits a complete Taproot policy flow using compatible resources without executing the key-hash flow or requiring one Bitcoin-wide root. Protocol/network/policy identity remains explicit. The same symbolic compiler preserves eight connection graphs/token results after deleting the old common root; forty-eight further injected aborts and two root/input rejections pass. Specific C2–C6 forms and future P2TR admission remain open. The updated policy-flow diagram shows that relationship; the other protocol and neutral diagrams retain their bounded scopes. M05 also [assesses the consumer PHP minimum and verification matrix together with provider selection](pips/PIP-0003/EXECUTION-PLAN.md#m05-provider-and-consumer-runtime-selection), including adoption impact and evidenced compatibility tradeoffs.
-The [symbolic terminal-junction comparison](pips/PIP-0003/M05/PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
-tests named-slot and direct-step bindings against the same bounded fixtures.
-Joint C1 review selected direct binding for this local junction; exact C2
-source syntax and production validation remain open.
-The separately approved
-[PIP00010 receiving entry point](pips/PIP00010/PIP00010.md)
-originates from [Issue #10](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/10);
-its implementation and verification are assigned in the Execution Plan under
-[Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3).
-The [independent plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
-assesses an earlier plan only, recoverable at [revision `83ccd557`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/83ccd5571843eed57726e140e493868f0f152b5f/docs/PLAN-FIRST-CAPABILITY.md).
-The [pre-M04 audit](pips/PIP-0003/reviews/pre-m04-audit-2026-10-17.md)
-records planning and navigation findings closed through
-[PR #20](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/20);
-its forward-looking M04 criteria should be read alongside the merged M04
-handoff above.
+coordinates the capability; [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41)
+coordinates M05 in [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44).
+The Plan links exact approval, merge, corrective-review and resumption evidence.
+Historical M01 contracts/diagrams and issued reports remain revision-specific
+inputs rather than current implementation or provider-selection claims.
+
+The [earlier plan review](pips/PIP-0003/M00/reviews/plan-first-capability-canonical-alignment.md)
+and [pre-M04 audit](pips/PIP-0003/reviews/pre-m04-audit-2026-10-17.md) retain their
+historical scopes. The latter's forward-looking criteria are read with the
+merged M04 handoff and subsequent corrections linked in the Plan.
 
 ## Drafting and maintaining documentation
 

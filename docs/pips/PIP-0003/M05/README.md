@@ -39,125 +39,25 @@ be quantified. Keep alternatives available for qualification; install one
 chosen implementation per boundary in production, with explicit wiring and
 no runtime fallback or backend autodetection.
 
-The [composition direction](PHP-CONTRACTS.md#agreed-composition-direction)
-began in the joint design discussion on 2026-10-22: inspectable composition
-data, semantic compatibility between connections and immediate abort on failure.
-The later C1 clarification gives distinct protocol candidates their own flow
-declarations, while compatible resources are shared; equivalent network or
-parameter variants within one candidate reuse its declaration. Names such as
-`BitcoinDefinition` are assessed by responsibility; the constraint concerns
-hidden or duplicated behavior, not a naming ban. The proposal now maps the
-three approved policy flows, distinguishes parameter data, composition
-declarations and provider wiring, and assigns
-schema/abort acceptance cases to M06/M07. The new
-[preliminary schema and execution proposal](PHP-CONTRACTS.md#preliminary-schema-and-execution-proposal)
-initially advanced C1–C6 for joint discussion: ordered declarations, duplicate-observable
-source records, semantic lineage, explicit intent bindings and execution/failure
-boundaries. Its [reading guide](PHP-CONTRACTS.md#reading-and-decision-status)
-distinguishes accepted constraints, agreed direction and unaccepted proposals.
-C1's agreed base remains in force: declared execution order and
-inspectable producer-output-to-consumer-input connections. Each step consumes
-only declared inputs/parameters or earlier outputs; setup resolves all admitted intent bindings
-and rejects circular dependencies among declarations. This does not constrain
-internal capability recursion or bounded iteration. Neutral subcompositions may be
-shared when they have cohesive, candidate-independent contracts; ordinary
-internal helpers and context-specific components need not become shared steps.
-Resource scope follows responsibility and semantics, not a consumer count:
-general resources may start shared on their first concrete use, while local
-components can be promoted when a compatible new use appears.
-The [joint responsibility criterion](PHP-CONTRACTS.md#capability-responsibility-and-boundary-decisions)
-requires one specific, complete semantic objective per capability; several
-internal actions may fulfill it, while cohesion does not merge independent
-responsibilities. Material C4 boundaries need an explicit contract/rationale
-and joint review rather than executor-specific interpretations.
-Each capability is a complete unit within its enclosing composition, with
-documented inputs, outcome and failure; its implementation remains open to
-inspection and tests at relevant lower boundaries. This does not promise
-rollback or settle the remaining capability/subcomposition boundaries.
-The three delivered Bitcoin policies share their ordered route through
-derived-key HASH160 and bind the explicitly selected terminal directly to the
-declared `encode` step. Other protocol candidates retain their own flow
-declarations. The jointly accepted terminal split keeps P2PKH payload/encoder
-steps, P2SH-P2WPKH script/HASH160/payload/encoder steps, and only a SegWit-v0
-encoder step for P2WPKH. Its derived key hash reaches the encoder's program
-input through a checked semantic connection, not a pass-through `program`
-execution step; the selected definition supplies the HRP. Remaining
-subcomposition boundaries, their contract checks and exact C2 syntax remain
-open. The draft's verbose pair-list example is a
-preliminary C2 representation, not the agreed concept;
-the remaining C2–C6 choices and concrete exception-chain design remain open.
-The agreed C1 direction requires deterministic, unambiguous stage contracts and
-a chain that can be inspected, independently validated and reproduced, with a
-stable, complete and atomic caller-facing outcome. Concrete contract checking
-and the point-infinity outcome form remain under C3; the executor and auditor
-inspection mechanisms remain under C6.
-Independent auditors, rather than ordinary consumers, own verification of the
-chain; a consumer is not required to collect per-invocation evidence to use its
-documented result or failure. The joint C1 audit direction is to inspect
-declarations, resolved connections, contracts and the assembled mapping from
-steps to capabilities and selected implementations; reproduce pinned code,
-environment, inputs and independently anchored outputs; and challenge routing,
-order and abort behavior with substitutable test capabilities at existing
-contract boundaries through the same validator and executor. Auditors choose
-which owned, native or third-party component boundaries merit deeper review;
-no fixed risk ranking governs execution. Native-algorithm trust does not
-replace review of our invocation, input bytes and output connections.
-Provenance and reproducibility help identify the examined artifact, not prove
-its protocol behavior. Independent review findings belong in the existing
-durable Issue/PR/CI trail when sufficient. Remaining component boundaries need
-C4 joint review; their checks remain under C3 and the auditor-facing mechanism
-under C6/M06–M07. These are not assembled-chain verification results.
-The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
-use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
-boundaries before M05 freeze. They add no admitted intent, implementation or
-protocol-qualification evidence.
-The [Bitcoin policy divergence counter-proof](PHP-CONTRACTS.md#bitcoin-policy-divergence-counter-proof--research-evidence)
-first challenged a universal post-HASH160 junction, then compared an earlier
-shared-root candidate. The [current independent-policy-flow direction](PHP-CONTRACTS.md#independent-policy-flow-declarations--agreed-c1-direction)
-supersedes that mandatory root: the hypothetical Taproot policy selects its
-own complete flow and directly reuses compatible resources without executing
-the three key-hash policies' declaration. Protocol identity does not dictate
-flow topology. This is the jointly agreed architectural direction, concluding
-the bounded C1 extension review on 2026-10-28; C2 is next. Concrete grouping,
-notation, compatibility checks and C3–C6 mechanisms remain open.
+The [consolidated contract record](PHP-CONTRACTS.md#reading-and-decision-status)
+owns architectural agreements, open C2–C6 choices, concrete PHP proposals,
+fitness evidence and visual explanations. **C1 is architecturally agreed; C2
+is next.** Independent policy flows may reuse compatible resources directly;
+there is no mandatory Bitcoin-wide execution root. Source syntax, semantic
+checking, remaining capability boundaries and execution mechanism remain open.
 
-The revised symbolic probe deletes the previous common root and selected inner
-routes from the independent-flow fixture. The same compiler produces eight
-plans with unchanged normalized connection graphs and deterministic token
-results. Forty-eight injected throws abort at exact prefixes; two invalid
-root/input fixtures fail setup. Earlier six-plan migration, renamed steps,
-nested scopes, fifteen invalid fixtures and forty-eight abort checks remain
-comparison evidence. Five neutral plans across four roots additionally test
-resource reuse after divergence, with twenty aborts and two incompatible reuse
-rejections. These are symbolic/dataflow observations, not real admission,
-lineage or protocol qualification. Current O02 rejects P2TR; future
-admission/provenance needs a separate reviewed decision.
+The [fitness evidence](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
+records direct-binding selection, independent complete policy roots, migration,
+nested scope, recurring-resource and failure probes. The [extended-key cross-check](PHP-CONTRACTS.md#extended-public-key-to-address-fitness--contract-cross-check)
+applies existing O01–O06 to full-node derivation, exact paths, admission and
+fingerprint/hash roles. These are bounded symbolic/dataflow observations and
+contract analysis, not a production schema/executor, future Taproot/CashAddr
+qualification or new public admission. Current O02 remains unchanged.
 
-The [extended-key-to-address contract cross-check](PHP-CONTRACTS.md#extended-public-key-to-address-fitness--contract-cross-check)
-examines the user's expanded diagram against existing O01–O06. It corrects
-next-index retry, generic/receiving path handling, literal xpub admission and
-complete-node metadata; it also makes HASH160 reuse inside BIP32 parent
-fingerprints explicit, including for a future Taproot route. This is textual
-contract analysis, not new executable or protocol/provider qualification.
-C1 remains architecturally consolidated and C2 remains next.
-
-The [visual counter-proofs](PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review)
-provide six synchronized Mermaid/SVG/PNG views. The updated policy-flow view
-shows the agreed independent-root relationship; specific component grouping
-and future P2TR admission remain preliminary. Other views retain current
-three-policy scope, the O02 admission conflict, independent Bitcoin Cash
-resource reuse, Signet parameter variation and neutral recurring resources.
-The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
-now applies one runnable symbolic probe to the named-slot and direct-step
-binding candidates. Both pass the same six-intent, rejection and abort cases;
-the joint C1 choice is direct binding at this local step because the slot adds
-an identifier without an extra demonstrated guarantee. Exact source syntax and
-other design choices stay open; this probe does not validate a production loader
-or address behavior.
-Concrete choices, including admission/body separation and owned-code failure
-classification, remain open alongside provider/runtime selection. This is a
-reviewable design proposal, not an implementation handoff; it adds no provider
-or runtime qualification and no implemented public capability.
+Use the [visual index](PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review)
+for lifecycle, admission, current policy and exploratory reuse views. Joint
+provider/runtime selection, consumer constraints, concrete PHP review and
+affected qualification still precede M05 freeze and M06 handoff.
 
 ## Current package suitability
 

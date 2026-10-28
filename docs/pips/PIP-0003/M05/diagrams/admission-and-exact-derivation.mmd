@@ -1,0 +1,36 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TB
+    raw["Raw request checks<br/>Definition, path, policy, key text<br/>Preserve original types; no codec/ECC work"]
+    decode["Delegate Base58Check decode<br/>Require 78 bytes and valid common/root metadata"]
+    version["Check all four public-version bytes<br/>Eligibility precedes point interpretation"]
+    point["Validate recognized-version compressed point<br/>Then check explicit network/policy compatibility"]
+    depth["Check path against remaining imported-node depth<br/>Before HMAC or any child derivation"]
+    attempt["Take exactly the next supplied path component i<br/>HMAC-SHA512 with this parent's chain code<br/>Message: compressed parent key + ser32(i)"]
+    scalar{"Left scalar a below curve order?"}
+    curve["Delegate child-point construction<br/>K child = aG + K parent<br/>Zero a is valid; no modular repair of invalid a"]
+    finite{"Child point finite?"}
+    node["Build complete child node<br/>Right half becomes chain code; update depth and child number<br/>Parent fingerprint: first four bytes of HASH160(parent key)"]
+    more{"More supplied path components?"}
+    complete["Complete final derived node<br/>Exact requested path and original admitted context"]
+    address["Continue this selected flow's address construction<br/>No universal HASH160 address-input requirement"]
+    failure["Owned failure: abort invocation<br/>No next-index search, later stage or partial result"]
+    rule["Any admission, capability or provider failure aborts<br/>The diamonds show CKDpub invalid-child cases"]
+    raw --> decode --> version --> point --> depth --> attempt --> scalar
+    scalar -->|yes| curve --> finite
+    scalar -->|no| failure
+    finite -->|yes| node --> more
+    finite -->|no| failure
+    more -->|yes: advance within the supplied path only| attempt
+    more -->|no| complete --> address
+    rule -. failure rule .-> failure
+    classDef contract fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef outcome fill:#eaf7ed,stroke:#28783b,color:#173b20
+    classDef failure fill:#fff0f0,stroke:#a52b2b,color:#6b1515
+    class raw,decode,version,point,depth,attempt,scalar,curve,finite,node,more,address contract
+    class complete outcome
+    class failure,rule failure
