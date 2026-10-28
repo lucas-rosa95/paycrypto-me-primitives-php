@@ -23,7 +23,10 @@ component local when its purpose or invariants belong to a specific flow.
 When a new concrete use reveals genuinely compatible semantics, promote the
 local component to a shared resource and update its consumers without making
 one protocol candidate impersonate another. Do not extract helpers into shared
-declared steps merely to anticipate reuse. This refines the existing
+declared steps merely to anticipate reuse. Protocol membership does not force
+one execution root: policies with distinct workflows may have independent
+complete flow declarations and directly reuse compatible resources, preserving
+their protocol/network/policy identity. This refines the existing
 evidence-driven composition guidance in the root README and canonical
 architecture; it does not make cryptographic algorithms or standardized codecs
 Primitives-owned implementations.

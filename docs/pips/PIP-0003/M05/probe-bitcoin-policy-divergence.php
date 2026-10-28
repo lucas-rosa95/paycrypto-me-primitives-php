@@ -340,6 +340,66 @@ function fitnessFlatFixture(): array
     return $model;
 }
 
+/** Independent policy-flow roots; no required Bitcoin-wide execution shell. */
+function fitnessIndependentRootsFixture(): array
+{
+    $model = fitnessFixture(true);
+    $oldRoot = $model['compositions']['bitcoin-public-address'];
+    $model['contracts']['admitted-public-derivation'] = fitnessContract(
+        ['request' => 'admitted-request'], ['node' => 'derived-public-node']);
+    // Shared composition, not a capability combining several responsibilities.
+    $model['compositions']['bitcoin-public-derivation'] = [
+        'contract' => 'admitted-public-derivation',
+        'steps' => array_slice($oldRoot['steps'], 0, 3),
+        'outputs' => ['node' => ['output', 'derive', 'node']],
+    ];
+    $prepare = fitnessStep('prepare', 'composition', 'bitcoin-public-derivation',
+        ['request' => ['input', 'request']]);
+    $network = ['network' => ['parameter', 'network']];
+    $model['compositions']['bitcoin-keyhash-public-address'] = [
+        'contract' => 'public-address', 'policies' => ['p2pkh', 'p2sh-p2wpkh', 'p2wpkh'],
+        'steps' => [
+            $prepare,
+            fitnessStep('keyhash', 'capability', 'hash-fixture',
+                ['node' => ['output', 'prepare', 'node']]),
+            fitnessStep('encode', 'intent', 'key-hash-address',
+                ['hash' => ['output', 'keyhash', 'digest']], $network),
+            fitnessStep('result', 'capability', 'make-result',
+                ['address' => ['output', 'encode', 'address']]),
+        ],
+        'outputs' => ['result' => ['output', 'result', 'result']],
+    ];
+    $model['compositions']['bitcoin-taproot-public-address'] = [
+        'contract' => 'public-address', 'policies' => ['p2tr-keypath'],
+        'steps' => [
+            $prepare,
+            fitnessStep('output-key', 'capability', 'taproot-output-fixture',
+                ['node' => ['output', 'prepare', 'node']]),
+            fitnessStep('encode', 'capability', 'witness-v1-fixture',
+                ['key' => ['output', 'output-key', 'key']], $network),
+            fitnessStep('result', 'capability', 'make-result',
+                ['address' => ['output', 'encode', 'address']]),
+        ],
+        'outputs' => ['result' => ['output', 'result', 'result']],
+    ];
+    // Remove both earlier shapes: neither independent root can call them.
+    unset($model['compositions']['bitcoin-public-address'],
+        $model['compositions']['keyhash-route'], $model['compositions']['taproot-route']);
+    foreach ($model['intents'] as &$intent) {
+        if ($intent['policy'] === 'p2tr-keypath') {
+            $intent['root'] = 'bitcoin-taproot-public-address';
+            $intent['bindings'] = [];
+        } else {
+            $intent['root'] = 'bitcoin-keyhash-public-address';
+            $intent['bindings'] = [[
+                'at' => ['encode'], 'composition' => $intent['bindings'][1]['composition'],
+            ]];
+        }
+    }
+    unset($intent);
+    return $model;
+}
+
 /** Compare the complete producer graph independently of composition-local names. */
 function fitnessNormalizedPlan(array $plan): array
 {
@@ -680,6 +740,36 @@ $wrongWire['compositions']['delta']['steps'][3]['inputs']['value'] = ['output', 
 $wrongWire['intents'][0]['bindings'] = [['at' => ['diverge'], 'composition' => 'middle-z']];
 fitnessReject($wrongWire, 'incompatible-port');
 
+// Current direction: the intent selects a complete independent policy flow.
+// The same compiler expands shared resources; it acquires no policy dispatch.
+$independent = fitnessIndependentRootsFixture();
+$independentPlans = fitnessAssemble($independent);
+$independentAborts = 0;
+fitnessRequire(count($independentPlans) === 8, 'independent-intent-count');
+foreach ($independentPlans as $key => $plan) {
+    fitnessRequire(fitnessNormalizedPlan($plan) === fitnessNormalizedPlan($plans[$key])
+        && fitnessRun($plan)['values'] === fitnessRun($plans[$key])['values'],
+        'independent-flow-connections');
+    foreach (array_column($plan['steps'], 'at') as $index => $at) {
+        try {
+            fitnessRun($plan, $at);
+            throw new FitnessFailure('failure-did-not-abort');
+        } catch (FitnessFailure $failure) {
+            fitnessRequire($failure->getMessage() === 'injected'
+                && $failure->trace === array_slice(array_column($plan['steps'], 'at'), 0, $index + 1),
+                'independent-failure-continuation');
+            ++$independentAborts;
+        }
+    }
+}
+$wrongPolicyRoot = $independent;
+$wrongPolicyRoot['intents'][3]['root'] = 'bitcoin-keyhash-public-address';
+fitnessReject($wrongPolicyRoot, 'incompatible-policy');
+$wrongKey = $independent;
+$wrongKey['compositions']['bitcoin-taproot-public-address']['steps'][2]['inputs']['key']
+    = ['output', 'prepare', 'node'];
+fitnessReject($wrongKey, 'incompatible-port');
+
 // This relation is not exercised by the admission trace fixture above.
 $currentMainnetXpubPolicies = ['p2pkh'];
 fitnessRequire(!in_array('p2tr-keypath', $currentMainnetXpubPolicies, true), 'current-o02');
@@ -694,4 +784,6 @@ echo "scope: repeated declaration occurrences retain independent bindings and ex
 echo "migration: 6 reconstructed flat plans preserve normalized connections and deterministic token results\n";
 echo 'topology: ' . $topologyChecks . ' independent-root plans; ' . $topologyAborts
     . " exact-prefix aborts; 2 incompatible semantic reuse fixtures rejected\n";
+echo 'policy roots: 8 plans preserve graphs/token results without the old Bitcoin root; '
+    . $independentAborts . " exact-prefix aborts; 2 incompatible root/input fixtures rejected\n";
 echo "limits: symbolic role catalogue and hypothetical admission only; O02 still rejects P2TR; no Taproot correctness claim\n";

@@ -4,35 +4,36 @@ config:
   flowchart:
     htmlLabels: false
 ---
-flowchart TD
-    admitted["Hypothetical compatible admission<br/>P2TR admission is OPEN<br/>Current O02 does not admit P2TR"]
-    derive["Shared public-derivation resource<br/>Complete derived public node"]
-    route{"Exploratory earlier policy binding<br/>Input: derived public node<br/>Output: complete address"}
-    hash["Shared route of the three current policies<br/>HASH160 of the derived compressed key"]
-    encode{"Existing local encode binding<br/>Input: derived-key HASH160"}
-    pkh["P2PKH terminal"]
-    nested["P2SH-P2WPKH terminal"]
-    native["P2WPKH terminal"]
-    outputkey["P2TR key-path route<br/>Construct the Taproot output key<br/>Delegated cryptographic machinery"]
-    v1["Witness-v1 / 32-byte output key<br/>Delegated Bech32m + network HRP"]
-    address["Common route outcome<br/>Complete address for the selected intent"]
-    result["Common public result construction<br/>Preserve admitted request context"]
-    admitted --> derive --> route
-    route -->|one of the three current policies| hash
-    hash --> encode
-    encode -->|p2pkh| pkh
-    encode -->|p2sh-p2wpkh| nested
-    encode -->|p2wpkh| native
-    route -->|p2tr-keypath| outputkey
-    outputkey --> v1
-    pkh --> address
-    nested --> address
-    native --> address
-    v1 --> address
-    address --> result
-    classDef existing fill:#eaf2ff,stroke:#2456a6,color:#14233b
+flowchart TB
+    intent["Explicit admitted network / policy intent<br/>Select its registered complete composition<br/>P2TR admission remains hypothetical; current O02 rejects it"]
+    subgraph current["Key-hash flow"]
+        prepare["Reference compatible public-derivation composition<br/>Admission, depth check, exact-path derivation<br/>This invocation's request and complete node"]
+        hash["HASH160 of this derived compressed public key"]
+        terminal{"Direct local terminal binding<br/>Resolved at setup"}
+        pkh["P2PKH terminal"]
+        nested["P2SH-P2WPKH terminal"]
+        native["P2WPKH terminal"]
+        result["Reference public-result construction<br/>Preserve this request's context"]
+        prepare --> hash --> terminal
+        terminal -->|p2pkh| pkh
+        terminal -->|p2sh-p2wpkh| nested
+        terminal -->|p2wpkh| native
+        pkh --> result
+        nested --> result
+        native --> result
+    end
+    subgraph taproot["Independent P2TR flow"]
+        tprepare["Reference compatible public-derivation composition<br/>Admission, depth check, exact-path derivation<br/>This invocation's request and complete node"]
+        outputkey["Taproot output-key construction<br/>Owned semantics; delegated crypto"]
+        encode["Fixed witness-v1 / 32-byte output-key encoder<br/>Delegated Bech32m with selected HRP"]
+        tresult["Reference public-result construction<br/>Preserve this request's context"]
+        tprepare --> outputkey --> encode --> tresult
+    end
+    intent -->|current key-hash intent| prepare
+    intent -->|hypothetical P2TR intent| tprepare
+    classDef resource fill:#eaf2ff,stroke:#2456a6,color:#14233b
     classDef open fill:#fff8df,stroke:#98751c,color:#47380e
     classDef outcome fill:#eaf7ed,stroke:#28783b,color:#173b20
-    class derive,hash,encode,pkh,nested,native existing
-    class admitted,route,outputkey,v1 open
-    class address,result outcome
+    class prepare,tprepare,hash,terminal,pkh,nested,native resource
+    class intent,outputkey,encode open
+    class result,tresult outcome

@@ -25,10 +25,10 @@ the draft is not agreement with the executor's proposed choices.**
 |---|---|
 | Referenced M02 decisions and approved PIPs | Existing boundaries. This draft does not amend them. |
 | [Agreed composition direction](#agreed-composition-direction) | Jointly agreed architectural direction; its flow tables explain the accepted protocol semantics. For the three delivered Bitcoin policies, the selected terminal binds directly to the declared `encode` step under its required contract. Exact C2 source syntax and executor remain open. |
-| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **C1's agreed base remains in force; its extension fitness review is reopened with joint approval on 2026-10-27. C2 discussion waits for that review.** Declared order, semantic connections, failure abort and the delivered terminal split remain agreed. The multi-junction and recurring-resource criteria are agreed. The [current concrete recommendation](#recommended-extensible-decomposition--pending-joint-decision) has migration and neutral topology counter-proofs; its exact decomposition, source grammar and concrete mechanisms await joint decision. |
+| [Preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal) | **C1 architectural direction consolidated, including its extension review (2026-10-28). C2 is next.** Independent policy flows may select complete declarations without a mandatory Bitcoin-wide root. The three current policies retain their compatible shared route and direct terminal bindings; Taproot fitness has an independent flow using compatible resources. Concrete C2–C6 forms and future admission remain open. |
 | Entry points, results, provisioning, concrete exception design and lower PHP signatures | Earlier executor proposals, also awaiting joint review. References to accepted protocol semantics do not approve the proposed PHP packaging. |
 | Research links and downstream acceptance cases | Linked probes establish only their recorded scope. Acceptance cases are obligations, not passing implementation tests. |
-| [Visual counter-proofs](#visual-counter-proofs-for-joint-review) | Guided comparison of the agreed current scope, the preliminary Taproot policy route and admission gap, independent Bitcoin Cash resource reuse, and test-only Signet parameter variation. Diagrams do not settle the open choices. |
+| [Visual counter-proofs](#visual-counter-proofs-for-joint-review) | Guided comparison of the agreed current scope, the agreed independent-policy-flow relationship and future Taproot admission gap, independent Bitcoin Cash resource reuse, and test-only Signet parameter variation. Diagrams do not settle the open choices. |
 
 For the new material, start with the [choice table](#preliminary-choices-for-joint-discussion),
 then examine the schema, full flow and admission rules. A subsequent joint
@@ -91,7 +91,13 @@ add supported networks, policies or operations.
   adapters, semantic validation rules and admission decisions may still be
   needed and must be qualified. This criterion does not approve the particular
   derived-node-address decomposition or occurrence-path notation explored below.
-  C1's bounded extension review remains active before C2 discussion resumes.
+  **Joint clarification (2026-10-28):** protocol membership does not require a
+  common execution root. A policy with a distinct workflow may have its own
+  complete composition declaration and directly reuse compatible resources,
+  while retaining its protocol/network/policy identity. Taproot is such a
+  policy-flow candidate; Bitcoin Cash remains a distinct protocol candidate.
+  Their independent-flow/reusable-resource principle is the same. C1's bounded
+  extension review is concluded at the architectural level; C2 is next.
 - For the delivered terminals, P2PKH declares payload construction then
   Base58Check encoding; P2SH-P2WPKH declares witness-v0 redeem-script
   construction, script HASH160, P2SH payload construction and Base58Check
@@ -288,7 +294,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 
 | Choice | Initial recommendation and reason | Alternative, cost or unresolved question |
 |---|---|---|
-| C1 — Execution model | **Agreed base retained; extension fitness review reopened by joint approval (2026-10-27).** Distinct candidates own independent declarations and share compatible resources. Declared order, earlier-output connections, complete setup resolution, cycle rejection, immediate failure abort, cohesive capability units and independent audit remain agreed. The delivered three-policy post-HASH160 junction is local. **New agreed criterion:** the mechanism supports multiple semantically justified, scoped policy bindings within one candidate without fixed step names/depth or policy-specific executor code. | Review the [remaining rigidity points](#c1-extension-review--agreed-criterion-and-open-design) before C2. Exact decomposition remains preliminary; C2 owns notation/immutable form, C3 compatibility, C4 component boundaries and C6 assembly/execution/inspection. A future Bitcoin policy may evolve its own candidate's declaration through a reviewed, revalidated revision; immutable loaded assemblies are not mutated. Cross-candidate impersonation remains prohibited. |
+| C1 — Execution model | **Architectural direction agreed; extension review concluded (2026-10-28).** Distinct flows retain their own declarations and share compatible resources at any position. Protocol membership does not impose one execution root. The three delivered policies share their compatible route and directly bind their terminals; the hypothetical Taproot policy has its own complete flow. Declared order, semantic connections, full setup resolution, cycle rejection, failure abort, single-responsibility capabilities and independent audit remain agreed. | C2 is next: choose concise authoring and immutable representation preserving these relationships. C3 owns compatibility, C4 concrete component boundaries, C5 provisioning/extension and C6 assembly/execution/inspection. The [independent-policy-flow direction](#independent-policy-flow-declarations--agreed-c1-direction) supersedes the mandatory shared-root recommendation. Source names, helper grouping and new feature admission are not frozen. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | **Agreed requirement:** deterministic stage contracts with semantically unambiguous inputs, outputs and failures; connections must preserve actual producer lineage and parameter roles, not merely PHP shape or caller-written labels. **Still proposed:** a closed owned-contract catalogue with narrow lineage checks for this slice. | Shape-only validation is insufficient. The bounded contract metadata/checker design, minimum useful internal value types, point-infinity outcome form and runtime boundary checks need PHP feasibility and joint review. A general refinement/type-expression language needs separate justification. |
 | C4 — Composition granularity | **Joint responsibility criterion:** one specific, complete semantic objective per capability; multiple internal actions may serve it, while cohesion does not merge independent responsibilities. Apply the [boundary-decision criteria](#capability-responsibility-and-boundary-decisions). **Joint terminal direction:** P2PKH declares payload construction then Base58Check; P2SH-P2WPKH declares redeem-script construction, script HASH160, P2SH payload construction then Base58Check; P2WPKH binds the derived key hash directly to one SegWit-v0 encoder step with the correct HRP, without a pass-through `program` step. **Still proposed:** keep key admission and exact-path CKDpub cohesive with ordered invariants in their contracts, and declare HASH160, shared address derivation and receiving composition as data. | Automatically exposing each parse or CKDpub instruction would confuse instruction count with semantic responsibility. Moving the entire address flow into one capability would hide the connections we agreed to inspect. The P2WPKH connection still needs semantic-lineage and runtime-shape checks; exact C2 syntax and C3 mechanism remain open. Review the remaining proposed boundaries against actual adapter code before freezing them. |
@@ -439,7 +445,7 @@ Bitcoin post-HASH160 junction.
 ### Preliminary source schema and immutable form — C1/C2/C5
 
 The proposed C2/C5 source form must preserve the agreed C1 constraints and
-address the [reopened extension review](#c1-extension-review--agreed-criterion-and-open-design).
+preserve the [concluded extension-review criteria](#c1-extension-review--concluded-architectural-direction).
 Propose the following **internal** source grammar. `Record` means a PHP list
 of exact `[field, value]` pairs; every listed field is required exactly once,
 including empty lists where applicable. Unknown or duplicate fields fail.
@@ -457,7 +463,7 @@ file loader is part of this proposal; assembly receives data already in memory.
 | Intent target | `step`, `composition`: identifiers. The named step must have an `intent` target, and the selected composition must satisfy its required contract. |
 | Intent binding | `network`, `policy`, `composition`: identifiers; `targets`: list of intent-target records; `parameters`: binding-record list. Exactly one row per admitted network/policy tuple, with no duplicate rows even if identical. Each intent-target step binds exactly once; unknown, duplicate and absent targets fail. |
 
-**Incomplete under the reopened C1 review:** this original local-step grammar
+**C2 representation gap identified by the C1 review:** this original local-step grammar
 does not yet specify how nested binding identity is authored or scoped. The
 probe explores occurrence paths separately. Do not implement the table as a
 complete schema until that C2/C6 question is resolved; do not interpret bare
@@ -574,14 +580,13 @@ Its fixed admission prefix validates definition, path, policy and key-text
 shape in the documented order. Only then does it select the matching binding
 and execute this shared body, whose input is the admitted `request`:
 
-**Scope correction from the C1 extension review:** this is the original flat
-body for the three delivered policies, not a universal Bitcoin route. Its
-unconditional `keyhash` cannot precede P2TR. The [current recommended decomposition](#recommended-extensible-decomposition--pending-joint-decision)
-reorganizes this body and moves HASH160 into the current-policy route. The
-flat table is retained as its comparison baseline, not a competing active
-recommendation; the replacement still needs joint agreement. The same is true
-of the six-row local binding example below. Source tables are not a mandate
-for an executor to recognize these step names or this topology.
+**Scope correction from the C1 extension review:** this body belongs to the
+three delivered policies, not a universal Bitcoin route. Its HASH160 is valid
+for them; an independent P2TR flow must not call or adapt this key-hash flow.
+The [agreed independent-flow direction](#independent-policy-flow-declarations--agreed-c1-direction)
+supersedes the later shared-root candidate. These table names/groupings and
+the six local bindings below remain C2/C4 examples, not reserved executor
+stages or a required topology for other policy declarations.
 
 | Step / target | Named inputs and parameters | Output and required meaning |
 |---|---|---|
@@ -645,7 +650,7 @@ In the preliminary pair-list notation, the shared `encode` step has
 The step ID identifies the existing junction; no separately declared slot or
 default target is involved. These tuples illustrate the agreed relationship,
 not an accepted C2 authoring syntax.
-This local-only target example is incomplete for the reopened nested-binding
+This local-only target example is incomplete for the agreed nested-binding
 fitness requirement. Repeated names such as `encode` in different compositions
 must not collide or capture one another. The source format must identify the
 intended scope; the probe's occurrence paths are one unaccepted notation for
@@ -774,6 +779,7 @@ executor must demonstrate in addition to the existing acceptance list.
 | Bind P2WPKH's program input to an unrelated 20-byte digest or wrong-HRP role, or insert a pass-through `program` execution step | Setup semantic/role or extra-step rejection; the direct connection is restricted to the derived-key HASH160 and selected SegWit HRP. |
 | Duplicate an intent row, bind an incompatible terminal to `encode`, or create a recursive subcomposition | Setup rejection before provider work; no first-row-wins or lazy repair. |
 | Add an unused step that executes another policy or validates the point before version eligibility | Reject extra execution or the broken admission contract. Internal key-admission order also needs mixed-invalid runtime tests; the loader cannot prove adapter code from a label. |
+| Resolve an independent synthetic policy root with compatible shared resources | Validate and execute it through the same setup/execution mechanism without the current key-hash root, a fake key hash, hidden policy dispatch or candidate impersonation. Reject an incompatible root/input before invocation. No public P2TR admission is added. |
 | Fail key admission, depth, a first/middle/final CKDpub edge, hash or encoder | Preserve the documented reason; observe no later stage, other policy/provider/index, or result construction. Instrument inside cohesive capabilities as well as at composition steps. |
 | Fail exact receiving lookup or the generic call | No alternate tuple/key; generic admission never runs after failed lookup, and receiving result construction never runs after failed generic derivation. |
 | Return a plausible but wrong digest/address from a provider | May pass runtime shape checks; independently anchored qualification must expose it. Do not claim static schema validation catches it. |
@@ -815,7 +821,7 @@ provider correctness. If either challenge requires misleading port roles,
 irrelevant definition fields or hidden conditional execution, reopen the agreed
 C1 boundary with that evidence before the M05 freeze.
 
-#### Bitcoin policy divergence counter-proof — pending joint review
+#### Bitcoin policy divergence counter-proof — research evidence
 
 The existing [terminal-junction probe](probe-terminal-junction.php) fixes
 `keyhash` before its only variable `encode` step. It therefore **cannot**
@@ -826,11 +832,12 @@ has already passed the broader fitness challenge.
 
 The runnable [symbolic divergence probe](probe-bitcoin-policy-divergence.php)
 explores a second, earlier Bitcoin policy junction without adding a protocol
-candidate or selecting a C2 source grammar. The [Taproot route diagram](#taproot-policy-route--exploratory)
-shows this shape alongside the current three-policy route.
+candidate or selecting a C2 source grammar. The updated [Taproot policy-flow diagram](#taproot-policy-flow--agreed-direction)
+shows the independent-root direction; the shared-root fixture below remains
+comparison evidence.
 
-The outer selected route has a derived-public-node input and a complete-address
-output. The three current policies reuse one inner key-hash route and still
+In the earlier shared-root fixture, the outer selected route has a
+derived-public-node input and a complete-address output. The three current policies reuse one inner key-hash route and still
 select their terminal directly at its `encode` step; P2TR selects a different
 route before HASH160. Both junctions use explicit intent bindings for the three existing policies.
 The revised P2TR fixture binds only the earlier junction and calls its sole
@@ -867,25 +874,27 @@ it does not prove semantic lineage, validate a complete source schema, execute
 providers, qualify Taproot/Bech32m or settle future admission. No P2TR intent is
 admitted by PIP-0003.
 
-#### C1 extension review — agreed criterion and open design
+#### C1 extension review — concluded architectural direction
 
-**Joint status (2026-10-27):** retain C1's existing agreements and reopen its
-extension review before C2. The new multi-junction requirement is agreed; the
-following concrete review findings do not approve a final PHP representation.
+**Joint status (2026-10-28): architectural extension review concluded; C2 is
+next.** Retain C1's earlier agreements and the multi-junction/recurring-resource
+criteria. The [independent policy-flow clarification](#independent-policy-flow-declarations--agreed-c1-direction)
+supersedes the shared-root candidate below. Concrete representation and
+remaining component boundaries belong to C2–C6, not another C1 approval gate.
 The boundary between a candidate's identity and a particular revision of its
 flow matters: Bitcoin may acquire a reviewed new policy and revised declaration
 without becoming another candidate or mutating an already assembled operation.
 
 | Rigidity found | Disposition and remaining decision |
 |---|---|
-| Flat shared body forces every route through key HASH160 | Localize that requirement to the three delivered policies. The earlier derived-node frontier and inner key-hash route are a candidate decomposition, still requiring joint review. P2TR cannot enter the existing key-hash-address port. |
+| Flat shared body forces every route through key HASH160 | Localize that requirement to the three delivered policies. The earlier shared-root candidate is superseded by independent complete policy-flow declarations. Each references compatible resources directly. P2TR cannot enter the existing key-hash-address port. |
 | Original probe recognizes `address`/`encode` and exactly two route levels | Removed from the current symbolic compiler/executor. A supplied catalogue and scoped bindings determine expansion; step renaming and additional early/late nesting exercise the same code. This does not select the production executor. |
 | Bare target `step = encode` cannot identify every nested occurrence | A binding must identify its intended declaration/occurrence scope without collisions or capture from a parent or sibling. The current probe uses root-relative occurrence paths; the exact C2/C6 identity and authoring form remain open. Readability remains a criterion; verbose exposed paths are not accepted by this probe. |
 | The former C1 wording could prohibit legitimate evolution of Bitcoin's own declaration | Correct the boundary: reviewed declaration revisions and rebuilt immutable assemblies are permitted. Candidate impersonation, live mutation of an admitted assembly, hidden bypasses and arbitrary configuration remain prohibited. |
 | Version-to-single-policy lookup and duplicate-version rejection could become universal structure | These are deliberately narrow initial O02/profile constraints. Preserve them for delivery. Do not claim that the same structure already represents BIP86's overlapping xpub use. A future compatibility/provenance contract and its representation require a separate explicit decision. |
 | Fixed prelude/body and finite semantic validation could mistake today's route for the execution mechanism | Scope the current tables to their admitted policies. Future capabilities, provider bindings, admission rules and semantic catalogue checks must be explicitly extended and qualified. The execution mechanism must not acquire coin/policy switches or fabricate inputs to retain an obsolete topology. Exact admission/body placement, contracts and component boundaries remain under C3/C4/C6 review. |
 
-Reopening this review removes no earlier agreement about independent candidates,
+The extension review preserves earlier agreements about independent candidates,
 compatible resource sharing, direct local binding, ordered execution, setup cycle
 rejection, deterministic complete outcomes, owned failures or audit support.
 The slot comparison remains valid at its original local junction; multiple
@@ -898,7 +907,7 @@ bounded observations on PHP 8.3 and 8.4:
 |---|---|
 | Extend six current-policy/network plans with two P2TR plans | Existing six plans remain byte-for-byte equal as PHP data; the same compiler handles all eight. **The baseline already uses the exploratory derived-node frontier.** This is not proof that the old flat declaration can accept P2TR unchanged. |
 | Reorganize the reconstructed old flat declaration | All six plans retain the same normalized producer/input/parameter/output graph and final deterministic token results. This compares coarse symbolic boundaries, not the actual PHP APIs or terminal internals. |
-| Independent roots reuse resources before and after divergent work | Four three-candidate plans select their own middle resource and later reuse the same compatible resource; a fifth unrelated root uses only that latter resource with another operation contract. Twenty injected throws abort at exact prefixes; two incompatible reuse fixtures fail setup. No Bitcoin-shaped root is required. |
+| Independent roots reuse resources before and after divergent work | Four three-candidate plans select their own middle resource and later reuse the same compatible resource; a fifth plan with an unrelated root uses only that latter resource with another operation contract. Twenty injected throws abort at exact prefixes; two incompatible reuse fixtures fail setup. No Bitcoin-shaped root is required. |
 | Rename every local step, source reference and binding occurrence | The selected capability sequences remain equal, including nested `encode` names. No executable stage is identified by a reserved step name. |
 | Add synthetic selection layers before the root and after terminal completion | The same compiler resolves selections at the beginning, middle and end, without adding executable no-op stages. These neutral layers are stress fixtures, not recommended production wrappers. |
 | Reuse one declaration at two sibling occurrences with different bindings | Both completed outputs retain distinct producer origins; each occurrence resolves its own target. Omitting one binding cannot borrow its sibling's target. This is a neutral scope fixture, not execution of multiple Bitcoin policies in one request. |
@@ -911,22 +920,83 @@ Run from the repository root:
 php docs/pips/PIP-0003/M05/probe-bitcoin-policy-divergence.php
 ```
 
-**Next joint discussion:** review the [concrete recommendation below](#recommended-extensible-decomposition--pending-joint-decision),
-starting with the root and route tables. The user authorized maturing and
-counter-proving this proposal; that authorization is not adoption of its exact
-boundaries or source notation. C2 waits for the bounded C1 extension decision.
-Future P2TR admission remains separate; current O02 is unchanged.
+**Next joint discussion:** C2 authoring and immutable representation, applying
+the [agreed independent-flow direction](#independent-policy-flow-declarations--agreed-c1-direction).
+The earlier shared-root fixture remains comparison evidence; its topology is
+not required. Current O02 is unchanged and future P2TR admission remains open.
 
-#### Recommended extensible decomposition — pending joint decision
+#### Independent policy-flow declarations — agreed C1 direction
 
-**Status (2026-10-27): current executor recommendation for joint review.** The
-user agrees that future policies must fit without repairing a Bitcoin-specific
-execution mechanism, and that independent flows may reuse compatible resources
-at the beginning, middle or end, including after divergent work. This section
-makes the proposed solution concrete. Its decomposition is not yet jointly
-adopted, and it does not add Taproot to PIP-0003 delivery.
+**Architectural agreement (2026-10-28):** a protocol's identity and a flow's
+composition boundary are separate concerns. Taproot may have a complete
+policy-flow declaration of its own, using compatible resources without entering
+or adapting the key-hash policies' root. It remains explicitly Bitcoin/P2TR;
+Bitcoin Cash retains its Bitcoin Cash context and independent protocol flow.
+“Candidate” in composition fitness does not have to mean a new protocol or coin.
+No common Bitcoin execution root is required merely because policies belong
+to Bitcoin. This resolves C1's remaining extension question; it does not select
+the concrete C2 syntax or approve future Taproot support.
 
-**Recommended Bitcoin body.** Keep one Bitcoin operation root. Move the
+The admitted intent selects a complete registered flow. Compatible policies
+may map to the same declaration with explicit parameter/terminal bindings;
+a distinct policy route may map to another declaration. No executor-specific
+policy branch, fake key hash, declaration mutation or extra outer wrapper is
+needed. Both references and all admitted plans are resolved at setup; runtime
+uses the selected plan only after required request admission. Composition-root
+selection does not move, omit or reorder that admission.
+
+| Intent family | Complete composition selected | Compatible resources and remaining variation |
+|---|---|---|
+| Bitcoin mainnet/testnet, P2PKH / P2SH-P2WPKH / P2WPKH | Current key-hash public-address flow | Compatible admission/public derivation resources, HASH160, then the directly bound terminal and result construction |
+| Hypothetical Bitcoin mainnet/testnet, P2TR key-path | Independent Taproot public-address flow | Compatible admission/public derivation resources where qualified, its output-key construction, fixed witness-v1/32 Bech32m encoder and result construction; no key-hash flow reference |
+| Bitcoin Cash fitness | Independent Bitcoin Cash flow | References compatible resources directly; never enters either Bitcoin policy flow. No CashAddr qualification is claimed here. |
+
+These rows explain the agreed relationships, not final PHP identifiers or a
+requirement to make one declaration per policy. The three existing policies
+continue sharing their compatible route. New flows can diverge and reuse
+resources again at any position; they need not satisfy the old flow's topology.
+A common operation entry contract does not imply a common executable root.
+Network/profile definitions remain separate from flow declarations: equal
+network identity neither forces a flow nor licenses incompatible resources.
+
+**Concrete symbolic counter-proof.** The revised
+[probe](probe-bitcoin-policy-divergence.php) adds two independent policy roots
+and deletes the former Bitcoin-wide root plus both selected inner routes from
+that fixture's catalogue. Both new roots reference one shared public-derivation
+composition; each owns its remaining ordered connections. That resource is a
+composition of admission, depth and derivation capabilities, not one capability
+combining those responsibilities. This particular grouping is illustrative and
+still subject to C4's recorded boundary criteria; compatible resource reuse is
+the architectural agreement.
+
+The same compiler assembles all eight network/policy plans. Their normalized
+producer/input/parameter/output graphs and deterministic token results equal
+the previous eight plans; consequently the initial six are preserved as well.
+Forty-eight additional injected throws abort at exact prefixes. Binding P2TR to
+the key-hash root or supplying an untweaked derived node to its output-key
+encoder fails setup (two rejected fixtures). No change to compiler/executor
+logic was needed. The [policy-flow diagram](#taproot-policy-flow--agreed-direction) now shows
+independent roots and compatible resource reuse. The earlier shared-root
+candidate below remains explicitly superseded comparison material.
+
+The evidence is symbolic, not proof of actual admission, semantic lineage,
+cryptography, provider behavior or O06 precedence. All fixture admission of
+P2TR remains hypothetical: current O02 rejects it. Future admission/provenance
+requires its own reviewed decision. The exact source representation is C2,
+compatibility checking C3, remaining capability/composition boundaries C4,
+provisioning/extension C5 and execution/audit mechanism C6. None is silently
+approved by C1's architectural closure.
+
+#### Earlier shared-root decomposition — superseded
+
+**Superseded on 2026-10-28:** the following was the executor's shared-root
+candidate, not the agreed requirement. Retain it to explain the earlier probes
+and comparison. The [current direction](#independent-policy-flow-declarations--agreed-c1-direction)
+permits an independent complete Taproot flow and does not require a Bitcoin-wide
+root or an outer derived-node-address junction. Neither fixture adds Taproot
+to PIP-0003 delivery.
+
+**Earlier proposed Bitcoin body (superseded).** Keep one Bitcoin operation root. Move the
 three-policy HASH160 requirement into a selected address-route declaration.
 The root's admitted-body connections become:
 
@@ -1034,12 +1104,10 @@ New features can require new domain code and qualification. These fixtures
 support a compositional direction, not a guarantee that one current abstraction
 will fit every unknown protocol unchanged.
 
-**Focused next decision:** adopt or revise the proposed Bitcoin root and its
-derived-node-to-address boundary, retaining the existing inner terminal binding
-and a direct fixed Taproot encoder in the hypothetical route. The agreed
-recurring-resource requirement stands independently of that choice. C2 source
-syntax, C3 lineage, remaining C4 units, C5 provisioning and C6 execution remain
-separate decisions; this section does not silently close them.
+**Disposition:** a mandatory shared Bitcoin root was not adopted. The
+independent-flow direction above is agreed at C1 level. This earlier grouping
+and its names do not bind C2/C4, and future P2TR admission remains unapproved.
+The next discussion is C2; C3–C6 retain their explicit unresolved choices.
 
 #### Visual counter-proofs for joint review
 
@@ -1061,7 +1129,7 @@ or partial results. These views do not select an arbitrary workflow engine.
 | View | Question and status | Editable source | Detailed SVG | PNG |
 |---|---|---|---|---|
 | 1. Current Bitcoin policies | What did C1 agree for the three delivered policies? Architectural direction, not a working public API. | [MMD](diagrams/bitcoin-current-policy-flow.mmd) | [SVG](diagrams/bitcoin-current-policy-flow.svg) | [PNG](diagrams/bitcoin-current-policy-flow.png) |
-| 2. Taproot policy route | Can one Bitcoin candidate express an earlier policy divergence? Exploratory shape from the symbolic probe; pending joint review. | [MMD](diagrams/taproot-policy-divergence.mmd) | [SVG](diagrams/taproot-policy-divergence.svg) | [PNG](diagrams/taproot-policy-divergence.png) |
+| 2. Taproot policy route | Can Bitcoin policies select independent complete flows while directly reusing compatible resources? Agreed C1 relationship; concrete grouping and P2TR admission remain preliminary. | [MMD](diagrams/taproot-policy-divergence.mmd) | [SVG](diagrams/taproot-policy-divergence.svg) | [PNG](diagrams/taproot-policy-divergence.png) |
 | 3. Taproot admission | Why does a correct route not establish a compatible whole operation? Current O02 rejects P2TR; the future contract remains open. | [MMD](diagrams/taproot-admission-counterexample.mmd) | [SVG](diagrams/taproot-admission-counterexample.svg) | [PNG](diagrams/taproot-admission-counterexample.png) |
 | 4. Independent candidates | Can Bitcoin Cash reuse resources without running through Bitcoin's declaration? Conceptual fitness, not CashAddr qualification. | [MMD](diagrams/independent-candidate-resource-reuse.mmd) | [SVG](diagrams/independent-candidate-resource-reuse.svg) | [PNG](diagrams/independent-candidate-resource-reuse.png) |
 | 5. Parameter variation | Can testnet and a test-only Signet profile reuse one declaration while retaining their identifiers? Existing M02/M04 counter-proof scope; no public Signet admission. | [MMD](diagrams/parameter-variation-fitness.mmd) | [SVG](diagrams/parameter-variation-fitness.svg) | [PNG](diagrams/parameter-variation-fitness.png) |
@@ -1076,26 +1144,24 @@ The three terminal boxes summarize the accepted C4 split; the P2WPKH connection
 does not introduce a pass-through program-construction step. The fixed shared
 HASH160 is appropriate for these three policies and cannot be presumed universal.
 
-##### Taproot policy route — exploratory
+##### Taproot policy flow — agreed direction
 
-![Exploratory Bitcoin policy route with an earlier Taproot divergence before HASH160 and the existing inner policy junction](diagrams/taproot-policy-divergence.png)
+![Independent Bitcoin policy-flow declarations reuse compatible public-derivation resources and retain their own address construction](diagrams/taproot-policy-divergence.png)
 
-This explains the [new symbolic probe](probe-bitcoin-policy-divergence.php),
-including its hypothetical compatible admission. Taproot remains a Bitcoin
-policy in this fitness case; it is not a separate candidate like Bitcoin Cash.
-The [recommended earlier-route decomposition](#recommended-extensible-decomposition--pending-joint-decision)
-is pending joint decision; the general multi-junction requirement is agreed.
-The P2TR fixture directly invokes its sole encoder; it introduces no inner
-selectable terminal just for symmetry. It challenges whether the
-eventual mechanism can support another justified junction without policy-specific
-executor code or fabricated key-hash data. The shared address outcome does not
-make the distinct terminal input contracts interchangeable.
+The [independent-root fixture](#independent-policy-flow-declarations--agreed-c1-direction)
+implements this symbolic shape. Each intent selects a complete flow; Taproot
+has its own declaration and does not execute or modify the current key-hash
+flow. Repeated public-derivation and result resource names denote separate
+invocations with each flow's own context. The diagram's independent-flow
+relationship is agreed; specific resource grouping, C2 syntax and future P2TR
+admission are not. The hypothetical P2TR encoder receives its output key,
+never a fabricated key hash. This is not a production Taproot implementation.
 
 ##### Taproot admission — current rejection and open future contract
 
 ![BIP86 xpub example versus the current strict O02 admission rule, with a separately reviewed future compatibility contract](diagrams/taproot-admission-counterexample.png)
 
-The evidence and rule are those [discussed above](#bitcoin-policy-divergence-counter-proof--pending-joint-review).
+The evidence and rule are those [discussed above](#bitcoin-policy-divergence-counter-proof--research-evidence).
 Current P2TR requests are rejected during request admission; this drawing does
 not propose moving that rejection later or inferring policy from a version.
 It distinguishes a deliberate future compatibility decision from a composition
@@ -1140,8 +1206,10 @@ they do not model the internals of Bitcoin Cash or another delivered protocol.
 <details>
 <summary>Diagram rendering and reproducible artifacts</summary>
 
-All six adjacent MMD/SVG/PNG sets were generated from the same source revisions
-on 2026-10-27 using the available local `mermaid` MCP tool
+Each adjacent MMD/SVG/PNG set is synchronized to its source revision. Five
+sets retain their 2026-10-27 exports; `taproot-policy-divergence` was revised
+and rerendered on 2026-10-28 for independent policy flows using the same local
+`mermaid` MCP tool
 `generate_mermaid_diagram`, `theme: default`, `backgroundColor: white` and
 `outputType: svg`. The configured server image is pinned at
 `sha256:8f1217b11502db25c34b05633bf9e338764f99724536ef5e3e49541a73e853c1`;
@@ -1161,7 +1229,7 @@ dependencies. Rendering success does not establish protocol correctness.
 | Diagram basename | PNG dimensions | Fresh raster to optimized PNG |
 |---|---|---|
 | `bitcoin-current-policy-flow` | 1280 × 2031 | 250.7 → 75.0 KiB |
-| `taproot-policy-divergence` | 1280 × 1954 | 225.0 → 66.9 KiB |
+| `taproot-policy-divergence` | 1280 × 1399 | 216.8 → 63.8 KiB |
 | `taproot-admission-counterexample` | 1280 × 1414 | 247.4 → 74.9 KiB |
 | `independent-candidate-resource-reuse` | 1280 × 696 | 126.2 → 39.2 KiB |
 | `parameter-variation-fitness` | 1280 × 1800 | 277.7 → 85.8 KiB |
@@ -1182,8 +1250,7 @@ diagrams describe their original draft and were not modified by this increment.
 
 </details>
 
-Before joint freeze, complete the reopened C1 extension review, then resolve
-the remaining C2–C6 choices against the agreed C1
+Before joint freeze, resolve the remaining C2–C6 choices against the agreed C1
 constraints and actual PHP interfaces, including
 the prelude/body selection boundary, terminal parameter exposure, unexpected
 owned-code failure classification and how
@@ -1304,7 +1371,7 @@ fields/version entries remain equivalent. Neither configuration order nor
 matching HRP/address bytes establishes profile identity.
 The unique-version restriction here belongs to the exact initial O02 profiles;
 it must not be presented as a universal version-to-policy cardinality. The
-[Taproot admission counterexample](#c1-extension-review--agreed-criterion-and-open-design)
+[Taproot admission counterexample](#c1-extension-review--concluded-architectural-direction)
 requires an explicit future compatibility decision before this representation
 could be broadened. This proposal does not admit overlapping relations now.
 
@@ -1551,9 +1618,9 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
   Tests must verify exactly one tuple and `[0, index]`, with no fallback.
 
 The [preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal)
-makes concrete choices available for joint discussion; C1's agreed base is
-retained and its extension review is reopened before C2, while the concrete
-C2–C6 choices remain unaccepted.
+makes concrete choices available for joint discussion. C1's architectural
+extension review is concluded with independent policy flows and reusable
+resources; C2 is next. Concrete C2–C6 choices remain unaccepted.
 No production schema validator or executor has been implemented or qualified by this
 document. M06 applies the assigned cases to
 the first complete branch; M07 extends them to all policies and receiving.

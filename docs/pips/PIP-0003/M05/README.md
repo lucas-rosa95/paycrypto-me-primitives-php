@@ -111,34 +111,34 @@ The [exploratory reuse fitness challenges](PHP-CONTRACTS.md#exploratory-reuse-fi
 use synthetic Bitcoin Cash CashAddr and Taproot key-path cases to test these
 boundaries before M05 freeze. They add no admitted intent, implementation or
 protocol-qualification evidence.
-The [Bitcoin policy divergence counter-proof](PHP-CONTRACTS.md#bitcoin-policy-divergence-counter-proof--pending-joint-review)
-now tests an earlier P2TR branch beside the three delivered policies' shared
-key-hash route. Its symbolic probe exercises selection, abort and invalid
-bindings, but does not implement the proposed executor. It also exposes a
-separate admission conflict: BIP86 uses `xpub` examples, while the accepted
-initial O02 mapping admits `xpub` only for P2PKH. The user has approved the
-multi-junction criterion and reopened C1 extension
-review before C2. The [rigidity review and stronger symbolic probe](PHP-CONTRACTS.md#c1-extension-review--agreed-criterion-and-open-design)
-retain six baseline plans in an eight-intent extension, accept renamed steps
-and synthetic early/middle/late selections, reject fifteen invalid fixtures
-and stop at forty-eight exact injected-failure prefixes on PHP 8.3/8.4. This
-baseline already uses the earlier frontier. The [current concrete recommendation](PHP-CONTRACTS.md#recommended-extensible-decomposition--pending-joint-decision)
-now reconstructs the old flat fixture: all six normalized connection graphs
-and deterministic token results survive the reorganization. Five additional
-neutral plans across four independent roots exercise recurring resource reuse,
-including after divergence, without imposing a Bitcoin-shaped root. Twenty
-additional exact-prefix aborts and two incompatible reuse rejections pass.
-The P2TR fixture calls its sole encoder directly, without an unnecessary inner
-selection. This is coarse symbolic composition evidence, not real admission,
-lineage or protocol qualification. The user agrees with the recurring-resource
-requirement; the concrete decomposition and future admission/provenance
-contract remain open for joint decision before C2.
+The [Bitcoin policy divergence counter-proof](PHP-CONTRACTS.md#bitcoin-policy-divergence-counter-proof--research-evidence)
+first challenged a universal post-HASH160 junction, then compared an earlier
+shared-root candidate. The [current independent-policy-flow direction](PHP-CONTRACTS.md#independent-policy-flow-declarations--agreed-c1-direction)
+supersedes that mandatory root: the hypothetical Taproot policy selects its
+own complete flow and directly reuses compatible resources without executing
+the three key-hash policies' declaration. Protocol identity does not dictate
+flow topology. This is the jointly agreed architectural direction, concluding
+the bounded C1 extension review on 2026-10-28; C2 is next. Concrete grouping,
+notation, compatibility checks and C3–C6 mechanisms remain open.
+
+The revised symbolic probe deletes the previous common root and selected inner
+routes from the independent-flow fixture. The same compiler produces eight
+plans with unchanged normalized connection graphs and deterministic token
+results. Forty-eight injected throws abort at exact prefixes; two invalid
+root/input fixtures fail setup. Earlier six-plan migration, renamed steps,
+nested scopes, fifteen invalid fixtures and forty-eight abort checks remain
+comparison evidence. Five neutral plans across four roots additionally test
+resource reuse after divergence, with twenty aborts and two incompatible reuse
+rejections. These are symbolic/dataflow observations, not real admission,
+lineage or protocol qualification. Current O02 rejects P2TR; future
+admission/provenance needs a separate reviewed decision.
+
 The [visual counter-proofs](PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review)
-provide six synchronized Mermaid/SVG/PNG views of current Bitcoin policy flow,
-preliminary Taproot divergence, the admission conflict, independent Bitcoin Cash
-resource reuse, test-only Signet parameter variation and neutral resource reuse
-after divergent work. They distinguish agreed
-direction, open proposals and research limits without selecting new contracts.
+provide six synchronized Mermaid/SVG/PNG views. The updated policy-flow view
+shows the agreed independent-root relationship; specific component grouping
+and future P2TR admission remain preliminary. Other views retain current
+three-policy scope, the O02 admission conflict, independent Bitcoin Cash
+resource reuse, Signet parameter variation and neutral recurring resources.
 The [terminal-junction comparison](PHP-CONTRACTS.md#synthetic-terminal-junction-comparison--c1-decision-evidence)
 now applies one runnable symbolic probe to the named-slot and direct-step
 binding candidates. Both pass the same six-intent, rejection and abort cases;
@@ -337,7 +337,7 @@ review them and assign their affected acceptance cases before the M06 handoff:
 | Public request/result | Freeze concrete signatures and immutable representations for serialized key, nonempty integer path, validated network and explicit policy; return address plus exact network/policy/path context. Keep generic derivation distinct from receiving account/index. |
 | Integer ingress | Reject booleans, numeric strings and integral floats **before coercion**. PHP parameter types plus callee `strict_types` do not suffice when the caller is weakly typed. Use explicit original-value validation at the admission boundary; later callers consume admitted semantic values. Test both caller modes. |
 | Definitions | Choose a concrete immutable schema and construction boundary that cannot bypass validation, rejects unknown/duplicate data and preserves order-independent equivalence. Test-only Signet data variation must not become public network support. `testnet` describes encoding parameters and does not authenticate testnet3/testnet4/Signet chain identity. |
-| Composition and execution | Preserve C1's agreed base and direct local binding while completing its reopened multi-junction extension review before C2. Review the concrete derived-node-to-address recommendation, flat-to-nested migration and recurring-resource counter-proofs, plus scoped nested target identity; review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
+| Composition and execution | C1 architectural direction is consolidated, including independent complete policy flows and compatible resource reuse without a mandatory Bitcoin root. C2 is next: settle authoring/immutable representation and scoped nested target identity. Review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
 | Receiving source | Freeze duplicate-safe provisioning, validation timing and missing/malformed/incompatible mapping failures. Select exactly by network/policy/account; provisioning binds ancestry, which serialized metadata cannot prove. Invoke generic `[0, index]` without advancement or fallback; return logical account/branch/index. |
 | Lower capabilities | Name only boundaries with real protocol responsibility and replacement evidence. Preserve zero-tweak identity, distinguish confirmed infinity from provider malfunction, and define the meaning of every nullable/boolean/outcome return. No vendor objects or generic buffer/crypto framework in public contracts. |
 | Failures and precedence | Choose owned exception classes/categories, safe messages and previous-chain rules; preserve corrected M02 validation stages and exact-index failure without partial success. Verify absent facilities, wrong provider types/widths and thrown faults through the eventual public operation. Do not expose raw vendor messages or exception chains. |
