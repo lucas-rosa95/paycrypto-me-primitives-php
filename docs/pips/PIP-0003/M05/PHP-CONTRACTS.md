@@ -503,13 +503,46 @@ performance limits remain. No prior duplicate-rejection requirement is waived.
 php docs/pips/PIP-0003/M05/probe-named-references.php
 ```
 
-**Next joint discussion:** compare the first HASH160 declaration in both new
-fixtures, then choose which authoring boundary to investigate further: data-only
-fixed records with schema validation, or typed construction with named fields.
-Discuss fixed-field duplicate observability and scalar preservation explicitly
-before selecting either. Contract-derived signatures, collection omission,
-scoped-binding notation and final admitted representation remain open. C3–C6
-dependencies are exposed, not settled here.
+#### C2 joint checkpoint — two authoring finalists
+
+**Agreed investigation direction; final representation remains open.** The
+human–agent pair retains [associative records](authoring-lab/associative.php)
+and [named typed references](authoring-lab/named-records.php) as the two active
+finalists. The original [records fixture](authoring-lab/records.php) leaves the
+competition by consensus: its positional references require memorizing field
+roles while retaining object construction. Earlier fixtures remain historical
+comparison evidence, not additional active finalists.
+
+Both finalists require admission and connection resolution. Constructing a
+`Flow`, `Call` or `Link` does not execute a capability or prove the composition
+valid. A static factory may change authoring syntax but does not, by itself,
+change those guarantees. No winner, production syntax, dual public API or pair
+of execution engines is approved. Both may converge on one admitted internal
+representation; its concrete design remains open.
+
+The engine should carry mechanical processing and validation so authors can
+express purpose and connections clearly. This does not permit hiding invariants
+or discarding information needed for validation. Duplicate rejection concerns
+conflicting identities within one scope and fields/bindings required to be
+unique, not reuse of a resource. A sequence such as
+`AlgA → hashA → encodeA → algB → hashB → encodeA` is permitted when each
+occurrence has its own identity and compatible connections. Repeated resource
+use is neither deduplicated nor, by itself, a cycle. Fixed-field overwrites
+before admission remain a separate unresolved source-boundary concern.
+
+**Next joint work:** develop both finalists against the same four questions:
+
+1. Declaration content: information supplied by the author versus resolved from contracts.
+2. References: inputs, parameters, outputs, projections and nested occurrences.
+3. Admission: observable errors, detection stage and declaration location.
+4. Admitted representation: guarantees after validation and resolution.
+
+Keep equivalent examples in both forms. Add probes for concrete uncertainties
+or differing restrictions, rather than multiplying syntax variants without a
+question to answer. The existing structural evidence does not settle semantic
+qualification or performance. Contract-derived signatures, collection omission,
+source ownership and final immutable layout remain open; C3–C6 dependencies
+are exposed without being settled here.
 
 ### Preliminary complete composition and intent bindings — C3/C4
 

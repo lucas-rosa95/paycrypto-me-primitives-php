@@ -54,9 +54,11 @@ compares pair lists, fixed source records and a restricted builder, with a
 separate occurrence-scoping comparison. A second round compares associative
 records and named typed references: 73 baseline plus 49 additional controls pass
 on PHP 8.3.36/8.4.27. These are structural experiments, not semantic or production
-qualification. Next, compare the two named-reference forms and their authoring
-boundaries jointly, including duplicate observability and scalar preservation.
-No candidate is selected.
+qualification. The [joint checkpoint](PHP-CONTRACTS.md#c2-joint-checkpoint--two-authoring-finalists)
+retains associative and named typed references as two finalists; the original
+positional records leave the competition. Next, develop both against declaration
+content, references, admission and admitted-representation guarantees. No winner
+or obligation to deliver two public APIs is selected.
 
 The [fitness evidence](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 records direct-binding selection, independent complete policy roots, migration,
