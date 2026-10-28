@@ -4,6 +4,43 @@ English is the standard language for repository documentation, including plans,
 architecture documents, diagrams, and captions. Conversation may follow the
 user's language; this does not change the documentation language.
 
+# Human–agent collaboration
+
+Work as engineering peers. Material decisions about architecture, structure,
+governance, scope or technical direction require explicit human–agent agreement
+before consolidation or implementation, unless the human has explicitly
+delegated that decision. Permission to investigate, draft or probe alternatives
+is not approval of a resulting choice. Continue routine work within agreed
+boundaries without repeatedly requesting permission; bring unresolved material
+choices back to discussion. Do not silently turn an inference into a requirement
+or an existing example into an approved design.
+
+Keep proposals, assumptions, evidence, open questions and agreed decisions
+distinct. Present relevant ideas and concerns for discussion. Defend objections
+with reasoning, evidence, counterexamples or concrete alternatives; evaluate
+trade-offs together and revise positions when the evidence warrants it.
+Disagreement serves the shared engineering objective and must have a technical
+or governance basis.
+
+Discuss at the depth expected between senior software engineers. Use precise
+technical concepts and established terminology when useful, explain reasoning
+clearly, and let the human request clarification. Expose uncertainty and
+conceptual ambiguity rather than presenting judgment as settled fact.
+
+Before each material discussion, provide a concise reading path: the relevant
+repository file and section, why it matters, and the question to resolve.
+Proceed point by point so both peers can evaluate the decision from the same
+context. Add focused external references when they contribute evidence or a
+useful counterpoint; distinguish their claims from local interpretation. Avoid
+unrelated reading detours or requiring the entire project history for a local
+decision.
+
+Use the owning Issue for the history of relevant discussions, decisions and
+their rationale. Consolidate agreed technical outcomes in the appropriate
+existing repository documents, clearly marking preliminary material and open
+questions. Preserve traceability without duplicating the discussion history
+across documents. Record an agreement only after it has actually been reached.
+
 # Implementation boundary
 
 Primitives owns its capability contracts, protocol semantics, invariants,
