@@ -1,9 +1,11 @@
 # M05 — Provider, runtime and concrete contract selection
 
-Work: [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41),
-under the approved PIP-0003 and PIP00010 boundaries in the
-[Execution Plan](../EXECUTION-PLAN.md). Execution PR:
-[PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44).
+C1 foundation: [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41)
+and [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44),
+merged at [`ee542e9`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/ee542e905b1b83f662356091bb2b4e59254186f5).
+Current C2 work: [Issue #45](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/45),
+which links its separate work branch and PR. The approved PIP-0003/PIP00010
+boundaries and wider M05 obligations remain in the [Execution Plan](../EXECUTION-PLAN.md).
 
 Status reconciled, 2026-10-28 (provider assessment dated 2026-10-22): **executor assessment in progress; no joint selection or
 contract freeze**. This record owns the current candidate comparison and its
@@ -41,8 +43,9 @@ no runtime fallback or backend autodetection.
 
 The [consolidated contract record](PHP-CONTRACTS.md#reading-and-decision-status)
 owns architectural agreements, open C2–C6 choices, concrete PHP proposals,
-fitness evidence and visual explanations. **C1 is architecturally agreed; C2
-is next.** Independent policy flows may reuse compatible resources directly;
+fitness evidence and visual explanations. **C1 is agreed and merged; C2 is the
+current separate discussion, with its choices still open.** Independent policy
+flows may reuse compatible resources directly;
 there is no mandatory Bitcoin-wide execution root. Source syntax, semantic
 checking, remaining capability boundaries and execution mechanism remain open.
 
@@ -245,7 +248,7 @@ review them and assign their affected acceptance cases before the M06 handoff:
 | Public request/result | Freeze concrete signatures and immutable representations for serialized key, nonempty integer path, validated network and explicit policy; return address plus exact network/policy/path context. Keep generic derivation distinct from receiving account/index. |
 | Integer ingress | Reject booleans, numeric strings and integral floats **before coercion**. PHP parameter types plus callee `strict_types` do not suffice when the caller is weakly typed. Use explicit original-value validation at the admission boundary; later callers consume admitted semantic values. Test both caller modes. |
 | Definitions | Choose a concrete immutable schema and construction boundary that cannot bypass validation, rejects unknown/duplicate data and preserves order-independent equivalence. Test-only Signet data variation must not become public network support. `testnet` describes encoding parameters and does not authenticate testnet3/testnet4/Signet chain identity. |
-| Composition and execution | C1 architectural direction is consolidated, including independent complete policy flows and compatible resource reuse without a mandatory Bitcoin root. C2 is next: settle authoring/immutable representation and scoped nested target identity. Review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
+| Composition and execution | C1 architectural direction is consolidated, including independent complete policy flows and compatible resource reuse without a mandatory Bitcoin root. C2 is the current separate discussion: settle authoring/immutable representation and scoped nested target identity. Review the remaining C2–C6 choices: pair-list source, role/lineage validation, other component boundaries, operation prelude/body boundary, terminal parameter exposure, explicit provider assembly and executor mechanism. Resolve representation feasibility and unexpected owned-code failure handling before M05 freeze; no production validator or executor has been qualified. |
 | Receiving source | Freeze duplicate-safe provisioning, validation timing and missing/malformed/incompatible mapping failures. Select exactly by network/policy/account; provisioning binds ancestry, which serialized metadata cannot prove. Invoke generic `[0, index]` without advancement or fallback; return logical account/branch/index. |
 | Lower capabilities | Name only boundaries with real protocol responsibility and replacement evidence. Preserve zero-tweak identity, distinguish confirmed infinity from provider malfunction, and define the meaning of every nullable/boolean/outcome return. No vendor objects or generic buffer/crypto framework in public contracts. |
 | Failures and precedence | Choose owned exception classes/categories, safe messages and previous-chain rules; preserve corrected M02 validation stages and exact-index failure without partial success. Verify absent facilities, wrong provider types/widths and thrown faults through the eventual public operation. Do not expose raw vendor messages or exception chains. |

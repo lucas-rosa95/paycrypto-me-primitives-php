@@ -1,9 +1,13 @@
 # M05 — Composition decisions and PHP contract proposals
 
-Current record, 2026-10-28. Work: [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41),
-[PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44).
-**C1 is architecturally agreed; C2 is next. M05 contracts are not frozen and no
-production schema validator, executor or public address capability is qualified.**
+Current record, 2026-10-28. C1: [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41)
+and [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44),
+merged at [`ee542e9`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/ee542e905b1b83f662356091bb2b4e59254186f5).
+Current C2 coordination: [Issue #45](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/45),
+with its own work branch and PR linked there.
+**C1 is agreed and merged; C2 is the current discussion, still undecided.
+M05 contracts are not frozen and no production schema validator, executor
+or public address capability is qualified.**
 
 This document owns composition agreements, concrete PHP proposals and their
 acceptance obligations. The [M05 assessment](README.md) owns provider/runtime
@@ -19,7 +23,7 @@ codec is implemented by this proposal.
 | Material | Authority and next action |
 |---|---|
 | [Agreed composition direction](#agreed-composition-direction) and current policy relationships | Joint C1 architecture, including independent complete policy flows, direct local bindings, resource scope, responsibility and audit criteria. |
-| [Choice table](#preliminary-choices-for-joint-discussion) | C2 is the next discussion: readable authoring, duplicate detection, scoped references and immutable representation. C3–C6 retain their stated open choices. |
+| [Choice table](#preliminary-choices-for-joint-discussion) | C2 is the current separately tracked discussion: readable authoring, duplicate detection, scoped references and immutable representation. C3–C6 retain their stated open choices. |
 | [Source example](#preliminary-source-schema-and-immutable-form--c2c5), PHP signatures, provisioning and failure representation | Executor proposals for joint review. Examples and names are not accepted APIs or instructions to implement unchanged. |
 | [Fitness evidence](#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery) | Bounded symbolic checks and contract analysis. They support C1's direction; they do not qualify actual future Taproot/CashAddr admission, providers or execution. |
 | [Downstream acceptance](#contract-review-and-downstream-acceptance) | Requirements for M06/M07 implementation and later assembled verification, not passed production tests. |
@@ -28,6 +32,13 @@ To continue, read the C2 row and its source example. The discussion must choose
 an authoring form that preserves agreed semantics without unnecessary verbosity.
 Document accepted, revised or deferred choices explicitly. A documentation merge,
 a probe passing or permission to draft does not approve an open design choice.
+
+Each step has its own Issue, work branch and PR. Investigate adjacent-stage
+dependencies when needed for C2, but record future-stage findings in their
+appropriate existing sections without silently deciding them. Proposed changes
+to an earlier agreement return to joint discussion with the human pair and the
+agent responsible for that stage. Opening C2 changes coordination only, not any
+source grammar, semantic checker, capability boundary or execution mechanism.
 
 ## Agreed composition direction
 
@@ -276,7 +287,7 @@ source schema, public API or implementation handoff.
 | Choice | Status and proposed direction | Decision still required |
 |---|---|---|
 | C1 — Execution model | **Agreed.** Independent data-declared flows, compatible resources, direct local binding, ordered semantic connections, setup cycle rejection, complete outcomes, failure abort and audit support. | None exclusively in C1. Future contradictions must reopen the affected decision with evidence. |
-| C2 — Authoring and representation | **Next.** Duplicate-observable PHP pair lists are one candidate; typed builders or another concise form remain alternatives. | Human readability, duplicate/unknown-field detection, scoped nested occurrence identity and private immutable resolved records. |
+| C2 — Authoring and representation | **Current discussion; undecided.** Duplicate-observable PHP pair lists are one candidate; typed builders or another concise form remain alternatives. | Human readability, duplicate/unknown-field detection, scoped nested occurrence identity and private immutable resolved records. |
 | C3 — Semantic compatibility | Required semantic contracts, lineage and parameter roles are agreed; a bounded owned catalogue/checker is proposed. | Minimum useful value types, relation-checking mechanism, whole definition versus narrow parameter bundles, and explicit versus nullable infinity outcome. No blanket nullable ban. |
 | C4 — Composition granularity | Single complete responsibility and the three terminal splits are agreed. Admission/CKDpub units and shared/receiving decompositions remain proposed. | Justify remaining units against real adapters, and choose inspectable raw-prelude/body packaging. Neither each instruction nor a whole hidden address routine is the default unit. |
 | C5 — Ownership and extension | Proposed closed internal catalogue, explicit provider assembly and consumer network/account provisioning. | Final ownership/extension surface and source lifecycle. No arbitrary public loader is approved. |
@@ -1219,7 +1230,8 @@ php -d error_reporting=E_ALL -d display_errors=stderr \
 The [preliminary schema and execution proposal](#preliminary-schema-and-execution-proposal)
 makes concrete choices available for joint discussion. C1's architectural
 extension review is concluded with independent policy flows and reusable
-resources; C2 is next. Concrete C2–C6 choices remain unaccepted.
+resources; C2 is now tracked separately under Issue #45. Concrete C2–C6
+choices remain unaccepted.
 No production schema validator or executor has been implemented or qualified by this
 document. M06 applies the assigned cases to
 the first complete branch; M07 extends them to all policies and receiving.

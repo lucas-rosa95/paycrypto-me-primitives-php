@@ -56,13 +56,16 @@ This map points to the owning records; it does not repeat their decision history
 | Approved capability and boundaries | [PIP-0003 at its approved revision](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/72c4fa1f0a2c9449a93071b55bf20f85b0008621/docs/pips/PIP-0003/PIP-0003.md) and [receiving PIP00010](pips/PIP00010/PIP00010.md) | Public-only generic address derivation and the separately approved receiving entry point. |
 | Execution, reviewed milestones and next gate | [Execution Plan](pips/PIP-0003/EXECUTION-PLAN.md#current-state) | M00–M04 bounded research/reviews are recorded; M05 is in progress. M06–M09 implementation/assembled verification remain downstream. |
 | Accepted protocol semantics | [M02 O01–O06](pips/PIP-0003/M02/M02-PROTOCOL.md) | Exact path without index advancement, strict initial admission, complete nodes, receiving `[0, index]` and owned failures. |
-| Composition decisions and PHP proposals | [M05 contract record](pips/PIP-0003/M05/PHP-CONTRACTS.md#reading-and-decision-status) | **C1 architecture agreed; C2 next.** C2–C6 forms, public PHP contracts and qualification remain open. Independent flow declarations reuse compatible resources; no mandatory Bitcoin root. |
+| Composition decisions and PHP proposals | [M05 contract record](pips/PIP-0003/M05/PHP-CONTRACTS.md#reading-and-decision-status) | **C1 agreed and merged; C2 is the current separately tracked discussion.** C2–C6 forms, public PHP contracts and qualification remain open. Independent flow declarations reuse compatible resources; no mandatory Bitcoin root. |
 | Provider/runtime comparison and reproduction | [M05 assessment](pips/PIP-0003/M05/README.md) | Three pinned graphs, 84 bounded graph commands and four language controls; provider/runtime selection and consumer constraints remain open. |
 | Visual explanations and fitness limits | [M05 visual index](pips/PIP-0003/M05/PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review) and [fitness evidence](pips/PIP-0003/M05/PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery) | Lifecycle, admission, policy flows and compatible reuse. Symbolic probes do not establish complete future Taproot/CashAddr support. |
 
 [Issue #3](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/3)
-coordinates the capability; [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41)
-coordinates M05 in [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44).
+coordinates the capability. C1 [Issue #41](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/41)
+concluded with [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44)
+at [`ee542e9`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/commit/ee542e905b1b83f662356091bb2b4e59254186f5).
+[Issue #45](https://github.com/paycrypto-me/paycrypto-me-primitives-php/issues/45)
+coordinates C2 and links its own work branch and PR; subsequent steps are tracked separately.
 The Plan links exact approval, merge, corrective-review and resumption evidence.
 Historical M01 contracts/diagrams and issued reports remain revision-specific
 inputs rather than current implementation or provider-selection claims.
