@@ -808,7 +808,7 @@ step-binding structure.
 | Challenge | Conceptual connections | What the proposal must explain |
 |---|---|---|
 | Bitcoin Cash P2KH CashAddr | An appropriately admitted, derived public key supplies a key hash; a CashAddr P2KH terminal receives that semantic hash and validated Bitcoin Cash address parameters. CashAddr encoding is delegated. | Can the key-hash-producing behavior and terminal contract be reused while keeping Bitcoin Cash intent and parameter definitions distinct from Bitcoin's? No prefix-based intent inference, fabricated Bitcoin definition fields or coin-specific executor branch is allowed. A mock terminal may test assembly and abort behavior, but cannot establish CashAddr correctness. |
-| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No HASH160/key-hash port lies on this route. Cryptography and encoding remain delegated. | The current `keyHash`-input `encode` step is local to the three delivered policies, not a universal address interface. Can a Taproot policy route reference compatible admission/derivation resources and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
+| Taproot key-path-only address | Starting **after a hypothetical compatible admission/derivation boundary**, a derived public node supplies the internal key to a distinct Taproot output-key capability; its x-only output feeds a witness-v1/32 Bech32m terminal. No derived-key HASH160 address input lies on this post-derivation route; BIP32 fingerprint construction is separate. Cryptography and encoding remain delegated. | The current `keyHash`-input `encode` step is local to the three delivered policies, not a universal address interface. Can a Taproot policy route reference compatible admission/derivation resources and express the different output-key route without an executor special case or a fake key hash? A mock can challenge wiring and failure abort, but cannot qualify Taproot semantics or the current admission versions. |
 
 The [CashAddr specification](https://github.com/bitcoincashorg/bitcoincash.org/blob/3e2e6da8c38dab7ba12149d327bc4b259aaad684/spec/cashaddr.md)
 defines a distinct address prefix, type and checksum format. [BIP341](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0341.mediawiki)
@@ -986,6 +986,58 @@ requires its own reviewed decision. The exact source representation is C2,
 compatibility checking C3, remaining capability/composition boundaries C4,
 provisioning/extension C5 and execution/audit mechanism C6. None is silently
 approved by C1's architectural closure.
+
+#### Extended-public-key-to-address fitness — contract cross-check
+
+**Review scope (2026-10-28):** the user's expanded diagram starts from serialized
+extended public keys rather than already-derived points. It exposes admission,
+path handling, CKDpub, full-node metadata and address construction. It is useful
+counter-proof input, not an approved diagram to implement unchanged. The
+following corrections apply existing M02 O01–O06 decisions; they add no feature,
+provider qualification or new C1 approval gate. C2 remains next.
+
+| Expanded diagram element | Required interpretation or correction | Existing basis |
+|---|---|---|
+| Invalid CKDpub child → try the next index | Replace with operation failure at the exact requested index. If the left scalar is at/above the curve order or the child is infinity, abort without another index, later path level, address or partial result. A zero left scalar remains valid and still updates the child metadata. | [M02 O01](../M02/M02-PROTOCOL.md#o01--public-derivation-and-invalid-children). BIP32 describes advancing; the accepted Primitives contract deliberately makes that a separate consumer request. |
+| “xpub” for every input context | Use “serialized extended public key” when naming the general family. Under current O02, mainnet P2WPKH admits the zpub version, not literal xpub; BIP84 specifies zpub/vpub. BIP86 publishes xpub vectors, but current P2TR admission remains unsupported. Bitcoin Cash needs its own future admission context, not Bitcoin's allowlist. | [M02 O02](../M02/M02-PROTOCOL.md#o02--version-network-and-policy-compatibility), [BIP84 versions](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0084.mediawiki#extended-key-version) and [BIP86 vectors](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0086.mediawiki#test-vectors). |
+| Define change/index after decoding | Generic derivation receives an explicit nonempty relative path; it does not choose a wallet branch. The receiving entry point always supplies `[0, index]`; change branch `[1, index]` is expressible through the generic operation, not a new receiving option. Preserve raw request checks before decode and remaining-depth checks after imported-node admission, before HMAC/derivation. | [M02 O03–O06](../M02/M02-PROTOCOL.md#o03o06--minimal-operation-boundary) and the [proposed concrete validation order](#failure-contract-and-validation-order). |
+| Derived child represented only as public point K | Preserve the complete derived node: key, chain code, version/context and metadata including depth, immediate-parent fingerprint and child number. Each new child number equals the requested component; successful result context retains the exact requested relative path. | [M02 O01](../M02/M02-PROTOCOL.md#o01--public-derivation-and-invalid-children) and [complete-node connections](#concrete-flow-and-semantic-connections). |
+| One common decode/validation block for BTC and BCH | Shared checked codecs and curve facilities do not establish shared admission semantics. A flow must explicitly apply its own admitted definition, version/intent compatibility and ordered failures; matching serialization bytes cannot infer protocol, policy or ancestry. Reuse a larger admission composition only where its full contract is compatible. | [M02 O02](../M02/M02-PROTOCOL.md#o02--version-network-and-policy-compatibility) and the [agreed independent-flow direction](#independent-policy-flow-declarations--agreed-c1-direction). |
+
+**A deeper reuse point:** the complete BIP32 derivation resource uses HASH160
+of the immediate parent's compressed public key to form its four-byte parent
+fingerprint. That work can occur while deriving a key for a future Taproot
+address. It is distinct from HASH160 of the final derived key used as an
+address input by P2WPKH/P2PKH. “Taproot does not use the key-hash address route”
+therefore must not be read as “the entire extended-key-to-Taproot operation
+never uses HASH160.” [BIP32 key identifiers and serialization](https://github.com/bitcoin/bips/blob/100ba872c808946155b1eeb8c4568058f2eea0a7/bip-0032.mediawiki#key-identifiers)
+provide the fingerprint basis; [M02 O01](../M02/M02-PROTOCOL.md#o01--public-derivation-and-invalid-children)
+already requires that metadata. The probe's `hash-fixture` marker represents
+the final derived-key address hash only; it does not expose or execute CKDpub
+internals. Its P2TR trace cannot establish the absence of hashes inside derivation.
+
+The Taproot tagged hash and ordinary SHA-256 within HASH160 can also reference
+the same qualified SHA-256 resource, while preserving different messages,
+contracts and outcomes. Shared curve machinery likewise does not make BIP32
+child construction and Taproot output-key construction the same semantic
+operation. Their responsibilities and invalid-result handling stay explicit.
+None of these observations requires every algorithm call to become a declared
+flow step; concrete granularity remains governed by the C4 responsibility criteria.
+
+The expanded picture strengthens the existing architectural direction:
+independent complete flow declarations may reference compatible resources
+throughout their own chains, including internal derivation resources. Common
+boxes summarize reusable behavior applied to separate values; they do not join
+accounts, execution state or flow declarations into one mandatory root. Source
+account ancestry is a provisioning assertion, not something version bytes or
+historical depth can prove. No private or newly hardened derivation is added.
+
+This cross-check does not run a full Taproot or CashAddr chain. The symbolic
+probe and earlier M03/M04 real-provider research retain their recorded scopes;
+actual assembly, semantic lineage and independently anchored complete results
+remain downstream obligations. The supplied diagram's retry behavior is not
+adopted, and the existing architecture/diagram sources are not altered by this
+textual contract review.
 
 #### Earlier shared-root decomposition — superseded
 

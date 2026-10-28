@@ -133,6 +133,14 @@ rejections. These are symbolic/dataflow observations, not real admission,
 lineage or protocol qualification. Current O02 rejects P2TR; future
 admission/provenance needs a separate reviewed decision.
 
+The [extended-key-to-address contract cross-check](PHP-CONTRACTS.md#extended-public-key-to-address-fitness--contract-cross-check)
+examines the user's expanded diagram against existing O01–O06. It corrects
+next-index retry, generic/receiving path handling, literal xpub admission and
+complete-node metadata; it also makes HASH160 reuse inside BIP32 parent
+fingerprints explicit, including for a future Taproot route. This is textual
+contract analysis, not new executable or protocol/provider qualification.
+C1 remains architecturally consolidated and C2 remains next.
+
 The [visual counter-proofs](PHP-CONTRACTS.md#visual-counter-proofs-for-joint-review)
 provide six synchronized Mermaid/SVG/PNG views. The updated policy-flow view
 shows the agreed independent-root relationship; specific component grouping

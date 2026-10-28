@@ -64,6 +64,10 @@ The same symbolic compiler preserves all eight connection graphs/token results
 with the old common root removed; forty-eight injected aborts and two rejected
 root/input fixtures exercise that alternative. Concrete grouping, C2–C6 and
 future P2TR admission remain open; current O02 remains unchanged.
+The [expanded extended-key fitness cross-check](M05/PHP-CONTRACTS.md#extended-public-key-to-address-fitness--contract-cross-check)
+applies existing O01–O06 to the full path: no next-index retry, explicit admitted
+paths, complete derived-node metadata and a distinct HASH160 fingerprint role
+inside BIP32. It adds no executable evidence and changes no next gate.
 Development/setup/CI/release image pins were refreshed to PHP 8.3.36/8.4.27
 for the 2026-10-21 security fixes;
 the configured minor-version floor and matrix remain 8.3 and 8.3/8.4.
