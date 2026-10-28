@@ -51,10 +51,12 @@ checking, remaining capability boundaries and execution mechanism remain open.
 
 The [C2 authoring laboratory](PHP-CONTRACTS.md#c2-authoring-laboratory--exploratory-findings)
 compares pair lists, fixed source records and a restricted builder, with a
-separate occurrence-scoping comparison. Its 73 controls pass on PHP
-8.3.36/8.4.27; these are structural experiments, not semantic or production
-qualification. Next, discuss fixed records versus ordered entry collections
-and the remaining source/immutability questions jointly. No candidate is selected.
+separate occurrence-scoping comparison. A second round compares associative
+records and named typed references: 73 baseline plus 49 additional controls pass
+on PHP 8.3.36/8.4.27. These are structural experiments, not semantic or production
+qualification. Next, compare the two named-reference forms and their authoring
+boundaries jointly, including duplicate observability and scalar preservation.
+No candidate is selected.
 
 The [fitness evidence](PHP-CONTRACTS.md#exploratory-reuse-fitness-challenges--outside-pip-0003-delivery)
 records direct-binding selection, independent complete policy roots, migration,

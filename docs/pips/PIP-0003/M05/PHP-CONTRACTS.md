@@ -461,11 +461,55 @@ Reproduce from the repository root on either recorded PHP runtime:
 php docs/pips/PIP-0003/M05/probe-authoring.php
 ```
 
-**Next joint discussion:** whether fixed records and ordered entry collections
-should have different source representations; then examine contract-derived
-signatures, empty collections and construction-path guarantees before choosing
-any API. Scoped-binding notation and the final admitted representation remain
-separate open C2 decisions. C3–C6 dependencies are exposed, not settled here.
+**Round two — named references, both candidates retained.** The human pair
+prefers clearer declarative records and authorized comparison of associative
+records with typed named references; neither preference selects a final API.
+Replacing `new` with a static factory changes construction syntax, not the
+separation between authored data and the validated internal representation.
+
+The [named-reference probe](probe-named-references.php) compares complete
+[associative declarations](authoring-lab/associative.php) and
+[named typed records](authoring-lab/named-records.php), using the research-only
+[reference variants](authoring-lab/reference-records.php). Both contain the same
+nine declarations and resolve the same eight cases as round one. The fixtures
+were derived from the earlier declarations, not independently sourced semantic
+vectors. Arrays use fixed named fields and ordered entry lists; typed records
+use named constructor arguments and closed reference variants. Neither source
+performs capability work. Both normalize into the same structural admission
+routine; they do not require different execution semantics.
+
+**PHP 8.3.36 and 8.4.27: all 73 baseline and 49 additional controls pass per
+runtime**, with equal reports apart from version. These counts include negative
+controls demonstrating limitations, not 122 independent correctness proofs.
+
+| Property | Associative records | Named typed records |
+|---|---|---|
+| Reference readability | `kind`, `step` and `port` are explicit data fields. | `StepOutput(step: ..., port: ...)` states the variant and fields. |
+| Unknown/missing fields | The schema adapter rejects them. | Direct calls fail with native PHP errors; domain normalization remains open. |
+| Repeated fixed field | PHP overwrites before validation; the control demonstrates the loss. | Repeated direct named arguments fail, but unpacking an already overwritten map cannot recover the loss. |
+| Repeated flow/step/binding | Ordered lists preserve occurrences for rejection. | Ordered lists preserve occurrences for rejection. |
+| Scalar input | Adapter checks the original value without scalar coercion. | Strict calls reject wrong scalar types; a weak caller can coerce before admission. |
+| Source validity | Unknown variants, callable leaves and explicit null fail. | Closed reference types reject callable/null sources; a valid `StepOutput` can still name a nonexistent step. |
+| Omission and ordering | Omitted binding collections become empty; required connections still fail. Step order is never repaired. | Same behavior; constructor defaults supply collections, not required values. |
+
+The associative fixture contains only literal arrays and scalar values. Loading
+it with PHP `require` is still code execution: this experiment does not approve
+a production loader or claim to restrict arbitrary PHP authoring. Typed
+constructors here only build data; no arbitrary callable is an admitted source.
+The existing semantic, catalogue-coverage, recursive-container, diagnostic and
+performance limits remain. No prior duplicate-rejection requirement is waived.
+
+```sh
+php docs/pips/PIP-0003/M05/probe-named-references.php
+```
+
+**Next joint discussion:** compare the first HASH160 declaration in both new
+fixtures, then choose which authoring boundary to investigate further: data-only
+fixed records with schema validation, or typed construction with named fields.
+Discuss fixed-field duplicate observability and scalar preservation explicitly
+before selecting either. Contract-derived signatures, collection omission,
+scoped-binding notation and final admitted representation remain open. C3–C6
+dependencies are exposed, not settled here.
 
 ### Preliminary complete composition and intent bindings — C3/C4
 
