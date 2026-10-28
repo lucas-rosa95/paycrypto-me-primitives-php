@@ -7,7 +7,7 @@ coordinates provider, consumer runtime and concrete PHP contract selection.
 
 ## Current state
 
-Status reconciled 2026-10-27; provider research retains its recorded dates. The [M05 resumption checkpoint](#m05-resumption-checkpoint)
+Status reconciled 2026-10-28; provider research retains its recorded dates. The [M05 resumption checkpoint](#m05-resumption-checkpoint)
 records the recovered decisions and repeated evidence. The [M05 assessment](M05/README.md)
 adds current suitability research and three isolated graphs tested on PHP 8.2–8.5;
 the [PHP contract proposal](M05/PHP-CONTRACTS.md) adds explicit signatures,
@@ -27,8 +27,11 @@ resolved declarations at setup, without restricting capability internals.
 Resource scope now follows responsibility and semantic contract: a general
 resource may start shared on its first concrete use; a context-specific one
 stays local until compatible new use warrants promotion. A capability is a
-complete contract unit within its enclosing composition, while its internals
-remain inspectable and testable; no rollback of provider side effects is
+complete contract unit with one specific semantic responsibility, while its
+internals remain inspectable and testable. The [joint boundary criterion](M05/PHP-CONTRACTS.md#capability-responsibility-and-boundary-decisions)
+distinguishes one objective from one internal action: cohesion cannot merge
+independent responsibilities, and material C4 boundaries require explicit
+justification and joint review. No rollback of provider side effects is
 implied. Remaining component boundaries (C4) and contract-checking mechanisms
 (C3) remain open. The agreed C1 direction requires deterministic, unambiguous
 stage contracts and a chain that can be

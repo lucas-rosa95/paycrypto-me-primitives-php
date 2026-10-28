@@ -102,8 +102,11 @@ add supported networks, policies or operations.
   independent validation guarantee. This does not make arbitrary 20-byte
   values interchangeable with the derived key hash. The exact C2 syntax and
   C3 checking mechanism remain open.
-- Capabilities retain cohesive behavior and their own invariants. Declaring
-  composition does not require turning every internal instruction into data.
+- Each capability fulfills one specific, complete semantic responsibility and
+  preserves its invariants. Granularity concerns that objective, not the number
+  of functions or internal actions. Cohesion alone does not justify combining
+  independently meaningful responsibilities. Declaring composition does not
+  require turning every internal instruction into data.
   Each capability is a complete unit for its enclosing composition: it has a
   documented input, outcome and failure contract, and the composition receives
   only that completed outcome or the owned failure. Its internals remain open
@@ -137,6 +140,33 @@ accepted rule still excludes a class per network merely to carry constants,
 and a descriptive name must not conceal duplicated behavior or composition.
 Ordinary methods may validate data or execute admitted capabilities; their
 existence is not the problem.
+
+### Capability responsibility and boundary decisions
+
+**Joint criterion (2026-10-28):** a capability has one specific and complete
+purpose within its semantic context. Several actions may be required to fulfill
+that responsibility; one action or one function is not the measure of
+granularity. Small, related actions must still belong to that responsibility.
+Independently meaningful responsibilities do not become one merely because
+they are cohesive or contribute to the same broader operation. Composition
+connects those responsibilities while preserving their contracts.
+
+For each material C4 boundary, record its specific purpose, inputs, complete
+outcome, invariants and failures, and explain why the enclosed work fulfills
+that responsibility rather than another independent responsibility. Identify
+which contracted resources it consumes and which connections belong in the
+flow declaration. A resource having a contract does not automatically require
+its invocation to become a separately configurable step; ordinary internal
+instructions and helpers are not extracted merely to make the diagram finer.
+Inspection and testing remain possible at the relevant internal boundaries.
+
+Executors follow those explicit decisions. An unresolved material boundary is
+raised for joint review with the contract and concrete counterexample; it is
+not settled independently through a broad interpretation of “cohesion.” These
+criteria constrain the remaining C4 choices without approving any specific
+admission, CKDpub or Taproot output-key boundary in advance. The proposed
+Taproot output-key unit still needs that justification. Existing agreed
+terminal splits and resource-scope guidance remain in force.
 
 ### Separate data responsibilities
 
@@ -261,7 +291,7 @@ The section ends at [Entry points and results](#entry-points-and-results).
 | C1 — Execution model | **Agreed base retained; extension fitness review reopened by joint approval (2026-10-27).** Distinct candidates own independent declarations and share compatible resources. Declared order, earlier-output connections, complete setup resolution, cycle rejection, immediate failure abort, cohesive capability units and independent audit remain agreed. The delivered three-policy post-HASH160 junction is local. **New agreed criterion:** the mechanism supports multiple semantically justified, scoped policy bindings within one candidate without fixed step names/depth or policy-specific executor code. | Review the [remaining rigidity points](#c1-extension-review--agreed-criterion-and-open-design) before C2. Exact decomposition remains preliminary; C2 owns notation/immutable form, C3 compatibility, C4 component boundaries and C6 assembly/execution/inspection. A future Bitcoin policy may evolve its own candidate's declaration through a reviewed, revalidated revision; immutable loaded assemblies are not mutated. Cross-candidate impersonation remains prohibited. |
 | C2 — Authoring and representation | Duplicate-observable PHP pair lists as source; load into private immutable records and resolved references. Reuse the existing provisioning proposal and avoid adding a serialized configuration language. | The pair-list example is hard for human readers to scan and must not stand in for the agreed connection semantics. Typed builders or another concise source form could improve authoring if they retain duplicate detection and yield the same inspectable data. Representation remains open. |
 | C3 — Semantic compatibility | **Agreed requirement:** deterministic stage contracts with semantically unambiguous inputs, outputs and failures; connections must preserve actual producer lineage and parameter roles, not merely PHP shape or caller-written labels. **Still proposed:** a closed owned-contract catalogue with narrow lineage checks for this slice. | Shape-only validation is insufficient. The bounded contract metadata/checker design, minimum useful internal value types, point-infinity outcome form and runtime boundary checks need PHP feasibility and joint review. A general refinement/type-expression language needs separate justification. |
-| C4 — Composition granularity | **Joint terminal direction:** P2PKH declares payload construction then Base58Check; P2SH-P2WPKH declares redeem-script construction, script HASH160, P2SH payload construction then Base58Check; P2WPKH binds the derived key hash directly to one SegWit-v0 encoder step with the correct HRP, without a pass-through `program` step. **Still proposed:** keep key admission and exact-path CKDpub cohesive with ordered invariants in their contracts, and declare HASH160, shared address derivation and receiving composition as data. | Exposing each parse or CKDpub instruction would increase configuration without demonstrated reuse. Moving the entire address flow into one capability would hide the connections we agreed to inspect. The P2WPKH connection still needs semantic-lineage and runtime-shape checks; exact C2 syntax and C3 mechanism remain open. Review the remaining proposed boundaries against actual adapter code before freezing them. |
+| C4 — Composition granularity | **Joint responsibility criterion:** one specific, complete semantic objective per capability; multiple internal actions may serve it, while cohesion does not merge independent responsibilities. Apply the [boundary-decision criteria](#capability-responsibility-and-boundary-decisions). **Joint terminal direction:** P2PKH declares payload construction then Base58Check; P2SH-P2WPKH declares redeem-script construction, script HASH160, P2SH payload construction then Base58Check; P2WPKH binds the derived key hash directly to one SegWit-v0 encoder step with the correct HRP, without a pass-through `program` step. **Still proposed:** keep key admission and exact-path CKDpub cohesive with ordered invariants in their contracts, and declare HASH160, shared address derivation and receiving composition as data. | Automatically exposing each parse or CKDpub instruction would confuse instruction count with semantic responsibility. Moving the entire address flow into one capability would hide the connections we agreed to inspect. The P2WPKH connection still needs semantic-lineage and runtime-shape checks; exact C2 syntax and C3 mechanism remain open. Review the remaining proposed boundaries against actual adapter code before freezing them. |
 | C5 — Ownership and extension | Ship a closed composition catalogue. Consumers provision admitted network/account data; provider wiring is explicit and separate. No public arbitrary composition-loader API in this slice. | A public extension registry introduces compatibility, validation and support commitments beyond the current operations. Internal data still must undergo validation; being repository-owned is not proof of correctness. Future extension remains a separate design question. |
 | C6 — Setup and runtime | **Agreed behavior from C1:** follow the declared order, execute only the selected route and abort without fallback, later stages or partial public results. **Still proposed:** validate and resolve a complete assembly once, use a fresh invocation frame and execute the selected plan synchronously through an interpreter. The concrete auditor inspection/instrumentation mechanism remains open. | A scheduler may not reorder or speculatively execute stages in violation of C1. Straight-line generated PHP, compilation and caching remain possible mechanisms or optimizations if they preserve the same validation, selection, failure and audit behavior; evaluate benefit and equivalence before adoption. No benchmark or working executor establishes a preference yet. |
 

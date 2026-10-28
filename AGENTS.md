@@ -28,6 +28,20 @@ evidence-driven composition guidance in the root README and canonical
 architecture; it does not make cryptographic algorithms or standardized codecs
 Primitives-owned implementations.
 
+# Capability responsibility
+
+Give each capability one specific, complete semantic responsibility. Granularity
+is defined by that objective, not by a function count or a single instruction;
+several internal actions may be necessary to fulfill it. Related or cohesive
+work does not justify combining independently meaningful responsibilities into
+one capability merely because they serve a broader result. Connect such
+responsibilities through composition and retain the contracts of reused
+resources. A dependency need not become a separately configurable flow step.
+For material boundary choices, record the purpose, inputs, complete outcome,
+invariants and why work belongs inside the capability or in composition.
+Follow the agreed boundaries; unresolved material changes require joint review
+rather than an executor's private interpretation of cohesion.
+
 # Operation results and failures
 
 Give each Primitives-owned operation a documented meaning for its return values

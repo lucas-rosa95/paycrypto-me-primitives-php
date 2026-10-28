@@ -5,7 +5,7 @@ under the approved PIP-0003 and PIP00010 boundaries in the
 [Execution Plan](../EXECUTION-PLAN.md). Execution PR:
 [PR #44](https://github.com/paycrypto-me/paycrypto-me-primitives-php/pull/44).
 
-Status reconciled, 2026-10-27 (provider assessment dated 2026-10-22): **executor assessment in progress; no joint selection or
+Status reconciled, 2026-10-28 (provider assessment dated 2026-10-22): **executor assessment in progress; no joint selection or
 contract freeze**. This record owns the current candidate comparison and its
 reproducible evidence. The Plan owns execution status and the
 [M00–M04 resumption checkpoint](../EXECUTION-PLAN.md#m05-resumption-checkpoint).
@@ -65,6 +65,11 @@ internal helpers and context-specific components need not become shared steps.
 Resource scope follows responsibility and semantics, not a consumer count:
 general resources may start shared on their first concrete use, while local
 components can be promoted when a compatible new use appears.
+The [joint responsibility criterion](PHP-CONTRACTS.md#capability-responsibility-and-boundary-decisions)
+requires one specific, complete semantic objective per capability; several
+internal actions may fulfill it, while cohesion does not merge independent
+responsibilities. Material C4 boundaries need an explicit contract/rationale
+and joint review rather than executor-specific interpretations.
 Each capability is a complete unit within its enclosing composition, with
 documented inputs, outcome and failure; its implementation remains open to
 inspection and tests at relevant lower boundaries. This does not promise
