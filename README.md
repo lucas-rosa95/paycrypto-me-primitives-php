@@ -307,6 +307,11 @@ matching the release containers. It needs no Compose service discovery.
 The supported consumer baseline is PHP 8.3. The Docker image runs PHP 8.3 and
 Composer is configured with an 8.3 platform target, so dependency resolution
 does not accidentally require a newer PHP release.
+Use a currently patched release within the supported PHP line. The development,
+CI and release image pins now use PHP 8.3.36 and 8.4.27 following the
+[2026-10-21 PHP security release](https://www.php.net/archive/2026.php#2026-10-21-5).
+The Composer platform target is a dependency-resolution floor, not evidence
+that an older patch release has current security fixes.
 
 ```bash
 bash scripts/setup.sh

@@ -87,6 +87,11 @@ This table consolidates the earlier executor triage with the [corrective re-revi
 
 The observed problems are not interchangeable: Muvon's undeclared runtime requirement is a package/deployment defect; cjpgdk's raw SegWit admissions concern decoding; BitWasp's injected exception exposed a decoder classification limit, not proof that its normal encoder rejects a valid address. Neither encoder has been selected. M05 must record why each alternative is selected or rejected using the corrected operation boundary and executed evidence.
 
+The subsequent [M05 assessment](../M05/README.md) owns the refreshed provider
+and runtime comparison, including new Cardano generation evidence and an
+executor recommendation. It does not change the historical M04 results or
+independent conclusions above; joint selection and concrete contracts remain open.
+
 ## Review and handoff limits
 
 - Review the version/field and provider-fault precedence against the accepted M02 ordering. Unknown, private and multisignature version bytes use checked, synthetic public payloads; private key material is outside this public-only research. The named mixed-invalid fixtures establish bounded ordering, not every possible pair of faults.
@@ -95,5 +100,11 @@ The observed problems are not interchangeable: Muvon's undeclared runtime requir
 - Assess the cjpgdk PHP 8.4 deprecations and joint package security, maintenance, license and deployment tradeoffs before M05. M04's two real adapters per codec boundary have bounded agreement; no production selection follows from it.
 
 ## Reproduction
+
+The original PHP 8.3.35/8.4.26 pins are recoverable from
+[`scripts/php-images.sh` at `f525f14`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/f525f14/scripts/php-images.sh).
+The current development pins include the later security patches;
+[M05](../M05/README.md) records their separate candidate-graph qualification.
+Preserve the original patch levels when comparing the historical JSON byte for byte.
 
 Use the pinned PHP images from [`scripts/php-images.sh`](../../../../scripts/php-images.sh) and the [M03 GMP image recipe](../M03/Containerfile.gmp), then add `RUN docker-php-ext-install bcmath` for Muvon. The local images used here were `localhost/primitives-php83-m04-codecs:latest` at `9b8f022024147b4af8ca77908dd8730e9076c3fe9d2ee7a1452e0ca46ec3d366` and `localhost/primitives-php84-m04-codecs:latest` at `fb0c1c6b3ae2e83464805771ce13682523cfe1ec0d5cbdc2e74907f8f1fb2aa1`, built on the M03 GMP images. Copy `M04-CODEC-COMPOSER.json` and `.lock` to `composer.json` and `composer.lock` in one scratch directory; copy the M02 trial manifest/lock to another. Install each with `composer install --no-plugins --no-scripts`. Mount the relevant scratch directory at `/trial` and this repository at `/repo` in either image. Run `php -d error_reporting=E_ALL -d display_errors=stderr /repo/docs/pips/PIP-0003/M04/codec-composition-probe.php` with the four-package graph and `admission-composition-probe.php` with the M02 graph; compare each pair of JSON records after removing `php`. Run the first probe with `M04_CHECK_MISSING_BCMATH=1` in the unextended PHP images for the missing-facility case. GMP is required by the combined ECC graph, but not the four-codec graph. No trial dependency is added to the production Composer manifest.

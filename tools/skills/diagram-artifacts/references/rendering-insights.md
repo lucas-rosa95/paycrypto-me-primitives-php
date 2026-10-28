@@ -3,9 +3,11 @@
 ## Complementary representations
 
 The M01/PIP-0003 diagrams established a useful division of responsibilities.
-MMD exposes the editable graph and labels. SVG retains text and scalable vector
-elements for detailed inspection. PNG gives visual tools a directly consumable
-representation of shape, placement, grouping, hierarchy and relationships.
+MMD exposes the editable graph and labels; native draw.io sources preserve
+editable shapes and layout when that workflow is chosen. SVG retains text and
+scalable vector elements for detailed inspection. PNG gives visual tools a
+directly consumable representation of shape, placement, grouping, hierarchy
+and relationships.
 
 In the user's experiment, SVG helped an agent understand elements/text while
 PNG helped it understand arrangement and architectural structure. This is local
@@ -87,6 +89,9 @@ authorization; this skill does not automatically install tools.
 - [Mermaid HTML-label configuration](https://mermaid.js.org/config/schema-docs/config.html#htmllabels).
 - [pngquant options and quality rejection](https://pngquant.org/).
 
-This skill packages the diagram workflow already used in PIP-0003. It does not
-alter capability contracts, choose production crypto/codec providers or create
-a universal architectural mandate for resolution, color palette or diagram count.
+The measurements above document the Mermaid workflow used in PIP-0003; they
+are not measurements of draw.io exports. The source/SVG/PNG division of roles
+also applies to native draw.io diagrams, subject to their own export checks.
+This skill does not alter capability contracts, choose production crypto/codec
+providers or create a universal architectural mandate for resolution, color
+palette or diagram count.

@@ -52,10 +52,10 @@ or behavior in every editor.
 ## PNG compression
 
 For subsequent diagrams, use the repository's
-[mermaid-diagram-artifacts skill](../../../../../tools/skills/mermaid-diagram-artifacts/SKILL.md).
+[diagram-artifacts skill](../../../../../tools/skills/diagram-artifacts/SKILL.md).
 It packages this workflow, the complementary format/resolution rationale and a
 helper that finalizes native-text SVGs and produces optimized PNG counterparts.
-It is also discoverable under `.agents/skills/mermaid-diagram-artifacts`.
+It is also discoverable under `.agents/skills/diagram-artifacts`.
 
 After rasterization, compress the PNGs with [pngquant](https://pngquant.org/),
 tested here with version 3.0.3. This is a documentation tool, not a Composer or

@@ -1,0 +1,47 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TB
+    subgraph alpha["Candidate alpha — one root, two fixture policies"]
+        direction TB
+        ap["Own preparation<br/>Own request and values"]
+        aa["Invoke shared resource common-a"]
+        ab{"Middle binding resolved at setup<br/>Only the selected route runs"}
+        ax["middle-x"]
+        ay["middle-y"]
+        ar["Invoke shared resource common-b<br/>Consume this route's output"]
+        af["Own completed result"]
+        ap --> aa --> ab
+        ab -->|policy x| ax
+        ab -->|policy y| ay
+        ax --> ar
+        ay --> ar
+        ar --> af
+    end
+    subgraph beta["Candidate beta — independent declaration"]
+        direction TB
+        bp["Own preparation<br/>Own request and values"]
+        ba["Invoke shared resource common-a"]
+        by["middle-y<br/>Same resource, own input"]
+        br["Invoke shared resource common-b<br/>Consume this route's output"]
+        bf["Own completed result"]
+        bp --> ba --> by --> br --> bf
+    end
+    subgraph gamma["Candidate gamma — independent declaration"]
+        direction TB
+        cp["Own preparation<br/>Own request and values"]
+        ca["Invoke shared resource common-a"]
+        cz["middle-z"]
+        cr["Invoke shared resource common-b<br/>Consume this route's output"]
+        cf["Own completed result"]
+        cp --> ca --> cz --> cr --> cf
+    end
+    classDef local fill:#fff8df,stroke:#98751c,color:#47380e
+    classDef shared fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef result fill:#eaf7ed,stroke:#28783b,color:#173b20
+    class ap,ab,ax,bp,cp,cz local
+    class aa,ar,ay,ba,by,br,ca,cr shared
+    class af,bf,cf result

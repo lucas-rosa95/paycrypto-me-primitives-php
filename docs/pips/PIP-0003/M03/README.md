@@ -598,6 +598,12 @@ reproducible binary build.
 From the repository root, with Podman and network access for image/package
 installation, build the base and research images:
 
+The current image list tracks development patch updates. To reproduce the
+historical PHP 8.3.35/8.4.26 patch levels, use the
+[image pins at `f525f14`](https://github.com/paycrypto-me/paycrypto-me-primitives-php/blob/f525f14/scripts/php-images.sh).
+[M05](../M05/README.md) records separate qualification on the patched runtimes;
+the historical result files below are unchanged.
+
 ```bash
 source scripts/php-images.sh
 for version in 8.3 8.4; do

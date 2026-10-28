@@ -1,0 +1,33 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TB
+    data["Definitions + composition declarations<br/>Explicit intent and parameter bindings"]
+    wiring["Owned contracts + explicit provider wiring<br/>Required environment; receiving source if used"]
+    setup["Validate and resolve every advertised flow<br/>Reject ambiguous bindings, cycles and incompatible connections<br/>Complete required setup/source admission"]
+    ready["Immutable usable operation<br/>No partially assembled operation"]
+    request["New invocation: preserve original caller values"]
+    admit["Admit raw arguments and explicit intent<br/>No prefix-based policy selection"]
+    selected["Use the resolved complete flow for that intent<br/>Fresh invocation state; only the selected route runs"]
+    execute["Execute declared steps in order<br/>Check capability inputs and completed outputs"]
+    result["Publish the complete immutable result<br/>Address and context from this same request"]
+    setupfail["Owned setup failure<br/>No usable operation returned"]
+    abort["Owned invocation failure<br/>No later stage, alternate attempt or partial result"]
+    data --> setup
+    wiring --> setup
+    setup -->|success| ready
+    setup -->|failure| setupfail
+    ready --> request --> admit
+    admit -->|admitted| selected --> execute
+    admit -->|failure| abort
+    execute -->|failure| abort
+    execute -->|complete success| result
+    classDef contract fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef outcome fill:#eaf7ed,stroke:#28783b,color:#173b20
+    classDef failure fill:#fff0f0,stroke:#a52b2b,color:#6b1515
+    class data,wiring,setup,request,admit,selected,execute contract
+    class ready,result outcome
+    class setupfail,abort failure

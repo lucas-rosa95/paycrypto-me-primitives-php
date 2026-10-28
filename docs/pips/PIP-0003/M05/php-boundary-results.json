@@ -1,0 +1,158 @@
+{
+  "82": {
+    "image_id": "cef53200c65c4df763df679dfe01418807c60db9b18f28c1d831df8f9bea2020",
+    "command": [
+      "php",
+      "-d",
+      "error_reporting=E_ALL",
+      "-d",
+      "display_errors=stderr",
+      "-d",
+      "zend.exception_ignore_args=0",
+      "/repo/docs/pips/PIP-0003/M05/php-boundary-probe.php"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "result": {
+      "php": "8.2.35",
+      "integer_bytes": 8,
+      "strict_callee_from_weak_caller": {
+        "numeric_string": 7,
+        "boolean": 1,
+        "integral_float": 7
+      },
+      "mixed_ingress_accepts_wrong_original_type": {
+        "numeric_string": false,
+        "boolean": false,
+        "integral_float": false
+      },
+      "integer_edge_controls_pass": true,
+      "readonly_array_retains_caller_reference": true,
+      "rebuilt_scalar_snapshot_detaches_reference": true,
+      "standard_sensitive_trace_is_redacted": true,
+      "sensitive_trace_value_remains_introspectable": true,
+      "previous_chain_is_null": true,
+      "source_sha256": {
+        "php-boundary-callee.php": "658459c02d0d528153cc9d08d11cf840e369ee0b2d42eaf00dbd0afa52b21e5f",
+        "php-boundary-probe.php": "77a2d9f30ec8a8e2d728740ce475b042f7ce6d49733c9f3e01bb7981b20e0a15"
+      }
+    }
+  },
+  "83": {
+    "image_id": "ac241017cf12d530cd7ffe845dbd681168bffcd81a597467260b4864d0c9f700",
+    "command": [
+      "php",
+      "-d",
+      "error_reporting=E_ALL",
+      "-d",
+      "display_errors=stderr",
+      "-d",
+      "zend.exception_ignore_args=0",
+      "/repo/docs/pips/PIP-0003/M05/php-boundary-probe.php"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "result": {
+      "php": "8.3.36",
+      "integer_bytes": 8,
+      "strict_callee_from_weak_caller": {
+        "numeric_string": 7,
+        "boolean": 1,
+        "integral_float": 7
+      },
+      "mixed_ingress_accepts_wrong_original_type": {
+        "numeric_string": false,
+        "boolean": false,
+        "integral_float": false
+      },
+      "integer_edge_controls_pass": true,
+      "readonly_array_retains_caller_reference": true,
+      "rebuilt_scalar_snapshot_detaches_reference": true,
+      "standard_sensitive_trace_is_redacted": true,
+      "sensitive_trace_value_remains_introspectable": true,
+      "previous_chain_is_null": true,
+      "source_sha256": {
+        "php-boundary-callee.php": "658459c02d0d528153cc9d08d11cf840e369ee0b2d42eaf00dbd0afa52b21e5f",
+        "php-boundary-probe.php": "77a2d9f30ec8a8e2d728740ce475b042f7ce6d49733c9f3e01bb7981b20e0a15"
+      }
+    }
+  },
+  "84": {
+    "image_id": "08e98c2f508055b222a30114548b271f27af2c030d93839d9d1dd10bf0fc319b",
+    "command": [
+      "php",
+      "-d",
+      "error_reporting=E_ALL",
+      "-d",
+      "display_errors=stderr",
+      "-d",
+      "zend.exception_ignore_args=0",
+      "/repo/docs/pips/PIP-0003/M05/php-boundary-probe.php"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "result": {
+      "php": "8.4.27",
+      "integer_bytes": 8,
+      "strict_callee_from_weak_caller": {
+        "numeric_string": 7,
+        "boolean": 1,
+        "integral_float": 7
+      },
+      "mixed_ingress_accepts_wrong_original_type": {
+        "numeric_string": false,
+        "boolean": false,
+        "integral_float": false
+      },
+      "integer_edge_controls_pass": true,
+      "readonly_array_retains_caller_reference": true,
+      "rebuilt_scalar_snapshot_detaches_reference": true,
+      "standard_sensitive_trace_is_redacted": true,
+      "sensitive_trace_value_remains_introspectable": true,
+      "previous_chain_is_null": true,
+      "source_sha256": {
+        "php-boundary-callee.php": "658459c02d0d528153cc9d08d11cf840e369ee0b2d42eaf00dbd0afa52b21e5f",
+        "php-boundary-probe.php": "77a2d9f30ec8a8e2d728740ce475b042f7ce6d49733c9f3e01bb7981b20e0a15"
+      }
+    }
+  },
+  "85": {
+    "image_id": "72c1cdc1ac79c39dffd2237f1605f32e4a78d9b7169da3cadaa9e2425dceb252",
+    "command": [
+      "php",
+      "-d",
+      "error_reporting=E_ALL",
+      "-d",
+      "display_errors=stderr",
+      "-d",
+      "zend.exception_ignore_args=0",
+      "/repo/docs/pips/PIP-0003/M05/php-boundary-probe.php"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "result": {
+      "php": "8.5.12",
+      "integer_bytes": 8,
+      "strict_callee_from_weak_caller": {
+        "numeric_string": 7,
+        "boolean": 1,
+        "integral_float": 7
+      },
+      "mixed_ingress_accepts_wrong_original_type": {
+        "numeric_string": false,
+        "boolean": false,
+        "integral_float": false
+      },
+      "integer_edge_controls_pass": true,
+      "readonly_array_retains_caller_reference": true,
+      "rebuilt_scalar_snapshot_detaches_reference": true,
+      "standard_sensitive_trace_is_redacted": true,
+      "sensitive_trace_value_remains_introspectable": true,
+      "previous_chain_is_null": true,
+      "source_sha256": {
+        "php-boundary-callee.php": "658459c02d0d528153cc9d08d11cf840e369ee0b2d42eaf00dbd0afa52b21e5f",
+        "php-boundary-probe.php": "77a2d9f30ec8a8e2d728740ce475b042f7ce6d49733c9f3e01bb7981b20e0a15"
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "url": "https://packagist.org/api/security-advisories/?packages%5B%5D=paragonie%2Fecc&packages%5B%5D=genkgo%2Fphp-asn1&packages%5B%5D=paragonie%2Fsodium_compat&packages%5B%5D=simplito%2Felliptic-php&packages%5B%5D=simplito%2Fbn-php&packages%5B%5D=simplito%2Fbigint-wrapper-php&packages%5B%5D=tuupola%2Fbase58&packages%5B%5D=muvon%2Fbase58-codec&packages%5B%5D=bitwasp%2Fbech32&packages%5B%5D=cjpgdk%2Fbech32&packages%5B%5D=cardano-php%2Fbech32&packages%5B%5D=uma%2Fsecp256k1-php&packages%5B%5D=stephenhill%2Fbase58&packages%5B%5D=furqansiddiqui%2Fbase58check-php&packages%5B%5D=allty%2Fbase58",
+  "response": {
+    "advisories": {
+      "paragonie/ecc": [
+        {
+          "advisoryId": "PKSA-jz93-gkdw-s495",
+          "packageName": "paragonie/ecc",
+          "remoteId": "paragonie/ecc/CVE-2024-33851.yaml",
+          "title": "mdanter/ecc affected by timing vulnerability in cryptographic side-channels",
+          "link": "https://github.com/advisories/GHSA-3494-cfwf-56hw",
+          "cve": "CVE-2024-33851",
+          "affectedVersions": ">=2,<2.0.1",
+          "source": "FriendsOfPHP/security-advisories",
+          "reportedAt": "2024-04-24 12:02:00",
+          "composerRepository": "https://packagist.org",
+          "severity": "medium",
+          "sources": [
+            {
+              "name": "GitHub",
+              "remoteId": "GHSA-3494-cfwf-56hw"
+            },
+            {
+              "name": "FriendsOfPHP/security-advisories",
+              "remoteId": "paragonie/ecc/CVE-2024-33851.yaml"
+            }
+          ]
+        }
+      ],
+      "paragonie/sodium_compat": [
+        {
+          "advisoryId": "PKSA-32g2-byr9-drtw",
+          "packageName": "paragonie/sodium_compat",
+          "remoteId": "paragonie/sodium_compat/2026-08-18.yaml",
+          "title": "Incorrect Ed25519 public key validation",
+          "link": "https://github.com/paragonie/sodium_compat/pull/206",
+          "cve": null,
+          "affectedVersions": ">=2,<2.5.1|<1.24.1",
+          "source": "FriendsOfPHP/security-advisories",
+          "reportedAt": "2026-08-18 00:00:00",
+          "composerRepository": "https://packagist.org",
+          "severity": null,
+          "sources": [
+            {
+              "name": "FriendsOfPHP/security-advisories",
+              "remoteId": "paragonie/sodium_compat/2026-08-18.yaml"
+            }
+          ]
+        },
+        {
+          "advisoryId": "PKSA-bjyb-w14t-61js",
+          "packageName": "paragonie/sodium_compat",
+          "remoteId": "GHSA-mrfv-m5wm-5w6w",
+          "title": "libsodium has Incomplete List of Disallowed Inputs",
+          "link": "https://github.com/advisories/GHSA-mrfv-m5wm-5w6w",
+          "cve": "CVE-2025-69277",
+          "affectedVersions": "<1.24.0|>=2,<2.5.0",
+          "source": "GitHub",
+          "reportedAt": "2025-12-31 06:30:18",
+          "composerRepository": "https://packagist.org",
+          "severity": "medium",
+          "sources": [
+            {
+              "name": "GitHub",
+              "remoteId": "GHSA-mrfv-m5wm-5w6w"
+            }
+          ]
+        },
+        {
+          "advisoryId": "PKSA-8x19-j2j3-bn67",
+          "packageName": "paragonie/sodium_compat",
+          "remoteId": "paragonie/sodium_compat/2025-12-30.yaml",
+          "title": "Missing check that a point is on the prime subgroup for Edwards25519",
+          "link": "https://00f.net/2025/12/30/libsodium-vulnerability",
+          "cve": null,
+          "affectedVersions": ">=2,<2.5.0|<1.24.0",
+          "source": "FriendsOfPHP/security-advisories",
+          "reportedAt": "2025-12-30 00:00:00",
+          "composerRepository": "https://packagist.org",
+          "severity": null,
+          "sources": [
+            {
+              "name": "FriendsOfPHP/security-advisories",
+              "remoteId": "paragonie/sodium_compat/2025-12-30.yaml"
+            }
+          ]
+        }
+      ],
+      "simplito/elliptic-php": [
+        {
+          "advisoryId": "PKSA-9mhg-c97x-hv8s",
+          "packageName": "simplito/elliptic-php",
+          "remoteId": "GHSA-mr6r-82x4-f4jj",
+          "title": "Timing attacks might allow practical recovery of the long-term private key",
+          "link": "https://github.com/advisories/GHSA-mr6r-82x4-f4jj",
+          "cve": "CVE-2019-10764",
+          "affectedVersions": "<1.0.6",
+          "source": "GitHub",
+          "reportedAt": "2019-11-20 01:34:50",
+          "composerRepository": "https://packagist.org",
+          "severity": "high",
+          "sources": [
+            {
+              "name": "GitHub",
+              "remoteId": "GHSA-mr6r-82x4-f4jj"
+            }
+          ]
+        }
+      ],
+      "genkgo/php-asn1": [],
+      "simplito/bn-php": [],
+      "simplito/bigint-wrapper-php": [],
+      "tuupola/base58": [],
+      "muvon/base58-codec": [],
+      "bitwasp/bech32": [],
+      "cjpgdk/bech32": [],
+      "cardano-php/bech32": [],
+      "uma/secp256k1-php": [],
+      "stephenhill/base58": [],
+      "furqansiddiqui/base58check-php": [],
+      "allty/base58": []
+    }
+  }
+}

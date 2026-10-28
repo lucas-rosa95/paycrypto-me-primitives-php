@@ -1,0 +1,39 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TB
+    intent["Explicit admitted network / policy intent<br/>Select its registered complete composition<br/>P2TR admission remains hypothetical; current O02 rejects it"]
+    subgraph current["Key-hash flow"]
+        prepare["Reference compatible public-derivation composition<br/>Admission, depth check, exact-path derivation<br/>This invocation's request and complete node"]
+        hash["HASH160 of this derived compressed public key"]
+        terminal{"Direct local terminal binding<br/>Resolved at setup"}
+        pkh["P2PKH terminal"]
+        nested["P2SH-P2WPKH terminal"]
+        native["P2WPKH terminal"]
+        result["Reference public-result construction<br/>Preserve this request's context"]
+        prepare --> hash --> terminal
+        terminal -->|p2pkh| pkh
+        terminal -->|p2sh-p2wpkh| nested
+        terminal -->|p2wpkh| native
+        pkh --> result
+        nested --> result
+        native --> result
+    end
+    subgraph taproot["Independent P2TR flow"]
+        tprepare["Reference compatible public-derivation composition<br/>Admission, depth check, exact-path derivation<br/>This invocation's request and complete node"]
+        outputkey["Taproot output-key construction<br/>Owned semantics; delegated crypto"]
+        encode["Fixed witness-v1 / 32-byte output-key encoder<br/>Delegated Bech32m with selected HRP"]
+        tresult["Reference public-result construction<br/>Preserve this request's context"]
+        tprepare --> outputkey --> encode --> tresult
+    end
+    intent -->|current key-hash intent| prepare
+    intent -->|hypothetical P2TR intent| tprepare
+    classDef resource fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef open fill:#fff8df,stroke:#98751c,color:#47380e
+    classDef outcome fill:#eaf7ed,stroke:#28783b,color:#173b20
+    class prepare,tprepare,hash,terminal,pkh,nested,native resource
+    class intent,outputkey,encode open
+    class result,tresult outcome

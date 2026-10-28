@@ -1,0 +1,20 @@
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+---
+flowchart TD
+    source["BIP86 published account example<br/>Taproot account public key serialized as xpub"]
+    rule["Current M02 O02 mainnet relation<br/>0488b21e public version + p2pkh policy<br/>P2TR is outside the admitted request policies"]
+    source --> request["Explicit request: p2tr-keypath<br/>The key version cannot select a policy<br/>or prove BIP86 account ancestry"]
+    request --> reject["Current operation rejects P2TR<br/>No derivation, alternate policy or address"]
+    rule --> reject
+    request -. Future feature review .-> future["OPEN: future admission / provenance contract<br/>Which version-policy relations are admitted?<br/>What context is explicitly provisioned?"]
+    future -. Requires a joint decision .-> next["Only a compatible admitted node<br/>may enter the exploratory P2TR route"]
+    classDef evidence fill:#eaf2ff,stroke:#2456a6,color:#14233b
+    classDef open fill:#fff8df,stroke:#98751c,color:#47380e
+    classDef error fill:#fff0ee,stroke:#b33d32,color:#57231e
+    class source,rule,request evidence
+    class reject error
+    class future,next open

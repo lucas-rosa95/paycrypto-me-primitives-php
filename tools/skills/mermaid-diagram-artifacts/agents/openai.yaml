@@ -1,4 +1,0 @@
-interface:
-  display_name: "Mermaid Diagram Artifacts"
-  short_description: "Render portable SVG and compact PNG diagram pairs"
-  default_prompt: "Use $mermaid-diagram-artifacts to create or update Mermaid sources and export complementary SVG and optimized PNG artifacts."

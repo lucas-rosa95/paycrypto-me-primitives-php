@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagram Artifacts"
+  short_description: "Create diagrams with Mermaid or draw.io and portable exports"
+  default_prompt: "Use $diagram-artifacts to create or update documentation visuals with the appropriate Mermaid or draw.io MCP tools and deliver editable sources, SVG and optimized PNG."
