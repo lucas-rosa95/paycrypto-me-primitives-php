@@ -813,7 +813,7 @@ two lifecycle/admission views use 2026-10-28 sources. All use the local
 its package version is 0.2.1 and Mermaid is 11.12.0.
 
 Sources disable HTML labels. The repository's
-[artifact exporter](../../../../tools/skills/mermaid-diagram-artifacts/scripts/export_artifacts.py)
+[artifact exporter](../../../../tools/skills/diagram-artifacts/scripts/export_artifacts.py)
 finalized native-text SVGs with explicit dimensions, preserved spacing and a
 white canvas, then rasterized them using `rsvg-convert` 2.63.2 at 1280 pixels
 wide. `pngquant` 3.0.3 used quality 90–100, speed 1, no dithering, stripped
@@ -839,7 +839,7 @@ save its returned native-text SVG outside the repository as a raw export,
 then run from the repository root:
 
 ```sh
-python3 tools/skills/mermaid-diagram-artifacts/scripts/export_artifacts.py \
+python3 tools/skills/diagram-artifacts/scripts/export_artifacts.py \
   /tmp/diagram-raw.svg --output-dir docs/pips/PIP-0003/M05/diagrams \
   --stem diagram-basename
 ```

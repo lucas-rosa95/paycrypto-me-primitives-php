@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Finalize a native-text Mermaid SVG and rasterize/quantize its PNG counterpart."""
+"""Finalize a native-text diagram SVG and rasterize/quantize its PNG counterpart."""
 
 import argparse
 import math
@@ -33,9 +33,9 @@ def finalized_svg(source):
     if root.tag != f"{{{SVG_NS}}}svg":
         raise ValueError("Input must be an SVG document.")
     if root.findall(f".//{{{SVG_NS}}}foreignObject"):
-        raise ValueError("HTML labels found. Regenerate with htmlLabels: false.")
+        raise ValueError("HTML labels found. Export native SVG text; for Mermaid use htmlLabels: false.")
     if not any("".join(node.itertext()).strip() for node in root.findall(f".//{{{SVG_NS}}}text")):
-        raise ValueError("No native SVG text found; check the Mermaid export.")
+        raise ValueError("No native SVG text found; check the diagram export.")
     values = root.get("viewBox", "").replace(",", " ").split()
     if len(values) != 4:
         raise ValueError("SVG must provide a four-number viewBox.")
@@ -65,7 +65,7 @@ def png_dimensions(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("svg", type=Path, help="Native-text SVG returned by Mermaid")
+    parser.add_argument("svg", type=Path, help="Native-text SVG exported by the diagram renderer")
     parser.add_argument("--output-dir", type=Path, help="Default: input SVG directory")
     parser.add_argument("--stem", help="Default: input SVG basename without extension")
     parser.add_argument("--width", type=int, default=1280)
